@@ -392,3 +392,35 @@ BEGIN
     );
 END
 GO
+
+/* =========================
+   INSERT ROLES (SAFE - NO DUPLICATE)
+   ========================= */
+
+-- Admin
+IF NOT EXISTS (SELECT 1 FROM roles WHERE role_name = N'Admin')
+BEGIN
+    INSERT INTO roles (role_name)
+    VALUES (N'Admin');
+END
+
+-- Trưởng sản xuất
+IF NOT EXISTS (SELECT 1 FROM roles WHERE role_name = N'Trưởng sản xuất')
+BEGIN
+    INSERT INTO roles (role_name)
+    VALUES (N'Trưởng sản xuất');
+END
+
+-- Quản lý kho
+IF NOT EXISTS (SELECT 1 FROM roles WHERE role_name = N'Quản lý kho')
+BEGIN
+    INSERT INTO roles (role_name)
+    VALUES (N'Quản lý kho');
+END
+
+-- Nhân viên kinh doanh
+IF NOT EXISTS (SELECT 1 FROM roles WHERE role_name = N'Nhân viên kinh doanh')
+BEGIN
+    INSERT INTO roles (role_name)
+    VALUES (N'Nhân viên kinh doanh');
+END
