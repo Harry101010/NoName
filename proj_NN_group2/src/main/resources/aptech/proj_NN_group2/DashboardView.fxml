@@ -3,34 +3,46 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #f0f2f5;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="aptech.proj_NN_group2.controller.DashboardController">
+<AnchorPane prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #f8fafc;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="aptech.proj_NN_group2.controller.DashboardController">
    <children>
-      <VBox spacing="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+      <VBox spacing="25.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="20.0">
          <children>
-            <Text text="BẢNG ĐIỀU KHIỂN SẢN XUẤT" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-fill: #1a202c;" />
+            <HBox alignment="CENTER_LEFT" prefHeight="50.0">
+               <children>
+                  <Text text="HỆ THỐNG QUẢN TRỊ SẢN XUẤT" style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-fill: #1e293b;" />
+                  <Region HBox.hgrow="ALWAYS" />
+                  <Label fx:id="lblClock" text="00:00:00 - 01/01/2026" style="-fx-font-family: 'Segoe UI Semibold'; -fx-font-size: 16px; -fx-text-fill: #64748b; -fx-background-color: #f1f5f9; -fx-padding: 8 15 8 15; -fx-background-radius: 20;" />
+               </children>
+            </HBox>
             
             <HBox spacing="30.0">
                <children>
-                  <VBox prefHeight="120.0" prefWidth="250.0" style="-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5); -fx-padding: 20;">
+                  <VBox prefHeight="130.0" prefWidth="280.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 15, 0, 0, 10); -fx-padding: 25;">
                      <children>
-                        <Label text="Mẻ kem hôm nay" textFill="#718096" />
-                        <Label fx:id="lblTongMeKem" text="0" style="-fx-font-size: 36px; -fx-font-weight: bold;" textFill="#3182ce" />
+                        <Label text="Mẻ kem hôm nay" style="-fx-font-size: 14px; -fx-text-fill: #94a3b8;" />
+                        <Label fx:id="lblTongMeKem" text="0" style="-fx-font-size: 42px; -fx-font-weight: bold; -fx-text-fill: #3b82f6;" />
                      </children>
                   </VBox>
 
-                  <VBox prefHeight="120.0" prefWidth="250.0" style="-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5); -fx-padding: 20;">
+                  <VBox prefHeight="130.0" prefWidth="280.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 15, 0, 0, 10); -fx-padding: 25;">
                      <children>
-                        <Label text="Nguyên liệu sắp hết" textFill="#718096" />
-                        <Label fx:id="lblCanhBaoKho" text="0" style="-fx-font-size: 36px; -fx-font-weight: bold;" textFill="#e53e3e" />
+                        <Label text="Nguyên liệu sắp hết" style="-fx-font-size: 14px; -fx-text-fill: #94a3b8;" />
+                        <Label fx:id="lblCanhBaoKho" text="0" style="-fx-font-size: 42px; -fx-font-weight: bold; -fx-text-fill: #ef4444;" />
                      </children>
                   </VBox>
                </children>
             </HBox>
 
-            <VBox spacing="10.0" style="-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-padding: 20;">
+            <VBox spacing="15.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 25; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 15, 0, 0, 10);">
                <children>
-                  <Label text="DANH SÁCH NGUYÊN LIỆU CẦN NHẬP GẤP" style="-fx-font-weight: bold; -fx-font-size: 16px;" />
-                  <ListView fx:id="lvNguyenLieuSapHet" prefHeight="250.0" />
+                  <HBox alignment="CENTER_LEFT">
+                     <children>
+                        <Label text="DANH SÁCH CẦN NHẬP HÀNG GẤP" style="-fx-font-weight: bold; -fx-font-size: 18px; -fx-text-fill: #1e293b;" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Button onAction="#handleRefresh" text="Làm mới dữ liệu" style="-fx-background-color: #3b82f6; -fx-text-fill: white; -fx-background-radius: 5;" />
+                     </children>
+                  </HBox>
+                  <ListView fx:id="lvNguyenLieuSapHet" prefHeight="250.0" style="-fx-background-radius: 10; -fx-border-color: #e2e8f0; -fx-border-radius: 10;" />
                </children>
             </VBox>
          </children>

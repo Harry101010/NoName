@@ -17,7 +17,10 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("DashboardView"), 640, 480);
+    	// Cách viết chuẩn xác dựa trên cây thư mục của bạn
+    	FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/aptech/proj_NN_group2/MainShell.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setTitle("Hệ Thống Quản Lý Sản Xuất Kem v1.0");
         stage.setScene(scene);
         stage.show();
     }
