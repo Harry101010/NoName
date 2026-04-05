@@ -37,4 +37,9 @@ public class TestConnection {
             e.printStackTrace();
         }
     }
+    public Connection getConnection() throws Exception {
+        String connectionUrl = "jdbc:sqlserver://localhost:1433;databaseName=QuanLySanXuatKem;user=sa;password=123456;encrypt=true;trustServerCertificate=true;";
+        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        return DriverManager.getConnection(connectionUrl);
+    }
 }
