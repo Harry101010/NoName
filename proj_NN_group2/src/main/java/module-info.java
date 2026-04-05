@@ -4,4 +4,5 @@ module aptech.proj_NN_group2 {
 
     opens aptech.proj_NN_group2 to javafx.fxml;
     exports aptech.proj_NN_group2;
+    requires java.sql;
 }
