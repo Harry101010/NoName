@@ -39,42 +39,59 @@ public class NguyenLieuDAO {
             e.printStackTrace();
         }
     }
-    public boolean xuatKhoFIFO(String tenNguyenLieu, double soLuongCan) {
-        // Tìm lô hàng cũ nhất (hạn dùng gần nhất) còn tồn kho
-        String sqlSelect = "SELECT TOP 1 id, so_luong_ton FROM NguyenLieu " +
+    public boolean xuatKhoVetCan(String tenNguyenLieu, double soLuongCan) {
+        // 1. Lấy tất cả các lô còn hàng, ưu tiên HSD cũ nhất đứng đầu
+        String sqlSelect = "SELECT id, so_luong_ton FROM NguyenLieu " +
                            "WHERE ten_nguyen_lieu = ? AND so_luong_ton > 0 " +
                            "ORDER BY han_su_dung ASC, ngay_nhap_kho ASC";
         
+        String sqlUpdate = "UPDATE NguyenLieu SET so_luong_ton = ? WHERE id = ?";
+
         try (Connection con = new TestConnection().getConnection()) {
-            con.setAutoCommit(false); // Bật giao dịch để đảm bảo an toàn dữ liệu
+            con.setAutoCommit(false); // Bắt đầu Transaction để đảm bảo an toàn
             
             try (PreparedStatement psSelect = con.prepareStatement(sqlSelect)) {
                 psSelect.setString(1, tenNguyenLieu);
                 ResultSet rs = psSelect.executeQuery();
                 
-                if (rs.next()) {
-                    int idLoHang = rs.getInt("id");
-                    double tonKho = rs.getDouble("so_luong_ton");
-                    
-                    if (tonKho >= soLuongCan) {
-                        // Cập nhật trừ kho
-                        String sqlUpdate = "UPDATE NguyenLieu SET so_luong_ton = so_luong_ton - ? WHERE id = ?";
-                        try (PreparedStatement psUpdate = con.prepareStatement(sqlUpdate)) {
-                            psUpdate.setDouble(1, soLuongCan);
-                            psUpdate.setInt(2, idLoHang);
-                            psUpdate.executeUpdate();
-                        }
-                        con.commit();
-                        return true;
+                double conThieu = soLuongCan;
+
+                while (rs.next() && conThieu > 0) {
+                    int idLo = rs.getInt("id");
+                    double tonHienTai = rs.getDouble("so_luong_ton");
+
+                    if (tonHienTai >= conThieu) {
+                        // Lô này đủ cân hết số còn thiếu
+                        updateLoHang(con, sqlUpdate, tonHienTai - conThieu, idLo);
+                        conThieu = 0; // Đã đủ
+                    } else {
+                        // Lô này không đủ, vét cạn lô này và trừ tiếp lô sau
+                        updateLoHang(con, sqlUpdate, 0, idLo);
+                        conThieu -= tonHienTai; // Giảm số lượng cần tìm xuống
                     }
                 }
-            } catch (Exception e) {
-                con.rollback();
-                e.printStackTrace();
+
+                if (conThieu <= 0) {
+                    con.commit(); // Thành công hoàn toàn
+                    return true;
+                } else {
+                    con.rollback(); // Không đủ tổng kho để trừ
+                    System.out.println("Lỗi: Tổng kho không đủ để vét!");
+                    return false;
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
-        return false;
+    }
+
+    // Hàm phụ để hỗ trợ update trong vòng lặp
+    private void updateLoHang(Connection con, String sql, double soLuongMoi, int id) throws SQLException {
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setDouble(1, soLuongMoi);
+            ps.setInt(2, id);
+            ps.executeUpdate();
+        }
     }
 }

@@ -48,13 +48,16 @@ public class SanXuatController {
     @FXML 
     private void handleStep1() { 
         NguyenLieuDAO dao = new NguyenLieuDAO();
-        // Giả sử mẻ kem này cần 10 lít Sữa tươi tiệt trùng
-        boolean checkKho = dao.xuatKhoFIFO("Sữa tươi tiệt trùng", 10.0);
         
-        if (checkKho) {
-            updateStatus("TRON", "Xử lý & Trộn (Đã trừ kho 10 lít sữa)", 0);
+        // Yêu cầu xuất 10 lít (Hệ thống sẽ bốc 3 lít Lô A và 7 lít Lô B)
+        double soLuongCanXuat = 10.0;
+        boolean thanhCong = dao.xuatKhoVetCan("Sữa tươi tiệt trùng", soLuongCanXuat);
+        
+        if (thanhCong) {
+            updateStatus("TRON", "Vét kho thành công: Đã lấy đủ " + soLuongCanXuat + " lít sữa từ nhiều lô.", 0);
+            showAlert("Thành công", "Hệ thống đã tự động vét cạn lô cũ và trừ tiếp vào lô mới!");
         } else {
-            showAlert("Lỗi kho", "Không đủ nguyên liệu Sữa tươi trong kho!");
+            showAlert("Thất bại", "Tổng kho không đủ " + soLuongCanXuat + " lít để sản xuất!");
         }
     }
     
