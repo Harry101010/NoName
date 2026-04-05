@@ -12,4 +12,7 @@ module aptech.proj_NN_group2 {
     // Xuất package để các phần khác có thể sử dụng
     exports aptech.proj_NN_group2.controller;
     exports aptech.proj_NN_group2.util;
+    
+    opens aptech.proj_NN_group2.model to javafx.base;
+    
 }

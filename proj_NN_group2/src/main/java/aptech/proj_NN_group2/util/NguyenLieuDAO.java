@@ -1,7 +1,9 @@
 package aptech.proj_NN_group2.util;
 
+import aptech.proj_NN_group2.model.NguyenLieuModel; // Quan trọng nhất: Để nó tìm thấy Model
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import java.sql.*;
-
 public class NguyenLieuDAO {
 
     // Logic SQL: Thêm mới nguyên liệu
@@ -93,5 +95,27 @@ public class NguyenLieuDAO {
             ps.setInt(2, id);
             ps.executeUpdate();
         }
+    }
+    public ObservableList<NguyenLieuModel> getAll() {
+        ObservableList<NguyenLieuModel> list = FXCollections.observableArrayList();
+        String sql = "SELECT * FROM NguyenLieu";
+        try (Connection con = new TestConnection().getConnection();
+             Statement st = con.createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
+            
+        	while (rs.next()) {
+                list.add(new NguyenLieuModel(
+                    rs.getInt("id"),
+                    rs.getString("ten_nguyen_lieu"),
+                    rs.getString("nguon_goc"),
+                    rs.getDouble("so_luong_ton"),
+                    rs.getString("don_vi_tinh"),
+                    rs.getDate("han_su_dung"),
+                    rs.getDouble("gia_thanh"),
+                    rs.getString("ngay_nhap_kho") // THÊM DÒNG NÀY (Tham số thứ 8)
+                ));
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+        return list;
     }
 }

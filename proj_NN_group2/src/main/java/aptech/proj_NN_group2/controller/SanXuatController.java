@@ -13,7 +13,14 @@ public class SanXuatController {
     @FXML private TextField txtDungTichDongHoa, txtSoKhuon;
     @FXML private Label status1, status3;
 
-    private int currentIdLenh = 1; // Giả sử đang làm lệnh ID số 1
+    private int currentIdLenh = 4; // Giả sử đang làm lệnh ID số 1
+    private String currentTenMon = "Kem Dâu Tây";
+    
+    @FXML
+    public void initialize() {
+        lblIdLenh.setText(String.valueOf(currentIdLenh)); // Hiển thị số 4
+        lblTenMon.setText(currentTenMon); // Hiển thị "Kem Dâu Tây"
+    }
 
     // Hàm cập nhật trạng thái chung
     private void updateStatus(String stepName, String extraInfo, double numericValue) {
@@ -45,19 +52,33 @@ public class SanXuatController {
     }
 
     // Các hàm xử lý sự kiện cho từng nút (onAction)
+//    @FXML 
+//    private void handleStep1() { 
+//        NguyenLieuDAO dao = new NguyenLieuDAO();
+//        
+//        // Yêu cầu xuất 10 lít (Hệ thống sẽ bốc 3 lít Lô A và 7 lít Lô B)
+//        double soLuongCanXuat = 10.0;
+//        boolean thanhCong = dao.xuatKhoVetCan("Sữa tươi tiệt trùng", soLuongCanXuat);
+//        
+//        if (thanhCong) {
+//            updateStatus("TRON", "Vét kho thành công: Đã lấy đủ " + soLuongCanXuat + " lít sữa từ nhiều lô.", 0);
+//            showAlert("Thành công", "Hệ thống đã tự động vét cạn lô cũ và trừ tiếp vào lô mới!");
+//        } else {
+//            showAlert("Thất bại", "Tổng kho không đủ " + soLuongCanXuat + " lít để sản xuất!");
+//        }
+//    }
+    
     @FXML 
     private void handleStep1() { 
         NguyenLieuDAO dao = new NguyenLieuDAO();
-        
-        // Yêu cầu xuất 10 lít (Hệ thống sẽ bốc 3 lít Lô A và 7 lít Lô B)
-        double soLuongCanXuat = 10.0;
-        boolean thanhCong = dao.xuatKhoVetCan("Sữa tươi tiệt trùng", soLuongCanXuat);
+        double soLuongCanXuat = 0.4; // Giả sử cần 2kg dâu tây
+        boolean thanhCong = dao.xuatKhoVetCan("Dâu tây Đà Lạt (Loại 1)", soLuongCanXuat);
         
         if (thanhCong) {
-            updateStatus("TRON", "Vét kho thành công: Đã lấy đủ " + soLuongCanXuat + " lít sữa từ nhiều lô.", 0);
-            showAlert("Thành công", "Hệ thống đã tự động vét cạn lô cũ và trừ tiếp vào lô mới!");
+            updateStatus("TRON", "Đã trừ 2kg dâu tây", 0);
+            showAlert("Thành công", "Đã trừ kho dâu tây thành công!");
         } else {
-            showAlert("Thất bại", "Tổng kho không đủ " + soLuongCanXuat + " lít để sản xuất!");
+            showAlert("Thất bại", "Kho không đủ dâu tây!");
         }
     }
     
