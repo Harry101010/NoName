@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="aptech.proj_NN_group2.controller.SanXuatController">
+   <children>
+      <VBox spacing="15.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+         <children>
+            <Label text="THEO DÕI 8 CÔNG ĐOẠN SẢN XUẤT KEM" style="-fx-font-size: 20px; -fx-font-weight: bold;" alignment="CENTER" maxWidth="Infinity"/>
+            
+            <HBox spacing="20.0" style="-fx-background-color: #f4f4f4; -fx-padding: 10;">
+               <children>
+                  <Label text="Lệnh sản xuất ID: " style="-fx-font-weight: bold;"/>
+                  <Label fx:id="lblIdLenh" text="---"/>
+                  <Label text="Món kem: " style="-fx-font-weight: bold;"/>
+                  <Label fx:id="lblTenMon" text="---"/>
+               </children>
+            </HBox>
+
+            <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
+               <content>
+                  <VBox spacing="10.0">
+                     <children>
+                        <HBox alignment="CENTER_LEFT" spacing="15.0" style="-fx-border-color: #ddd; -fx-padding: 10; -fx-border-radius: 5;">
+                           <children>
+                              <Label prefWidth="150.0" text="1. Xử lý &amp; Trộn" style="-fx-font-weight: bold;"/>
+                              <Label fx:id="status1" text="Đang chờ..." textFill="#7f8c8d"/>
+                              <Region HBox.hgrow="ALWAYS" />
+                              <Button fx:id="btnStep1" onAction="#handleStep1" text="Xác nhận Trộn" style="-fx-background-color: #3498db; -fx-text-fill: white;"/>
+                           </children>
+                        </HBox>
+
+                        <HBox alignment="CENTER_LEFT" spacing="15.0" style="-fx-border-color: #ddd; -fx-padding: 10; -fx-border-radius: 5;">
+                           <children>
+                              <Label prefWidth="150.0" text="2. Đồng hóa" style="-fx-font-weight: bold;"/>
+                              <TextField fx:id="txtDungTichDongHoa" promptText="Nhập dung tích (lít)" prefWidth="150.0"/>
+                              <Region HBox.hgrow="ALWAYS" />
+                              <Button fx:id="btnStep2" onAction="#handleStep2" text="Xác nhận" style="-fx-background-color: #3498db; -fx-text-fill: white;"/>
+                           </children>
+                        </HBox>
+
+                        <HBox alignment="CENTER_LEFT" spacing="15.0" style="-fx-border-color: #ddd; -fx-padding: 10; -fx-border-radius: 5;">
+                           <children>
+                              <Label prefWidth="150.0" text="3. Thanh trùng" style="-fx-font-weight: bold;"/>
+                              <Label fx:id="status3" text="---"/>
+                              <Region HBox.hgrow="ALWAYS" />
+                              <Button fx:id="btnStep3" onAction="#handleStep3" text="Xác nhận" style="-fx-background-color: #3498db; -fx-text-fill: white;"/>
+                           </children>
+                        </HBox>
+
+                        <HBox alignment="CENTER_LEFT" spacing="15.0" style="-fx-border-color: #ddd; -fx-padding: 10; -fx-border-radius: 5;">
+                           <children>
+                              <Label prefWidth="150.0" text="4. Ủ kem (Aging)" style="-fx-font-weight: bold;"/>
+                              <Label text="Nhiệt độ: 4°C" />
+                              <Region HBox.hgrow="ALWAYS" />
+                              <Button fx:id="btnStep4" onAction="#handleStep4" text="Bắt đầu ủ" style="-fx-background-color: #f39c12; -fx-text-fill: white;"/>
+                           </children>
+                        </HBox>
+
+                        <HBox alignment="CENTER_LEFT" spacing="15.0" style="-fx-border-color: #ddd; -fx-padding: 10; -fx-border-radius: 5;">
+                           <children>
+                              <Label prefWidth="150.0" text="5. Đánh kem" style="-fx-font-weight: bold;"/>
+                              <Region HBox.hgrow="ALWAYS" />
+                              <Button fx:id="btnStep5" onAction="#handleStep5" text="Hoàn thành" />
+                           </children>
+                        </HBox>
+
+                        <HBox alignment="CENTER_LEFT" spacing="15.0" style="-fx-border-color: #ddd; -fx-padding: 10; -fx-border-radius: 5;">
+                           <children>
+                              <Label prefWidth="150.0" text="6. Chiết rót" style="-fx-font-weight: bold;"/>
+                              <TextField fx:id="txtSoKhuon" promptText="Số khuôn thực tế" prefWidth="150.0"/>
+                              <Region HBox.hgrow="ALWAYS" />
+                              <Button fx:id="btnStep6" onAction="#handleStep6" text="Xác nhận" />
+                           </children>
+                        </HBox>
+
+                        <HBox alignment="CENTER_LEFT" spacing="15.0" style="-fx-border-color: #ddd; -fx-padding: 10; -fx-border-radius: 5;">
+                           <children>
+                              <Label prefWidth="150.0" text="7. Làm cứng" style="-fx-font-weight: bold;"/>
+                              <Region HBox.hgrow="ALWAYS" />
+                              <Button fx:id="btnStep7" onAction="#handleStep7" text="Hoàn thành" />
+                           </children>
+                        </HBox>
+
+                        <HBox alignment="CENTER_LEFT" spacing="15.0" style="-fx-border-color: #ddd; -fx-padding: 10; -fx-border-radius: 5; -fx-background-color: #e8f8f5;">
+                           <children>
+                              <Label prefWidth="150.0" text="8. Đóng gói" style="-fx-font-weight: bold; -fx-text-fill: #16a085;"/>
+                              <Region HBox.hgrow="ALWAYS" />
+                              <Button fx:id="btnStep8" onAction="#handleStep8" text="NHẬP KHO THÀNH PHẨM" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </content>
+            </ScrollPane>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
