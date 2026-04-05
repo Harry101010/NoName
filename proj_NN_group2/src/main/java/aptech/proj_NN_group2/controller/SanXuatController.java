@@ -1,5 +1,6 @@
 package aptech.proj_NN_group2.controller;
 
+import aptech.proj_NN_group2.util.KhoThanhPhamDAO;
 import aptech.proj_NN_group2.util.NguyenLieuDAO;
 import aptech.proj_NN_group2.util.TestConnection;
 import javafx.fxml.FXML;
@@ -77,25 +78,42 @@ public class SanXuatController {
     
     @FXML 
     private void handleStep8() { 
-        // 1. Cập nhật trạng thái lệnh sản xuất thành HOAN_THANH
-        String sql = "UPDATE TienDoSanXuat SET buoc_hien_tai = 'DONG_GOI', trang_thai = 'HOAN_THANH', thoi_gian_xac_nhan = GETDATE() WHERE id_lenh_sx = ?";
-        
-        try (Connection con = new TestConnection().getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+        try {
+            // 1. Lấy dữ liệu thực tế từ giao diện
+            int soLuongThucTe = Integer.parseInt(txtSoKhuon.getText());
+            String tenKem = "Kem Dừa Non"; // Sau này có thể lấy động từ lblTenMon.getText()
+
+            // 2. Cập nhật trạng thái Lệnh sản xuất thành HOAN_THANH
+            String sqlUpdateLenh = "UPDATE TienDoSanXuat SET buoc_hien_tai = 'DONG_GOI', " +
+                                   "trang_thai = 'HOAN_THANH', thoi_gian_xac_nhan = GETDATE() " +
+                                   "WHERE id_lenh_sx = ?";
             
-            ps.setInt(1, currentIdLenh);
-            
-            if (ps.executeUpdate() > 0) {
-                showAlert("Hoàn tất", "Chúc mừng! Mẻ kem đã đóng gói và hoàn thành quy trình sản xuất.");
-                // Sau này bạn sẽ gọi thêm hàm nhập vào bảng KhoThanhPham tại đây
+            try (Connection con = new TestConnection().getConnection();
+                 PreparedStatement ps = con.prepareStatement(sqlUpdateLenh)) {
+                
+                ps.setInt(1, currentIdLenh);
+                ps.executeUpdate();
+                
+                // 3. GỌI DAO MỚI ĐỂ NHẬP KHO THÀNH PHẨM
+                KhoThanhPhamDAO tpDAO = new KhoThanhPhamDAO();
+                boolean isOk = tpDAO.nhapKho(tenKem, soLuongThucTe, currentIdLenh);
+                
+                if (isOk) {
+                    // Hiển thị thông báo thành công (nhớ dùng INFORMATION thay vì ERROR nhé)
+                    showAlert("Thành công", "Mẻ kem đã HOÀN THÀNH và nhập kho " + soLuongThucTe + " hộp!");
+                }
             }
+        } catch (NumberFormatException e) {
+            showAlert("Lỗi dữ liệu", "Vui lòng nhập số lượng khuôn ở Bước 6 trước khi đóng gói!");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
     private void showAlert(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
+        // Sửa ERROR thành INFORMATION để hiện biểu tượng chữ 'i' xanh (hoặc tích xanh tùy bản Java)
+        Alert alert = new Alert(Alert.AlertType.INFORMATION); 
         alert.setTitle(title);
+        alert.setHeaderText(null); // Để tiêu đề gọn gàng hơn
         alert.setContentText(content);
         alert.showAndWait();
     }
