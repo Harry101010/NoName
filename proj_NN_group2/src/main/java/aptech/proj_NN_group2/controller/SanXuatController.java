@@ -75,9 +75,23 @@ public class SanXuatController {
     
     @FXML private void handleStep7() { updateStatus("LAM_CUNG", "Làm cứng", 0); }
     
-    @FXML private void handleStep8() { 
-        updateStatus("DONG_GOI", "Đóng gói hoàn tất", 0);
-        // Sau bước này sẽ gọi hàm nhập kho thành phẩm (sẽ viết sau)
+    @FXML 
+    private void handleStep8() { 
+        // 1. Cập nhật trạng thái lệnh sản xuất thành HOAN_THANH
+        String sql = "UPDATE TienDoSanXuat SET buoc_hien_tai = 'DONG_GOI', trang_thai = 'HOAN_THANH', thoi_gian_xac_nhan = GETDATE() WHERE id_lenh_sx = ?";
+        
+        try (Connection con = new TestConnection().getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            
+            ps.setInt(1, currentIdLenh);
+            
+            if (ps.executeUpdate() > 0) {
+                showAlert("Hoàn tất", "Chúc mừng! Mẻ kem đã đóng gói và hoàn thành quy trình sản xuất.");
+                // Sau này bạn sẽ gọi thêm hàm nhập vào bảng KhoThanhPham tại đây
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     private void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
