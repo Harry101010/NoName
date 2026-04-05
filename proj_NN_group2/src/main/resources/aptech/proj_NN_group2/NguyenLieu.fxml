@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="10" alignment="CENTER" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="aptech.proj_NN_group2.controller.NguyenLieuController">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+    
+    <Label text="QUẢN LÝ NHẬP KHO NGUYÊN LIỆU" style="-fx-font-weight: bold; -fx-font-size: 18px;"/>
+    
+    <GridPane hgap="10" vgap="10">
+        <Label text="Tên nguyên liệu:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <TextField fx:id="txtTen" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+        
+        <Label text="Nguồn gốc:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <TextField fx:id="txtNguonGoc" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+        
+        <Label text="Số lượng:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        <TextField fx:id="txtSoLuong" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+        
+        <Label text="Giá thành:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+        <TextField fx:id="txtGia" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+        
+        <Label text="Đơn vị tính:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+        <ComboBox fx:id="cbDonVi" GridPane.columnIndex="1" GridPane.rowIndex="4" prefWidth="150"/>
+        
+        <Label text="Hạn sử dụng:" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+        <DatePicker fx:id="dpHanSD" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+    </GridPane>
+    
+    <Button text="Nhập Kho (Thêm)" onAction="#handleThem" style="-fx-background-color: #2ecc71; -fx-text-fill: white;"/>
+</VBox>
