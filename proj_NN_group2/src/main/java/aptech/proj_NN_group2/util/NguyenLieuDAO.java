@@ -39,4 +39,42 @@ public class NguyenLieuDAO {
             e.printStackTrace();
         }
     }
+    public boolean xuatKhoFIFO(String tenNguyenLieu, double soLuongCan) {
+        // Tìm lô hàng cũ nhất (hạn dùng gần nhất) còn tồn kho
+        String sqlSelect = "SELECT TOP 1 id, so_luong_ton FROM NguyenLieu " +
+                           "WHERE ten_nguyen_lieu = ? AND so_luong_ton > 0 " +
+                           "ORDER BY han_su_dung ASC, ngay_nhap_kho ASC";
+        
+        try (Connection con = new TestConnection().getConnection()) {
+            con.setAutoCommit(false); // Bật giao dịch để đảm bảo an toàn dữ liệu
+            
+            try (PreparedStatement psSelect = con.prepareStatement(sqlSelect)) {
+                psSelect.setString(1, tenNguyenLieu);
+                ResultSet rs = psSelect.executeQuery();
+                
+                if (rs.next()) {
+                    int idLoHang = rs.getInt("id");
+                    double tonKho = rs.getDouble("so_luong_ton");
+                    
+                    if (tonKho >= soLuongCan) {
+                        // Cập nhật trừ kho
+                        String sqlUpdate = "UPDATE NguyenLieu SET so_luong_ton = so_luong_ton - ? WHERE id = ?";
+                        try (PreparedStatement psUpdate = con.prepareStatement(sqlUpdate)) {
+                            psUpdate.setDouble(1, soLuongCan);
+                            psUpdate.setInt(2, idLoHang);
+                            psUpdate.executeUpdate();
+                        }
+                        con.commit();
+                        return true;
+                    }
+                }
+            } catch (Exception e) {
+                con.rollback();
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
