@@ -424,3 +424,28 @@ BEGIN
     INSERT INTO roles (role_name)
     VALUES (N'Nhân viên kinh doanh');
 END
+
+USE IceCreamManagement;
+GO
+
+-- 1) Insert sample Roles first
+INSERT INTO dbo.roles (role_name) 
+VALUES (N'Admin'), (N'Manager'), (N'Staff');
+GO
+
+-- 2) Insert 10 Sample Users
+-- Note: In a real app, 'password_hash' would be a Bcrypt/Argon2 string.
+-- I'm using placeholder strings here for your testing.
+INSERT INTO dbo.users (username, password_hash, role_id, is_active)
+VALUES 
+(N'admin_user',    N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 1, 1),
+(N'manager_alice', N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 2, 1),
+(N'manager_bob',   N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 2, 1),
+(N'staff_charlie', N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 1),
+(N'staff_david',   N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 1),
+(N'staff_eve',     N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 1),
+(N'staff_frank',   N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 1),
+(N'staff_grace',   N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 1),
+(N'staff_heidi',   N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 1),
+(N'staff_ivan',    N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 0); -- One inactive user for testing
+GO
