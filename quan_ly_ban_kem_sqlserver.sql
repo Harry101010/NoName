@@ -425,15 +425,7 @@ BEGIN
     VALUES (N'Nhân viên kinh doanh');
 END
 
-USE IceCreamManagement;
-GO
-
--- 1) Insert sample Roles first
-INSERT INTO dbo.roles (role_name) 
-VALUES (N'Admin'), (N'Manager'), (N'Staff');
-GO
-
--- 2) Insert 10 Sample Users
+-- Insert 10 Sample Users
 -- Note: In a real app, 'password_hash' would be a Bcrypt/Argon2 string.
 -- I'm using placeholder strings here for your testing.
 INSERT INTO dbo.users (username, password_hash, role_id, is_active)
