@@ -13,11 +13,6 @@ public class UserRepository extends BaseRepository<User> implements IFind<User>{
 	private final UserMapper mapper = new UserMapper();
 	
 	@Override
-	protected User map(ResultSet rs) throws SQLException {
-		return mapper.RowMap(rs);
-	}
-
-	@Override
 	public User findById(int id) {
 		return findOne(
 			"SELECT * FROM users WHERE user_id = ?", 
@@ -29,4 +24,10 @@ public class UserRepository extends BaseRepository<User> implements IFind<User>{
 	public List<User> findAll() {
 		return find("SELECT * FROM users", null);
 	}
+
+	@Override
+	protected User map(ResultSet rs) throws SQLException {
+		return mapper.RowMap(rs);
+	}
+	
 }
