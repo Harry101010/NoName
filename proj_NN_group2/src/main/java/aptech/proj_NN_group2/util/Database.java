@@ -21,7 +21,7 @@ public final class Database {
             cfg.setJdbcUrl(props.getProperty("db.url"));
             cfg.setUsername(props.getProperty("db.user"));
             cfg.setPassword(props.getProperty("db.password"));
-            cfg.setMaximumPoolSize(Integer.parseInt(props.getProperty("db.maximumPoolSize", "1")));
+            cfg.setMaximumPoolSize(Integer.parseInt(props.getProperty("db.maximumPoolSize")));
             cfg.setPoolName("MyPool");
 
             ds = new HikariDataSource(cfg);
