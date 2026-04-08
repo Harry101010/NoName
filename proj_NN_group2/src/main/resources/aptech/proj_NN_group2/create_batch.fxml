@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox spacing="16" xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="aptech.proj_NN_group2.controller.CreateBatchController"
+      style="-fx-background-color: #f4f6f8;">
+    <padding><Insets top="24" right="32" bottom="24" left="32"/></padding>
+
+    <Label text="Tạo Mẻ Sản Xuất" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+
+    <GridPane hgap="12" vgap="12">
+        <columnConstraints>
+            <ColumnConstraints minWidth="140"/>
+            <ColumnConstraints hgrow="ALWAYS"/>
+        </columnConstraints>
+
+        <Label text="Loại kem:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="cbIceCream" maxWidth="Infinity" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+        <Label text="Số kg đầu ra:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="tfOutputKg" promptText="VD: 10.5" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <Label text="Ghi chú:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <TextArea fx:id="taNote" promptText="Ghi chú (tuỳ chọn)" prefRowCount="3"
+                  GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+    </GridPane>
+
+    <Label fx:id="lblMessage" style="-fx-text-fill: red;"/>
+
+    <HBox spacing="10">
+        <Button text="Tạo mẻ sản xuất" onAction="#handleCreate"
+                style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 20;"/>
+        <Button text="Làm mới" onAction="#handleReset"
+                style="-fx-padding: 8 20;"/>
+    </HBox>
+
+    <Separator/>
+
+    <Label text="Danh sách mẻ sản xuất" style="-fx-font-size: 15px; -fx-font-weight: bold;"/>
+
+    <TableView fx:id="tableOrders" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colId" text="ID" prefWidth="50"/>
+            <TableColumn fx:id="colIceCream" text="Loại kem" prefWidth="160"/>
+            <TableColumn fx:id="colKg" text="Số kg" prefWidth="80"/>
+            <TableColumn fx:id="colStatus" text="Trạng thái" prefWidth="120"/>
+            <TableColumn fx:id="colCreatedAt" text="Ngày tạo" prefWidth="160"/>
+            <TableColumn fx:id="colNote" text="Ghi chú" prefWidth="180"/>
+        </columns>
+    </TableView>
+</VBox>
