@@ -17,25 +17,12 @@ public class App extends Application {
 
     private static Scene scene;
 
-//    @Override
-//    public void start(Stage stage) throws IOException {
-//        scene = new Scene(loadFXML(StringValue.VIEW_PRIMARY), 640, 480);
-//        stage.setScene(scene);
-//        stage.show();
-//    }
-    
-    
     @Override
     public void start(Stage stage) throws IOException {
-        // Tải giao diện đăng nhập
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("login.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle("Hệ thống Quản lý Sản xuất Kem");
+        scene = new Scene(loadFXML(StringValue.VIEW_LOGIN), 640, 480);
         stage.setScene(scene);
         stage.show();
     }
-
-    
     
     public static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
