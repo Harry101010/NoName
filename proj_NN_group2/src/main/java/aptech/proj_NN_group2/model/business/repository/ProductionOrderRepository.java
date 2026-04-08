@@ -39,7 +39,8 @@ public class ProductionOrderRepository extends BaseRepository<ProductionOrder> {
     public int create(ProductionOrder order) {
         String sql = "INSERT INTO production_orders (ice_cream_id, planned_output_kg, created_by, order_status, note) " +
                      "VALUES (?, ?, ?, 'draft', ?)";
-        try (Connection conn = Database.getDataSource().getConnection();
+//        try (Connection conn = Database.getDataSource().getConnection();
+        try (Connection conn = Database.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, order.getIce_cream_id());
             ps.setBigDecimal(2, order.getPlanned_output_kg());
