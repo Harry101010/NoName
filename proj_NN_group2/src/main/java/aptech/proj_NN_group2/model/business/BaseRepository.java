@@ -19,8 +19,7 @@ public abstract class BaseRepository<T> {
     protected abstract T map(ResultSet rs) throws SQLException;
 
     protected T findOne(String sql, Binder binder) {
-        // Get connection from Hikari pool via your static Database class
-        try (Connection conn = Database.getDataSource().getConnection();
+        try (Connection conn = Database.getConnection(); 
              PreparedStatement ps = conn.prepareStatement(sql)) {
             
             if (binder != null) binder.bind(ps);
@@ -36,7 +35,7 @@ public abstract class BaseRepository<T> {
 
     protected List<T> find(String sql, Binder binder) {
         List<T> result = new ArrayList<>();
-        try (Connection conn = Database.getDataSource().getConnection();
+        try (Connection conn = Database.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             
             if (binder != null) binder.bind(ps);
@@ -51,7 +50,7 @@ public abstract class BaseRepository<T> {
     }
 
     protected boolean executeUpdate(String sql, Binder binder) {
-        try (Connection conn = Database.getDataSource().getConnection();
+        try (Connection conn = Database.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             
             if (binder != null) binder.bind(ps);

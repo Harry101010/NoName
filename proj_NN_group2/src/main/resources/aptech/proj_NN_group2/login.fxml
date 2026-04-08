@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="aptech.proj_NN_group2.controller.LoginController" 
+      style="-fx-padding: 40; -fx-background-color: #f4f4f4;">
+    <children>
+        <Text text="QUẢN LÝ SẢN XUẤT KEM" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-fill: #2c3e50;" />
+        
+        <VBox spacing="10.0" maxWidth="300">
+            <Label text="Tên đăng nhập:" />
+            <TextField fx:id="txtUsername" promptText="Nhập username..." style="-fx-pref-height: 35;" />
+            
+            <Label text="Mật khẩu:" />
+            <PasswordField fx:id="txtPassword" promptText="Nhập mật khẩu..." style="-fx-pref-height: 35;" />
+        </VBox>
+
+        <Button text="Đăng nhập" onAction="#handleLogin" 
+                style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-pref-width: 150; -fx-pref-height: 40; -fx-cursor: hand;" />
+        
+        <Hyperlink text="Quên mật khẩu?" onAction="#handleForgotPassword" />
+    </children>
+</VBox>
