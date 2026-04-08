@@ -11,9 +11,9 @@ public class MainController {
 
     @FXML private StackPane contentArea;
     
-    // Các biến này phải trùng tên với fx:id bạn đặt trong Scene Builder
     @FXML private Button btnDashboard;
     @FXML private Button btnSanXuat;
+    @FXML private Button btnThanhPham; // Thêm biến cho nút mới
     @FXML private Button btnKho;
 
     @FXML
@@ -34,9 +34,15 @@ public class MainController {
         setButtonActive(btnSanXuat);
     }
 
+    // Hàm mới để nạp trang Kho Thành Phẩm
+    @FXML
+    private void showKhoThanhPham() {
+        loadView("/aptech/proj_NN_group2/ThanhPhamView.fxml");
+        setButtonActive(btnThanhPham);
+    }
+
     @FXML
     private void showKhoNguyenLieu() {
-        // Nạp file view mới thay vì dùng chung với Dashboard
         loadView("/aptech/proj_NN_group2/NguyenLieuView.fxml");
         setButtonActive(btnKho);
     }
@@ -53,16 +59,14 @@ public class MainController {
         }
     }
 
-    // Hàm xử lý đổi màu nút bấm
     private void setButtonActive(Button activeBtn) {
-        // Style cho nút đang chọn (Nền xanh đậm, chữ trắng)
         String activeStyle = "-fx-background-color: #334155; -fx-text-fill: white; -fx-background-radius: 8; -fx-alignment: CENTER_LEFT; -fx-padding: 12 20;";
-        // Style cho nút bình thường (Nền trong suốt, chữ xám xanh)
         String normalStyle = "-fx-background-color: transparent; -fx-text-fill: #cbd5e1; -fx-alignment: CENTER_LEFT; -fx-padding: 12 20;";
 
-        // Trả tất cả về bình thường
+        // Trả tất cả nút về trạng thái bình thường
         if (btnDashboard != null) btnDashboard.setStyle(normalStyle);
         if (btnSanXuat != null) btnSanXuat.setStyle(normalStyle);
+        if (btnThanhPham != null) btnThanhPham.setStyle(normalStyle); // Thêm dòng này
         if (btnKho != null) btnKho.setStyle(normalStyle);
 
         // Làm nổi bật nút vừa bấm

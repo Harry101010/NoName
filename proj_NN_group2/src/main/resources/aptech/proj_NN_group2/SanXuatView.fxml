@@ -4,19 +4,24 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" 
+<AnchorPane prefHeight="600.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" 
             fx:controller="aptech.proj_NN_group2.controller.SanXuatController">
    <children>
       <VBox spacing="15.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
          <children>
             <Label text="THEO DÕI 8 CÔNG ĐOẠN SẢN XUẤT KEM" style="-fx-font-size: 20px; -fx-font-weight: bold;" alignment="CENTER" maxWidth="Infinity"/>
             
-            <HBox spacing="20.0" style="-fx-background-color: #f4f4f4; -fx-padding: 10;">
+            <HBox spacing="15.0" alignment="CENTER_LEFT" style="-fx-background-color: #f4f4f4; -fx-padding: 10; -fx-background-radius: 5;">
                <children>
                   <Label text="Lệnh sản xuất ID: " style="-fx-font-weight: bold;"/>
-                  <Label fx:id="lblIdLenh" text="---"/>
+                  <Label fx:id="lblIdLenh" text="---" style="-fx-font-size: 14px; -fx-text-fill: #e67e22; -fx-font-weight: bold;"/>
+                  
+                  <Separator orientation="VERTICAL" prefHeight="20.0" />
+                  
                   <Label text="Món kem: " style="-fx-font-weight: bold;"/>
-                  <Label fx:id="lblTenMon" text="---"/>
+                  <ComboBox fx:id="cbTenMon" prefWidth="180.0" promptText="Chọn loại kem..." style="-fx-background-radius: 5;" />
+                  
+                  <Button onAction="#handleCreateNewOrder" style="-fx-background-color: #9b59b6; -fx-text-fill: white; -fx-font-weight: bold;" text="+ Tạo mẻ mới" />
                </children>
             </HBox>
 
@@ -26,7 +31,7 @@
                      <children>
                         <HBox alignment="CENTER_LEFT" spacing="15.0" style="-fx-border-color: #ddd; -fx-padding: 10; -fx-border-radius: 5;">
                            <children>
-                              <Label prefWidth="150.0" text="1. Xử lý &amp; Trộn" style="-fx-font-weight: bold;"/>
+                               <Label prefWidth="150.0" text="1. Xử lý &amp; Trộn" style="-fx-font-weight: bold;"/>
                               <Label fx:id="status1" text="Đang chờ..." textFill="#7f8c8d"/>
                               <Region HBox.hgrow="ALWAYS" />
                               <Button fx:id="btnStep1" onAction="#handleStep1" text="Xác nhận Trộn" style="-fx-background-color: #3498db; -fx-text-fill: white;"/>

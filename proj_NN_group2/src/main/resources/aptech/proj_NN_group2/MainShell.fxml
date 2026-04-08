@@ -28,9 +28,13 @@
             
             <Button fx:id="btnSanXuat" maxWidth="Infinity" onAction="#showSanXuat" style="-fx-background-color: transparent; -fx-text-fill: #cbd5e1; -fx-alignment: CENTER_LEFT; -fx-padding: 12 20;" text="⚙️  Quy trình sản xuất" />
             
+            <Button fx:id="btnThanhPham" maxWidth="Infinity" onAction="#showKhoThanhPham" style="-fx-background-color: transparent; -fx-text-fill: #cbd5e1; -fx-alignment: CENTER_LEFT; -fx-padding: 12 20;" text="🍨  Kho thành phẩm" />
+            
             <Button fx:id="btnKho" maxWidth="Infinity" onAction="#showKhoNguyenLieu" style="-fx-background-color: transparent; -fx-text-fill: #cbd5e1; -fx-alignment: CENTER_LEFT; -fx-padding: 12 20;" text="📦  Kho nguyên liệu" />
             
-            <Region VBox.vgrow="ALWAYS" /> <Button maxWidth="Infinity" style="-fx-background-color: transparent; -fx-text-fill: #94a3b8; -fx-alignment: CENTER_LEFT;" text="👤 Đăng xuất" />
+            <Region VBox.vgrow="ALWAYS" /> 
+            
+            <Button maxWidth="Infinity" onAction="#handleLogout" style="-fx-background-color: transparent; -fx-text-fill: #94a3b8; -fx-alignment: CENTER_LEFT;" text="👤 Đăng xuất" />
          </children>
       </VBox>
 
