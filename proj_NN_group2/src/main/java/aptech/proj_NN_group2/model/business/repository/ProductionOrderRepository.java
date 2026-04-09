@@ -11,21 +11,15 @@ import aptech.proj_NN_group2.model.business.BaseRepository;
 import aptech.proj_NN_group2.model.entity.ProductionOrder;
 import aptech.proj_NN_group2.util.Database;
 
+import aptech.proj_NN_group2.model.mapper.ProductionOrderMapper;
+
 public class ProductionOrderRepository extends BaseRepository<ProductionOrder> {
+
+    private final ProductionOrderMapper mapper = new ProductionOrderMapper();
 
     @Override
     protected ProductionOrder map(ResultSet rs) throws SQLException {
-        ProductionOrder o = new ProductionOrder();
-        o.setProduction_order_id(rs.getInt("production_order_id"));
-        o.setIce_cream_id(rs.getInt("ice_cream_id"));
-        o.setPlanned_output_kg(rs.getBigDecimal("planned_output_kg"));
-        o.setCreated_by((Integer) rs.getObject("created_by"));
-        o.setCreated_at(rs.getTimestamp("created_at"));
-        o.setOrder_status(rs.getString("order_status"));
-        o.setNote(rs.getString("note"));
-        // optional join field
-        try { o.setIce_cream_name(rs.getString("ice_cream_name")); } catch (SQLException ignored) {}
-        return o;
+        return mapper.RowMap(rs);
     }
 
     public List<ProductionOrder> findAll() {

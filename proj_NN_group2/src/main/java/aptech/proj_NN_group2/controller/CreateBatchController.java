@@ -99,6 +99,11 @@ public class CreateBatchController implements Initializable {
         lblMessage.setText("");
     }
 
+    @FXML
+    private void goBack() throws java.io.IOException {
+        aptech.proj_NN_group2.App.setRoot(aptech.proj_NN_group2.util.StringValue.VIEW_MAIN_MENU);
+    }
+
     private void loadTable() {
         tableOrders.setItems(FXCollections.observableArrayList(orderRepo.findAll()));
     }
