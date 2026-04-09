@@ -28,7 +28,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         // Tải giao diện đăng nhập
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("login.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("auth/login.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Hệ thống Quản lý Sản xuất Kem");
         stage.setScene(scene);

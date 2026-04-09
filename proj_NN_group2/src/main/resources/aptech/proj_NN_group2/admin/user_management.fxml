@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="aptech.proj_NN_group2.controller.admin.AdminController" style="-fx-padding: 20;">
+    
+    <top>
+        <VBox spacing="10">
+            <HBox alignment="CENTER_RIGHT" spacing="10" style="-fx-background-color: #ecf0f1; -fx-padding: 10; -fx-background-radius: 5;">
+                <Label fx:id="lblWelcome" text="Xin chào, Admin" style="-fx-font-weight: bold;" />
+                <Button text="Hồ sơ" onAction="#handleOpenProfile" 
+                        style="-fx-background-color: #34495e; -fx-text-fill: white; -fx-cursor: hand;" />
+                <Button text="Đăng xuất" onAction="#handleLogout" 
+                        style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-cursor: hand;" />
+            </HBox>
+            
+            <Label text="DANH SÁCH TÀI KHOẢN NHÂN VIÊN" style="-fx-font-size: 20; -fx-font-weight: bold;" alignment="CENTER" maxWidth="Infinity">
+                <padding><Insets top="10" bottom="20"/></padding>
+            </Label>
+        </VBox>
+    </top>
+    
+    <center>
+        <TableView fx:id="tableUsers" prefHeight="400.0" prefWidth="600.0">
+            <columns>
+                <TableColumn fx:id="colId" text="ID" prefWidth="50" />
+                <TableColumn fx:id="colUsername" text="Tên đăng nhập" prefWidth="150" />
+                <TableColumn fx:id="colRole" text="Quyền hạn" prefWidth="150" />
+                <TableColumn fx:id="colStatus" text="Trạng thái" prefWidth="100" />
+            </columns>
+        </TableView>
+    </center>
+
+    <right>
+        <VBox spacing="15.0" style="-fx-padding: 0 0 0 20;">
+            <Label text="Thêm người dùng mới" style="-fx-font-weight: bold;" />
+            <TextField fx:id="txtNewUser" promptText="Username" />
+            <PasswordField fx:id="txtNewPass" promptText="Password" />
+            <ComboBox fx:id="cbRole" promptText="Chọn quyền..." prefWidth="150" />
+            
+            <Button text="Thêm mới" onAction="#addUser" prefWidth="150" style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-cursor: hand;" />
+            <Separator />
+            <Button text="Khóa/Mở khóa" onAction="#toggleStatus" prefWidth="150" style="-fx-background-color: #e67e22; -fx-text-fill: white; -fx-cursor: hand;" />
+            <Button fx:id="btnUpdate" onAction="#handleUpdateUser" text="Cập nhật" prefWidth="150" style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-cursor: hand;" />
+            <Button fx:id="btnDelete" onAction="#handleDeleteUser" text="Xóa tài khoản" prefWidth="150" style="-fx-background-color: #f44336; -fx-text-fill: white; -fx-cursor: hand;" />
+        </VBox>
+    </right>
+</BorderPane>

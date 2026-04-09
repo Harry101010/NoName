@@ -10,6 +10,14 @@ module aptech.proj_NN_group2 {
     opens aptech.proj_NN_group2.controller to javafx.fxml;
     opens aptech.proj_NN_group2.model.entity to javafx.base;
 
+    opens aptech.proj_NN_group2.controller.admin to javafx.fxml;
+    opens aptech.proj_NN_group2.controller.auth to javafx.fxml;
+//    opens aptech.proj_NN_group2.controller.ingredient to javafx.fxml;
+//    opens aptech.proj_NN_group2.controller.production to javafx.fxml;
+//    opens aptech.proj_NN_group2.controller.production_stage to javafx.fxml;
+//    opens aptech.proj_NN_group2.controller.recipe to javafx.fxml;
+//    opens aptech.proj_NN_group2.controller.saleman to javafx.fxml;
+//    opens aptech.proj_NN_group2.controller.warehouse to javafx.fxml;
     
     exports aptech.proj_NN_group2;
 }

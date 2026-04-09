@@ -12,7 +12,7 @@ import aptech.proj_NN_group2.util.Database;
 public abstract class BaseRepository<T> {
 
     @FunctionalInterface
-    protected interface Binder {
+    public interface Binder {
         void bind(PreparedStatement ps) throws SQLException;
     }
 
@@ -49,7 +49,7 @@ public abstract class BaseRepository<T> {
         return result;
     }
 
-    protected boolean executeUpdate(String sql, Binder binder) {
+    public boolean executeUpdate(String sql, Binder binder) {
         try (Connection conn = Database.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             
