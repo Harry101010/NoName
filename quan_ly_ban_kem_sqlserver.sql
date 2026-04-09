@@ -510,4 +510,3 @@ JOIN dbo.ice_creams ic
     ON ic.ice_cream_name = v.ice_name
 JOIN dbo.ingredients ing 
     ON ing.ingredient_name = v.ing_name;
-
