@@ -20,7 +20,7 @@
 
             <TabPane tabClosingPolicy="UNAVAILABLE">
 
-                <Tab text="Ice Cream Menu">
+                <Tab text="Ice Cream Products">
                     <content>
                         <VBox spacing="10">
                             <GridPane hgap="10" vgap="10">
@@ -53,7 +53,7 @@
                     </content>
                 </Tab>
 
-                <Tab text="Ingredient Management">
+                <Tab text="Ingredients">
                     <content>
                         <VBox spacing="10">
                             <GridPane hgap="10" vgap="10">
@@ -103,7 +103,7 @@
                     </content>
                 </Tab>
 
-                <Tab text="Recipe Detail CRUD">
+                <Tab text="Recipe Details">
                     <content>
                         <VBox spacing="10">
                             <GridPane hgap="10" vgap="10">
@@ -141,7 +141,7 @@
                     </content>
                 </Tab>
 
-                <Tab text="Output-based Calculation">
+                <Tab text="Production Calculator">
                     <content>
                         <VBox spacing="10">
                             <GridPane hgap="10" vgap="10">
