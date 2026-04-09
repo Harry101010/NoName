@@ -7,7 +7,8 @@ import aptech.proj_NN_group2.model.IMapper;
 import aptech.proj_NN_group2.model.entity.IceCream;
 
 public class IceCreamMapper implements IMapper<IceCream> {
-    @Override
+    
+	@Override
     public IceCream RowMap(ResultSet rs) throws SQLException {
         IceCream i = new IceCream();
         i.setIce_cream_id(rs.getInt("ice_cream_id"));
@@ -15,4 +16,5 @@ public class IceCreamMapper implements IMapper<IceCream> {
         i.setIs_active(rs.getBoolean("is_active"));
         return i;
     }
+
 }

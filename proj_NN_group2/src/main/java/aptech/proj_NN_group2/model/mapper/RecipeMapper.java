@@ -7,7 +7,8 @@ import aptech.proj_NN_group2.model.IMapper;
 import aptech.proj_NN_group2.model.entity.Recipe;
 
 public class RecipeMapper implements IMapper<Recipe> {
-    @Override
+    
+	@Override
     public Recipe RowMap(ResultSet rs) throws SQLException {
         Recipe r = new Recipe();
         r.setRecipe_id(rs.getInt("recipe_id"));
@@ -16,4 +17,5 @@ public class RecipeMapper implements IMapper<Recipe> {
         r.setQuantity_per_kg(rs.getDouble("quantity_per_kg"));
         return r;
     }
+
 }

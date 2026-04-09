@@ -7,7 +7,8 @@ import aptech.proj_NN_group2.model.IMapper;
 import aptech.proj_NN_group2.model.entity.Ingredient;
 
 public class IngredientMapper implements IMapper<Ingredient> {
-    @Override
+    
+	@Override
     public Ingredient RowMap(ResultSet rs) throws SQLException {
         Ingredient i = new Ingredient();
         i.setIngredient_id(rs.getInt("ingredient_id"));
@@ -19,4 +20,5 @@ public class IngredientMapper implements IMapper<Ingredient> {
         i.setIs_active(rs.getBoolean("is_active"));
         return i;
     }
+
 }

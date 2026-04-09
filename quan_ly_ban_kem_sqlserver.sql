@@ -68,7 +68,7 @@ IF OBJECT_ID(N'dbo.ingredients', N'U') IS NULL
 BEGIN
     CREATE TABLE dbo.ingredients (
         ingredient_id         INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-        ingredient_name       NVARCHAR(100) NOT NULL,
+        ingredient_name       NVARCHAR(100) NOT NULL UNIQUE,
         origin              NVARCHAR(200) NULL,
         storage_condition   NVARCHAR(255) NULL,
         unit_id             INT NOT NULL,
@@ -445,7 +445,7 @@ GO
 IF NOT EXISTS (SELECT 1 FROM dbo.units)
 BEGIN
     INSERT INTO dbo.units (unit_name)
-    VALUES (N'kg'), (N'g'), (N'ml'), (N'l'), (N'pcs');
+    VALUES (N'kg'), (N'l'), (N'pcs');
 END
 GO
 
@@ -464,10 +464,11 @@ BEGIN
     INSERT INTO dbo.ingredients
     (ingredient_name, origin, storage_condition, unit_id, price_per_unit, is_active)
     VALUES
-    (N'Milk', N'Veng soure', N'Keep chilled', 3, 12000, 1),
-    (N'Sugar', N'Local', N'Dry place', 2, 25000, 1),
-    (N'Cream', N'Imported', N'Keep chilled', 3, 45000, 1),
-    (N'Cocoa Powder', N'Imported', N'Dry place', 2, 70000, 1);
+    (N'Milk', N'Veng soure', N'Keep chilled', 2, 12000, 1),
+    (N'Sugar', N'Local', N'Dry place', 1, 25000, 1),
+    (N'Cream', N'Imported', N'Keep chilled', 2, 45000, 1),
+    (N'Cocoa Powder', N'Imported', N'Dry place', 1, 70000, 1),
+    (N'Strawberry', N'Local', N'Keep chilled', 3, 110000, 1);
 END
 GO
 
@@ -482,7 +483,8 @@ FROM (VALUES
     (N'Milk', '2026-04-01 08:00:00', '2026-07-30', 300.000, 280.000),
     (N'Sugar','2026-03-25 09:00:00', '2027-01-31',1000.000, 900.000),
     (N'Cream','2026-03-22 10:00:00', '2026-05-15', 400.000, 350.000),
-    (N'Cocoa Powder','2026-03-18 11:00:00', '2027-02-28',200.000,180.000)
+    (N'Cocoa Powder','2026-03-18 11:00:00', '2027-02-28',200.000,180.000),
+    (N'Strawberry','2026-03-18 11:00:00', '2027-02-28',10000.000,700.000)
 ) v(name, import_date, expiry_date, received_quantity, remaining_quantity)
 JOIN dbo.ingredients i ON i.ingredient_name = v.name;
 
@@ -504,7 +506,9 @@ FROM (VALUES
 
     (N'Strawberry', N'Milk',         0.480),
     (N'Strawberry', N'Sugar',        0.170),
-    (N'Strawberry', N'Cream',        0.220)
+    (N'Strawberry', N'Cream',        0.200),
+    (N'Strawberry', N'Strawberry',   5)
+
 ) v(ice_name, ing_name, qty)
 JOIN dbo.ice_creams ic 
     ON ic.ice_cream_name = v.ice_name

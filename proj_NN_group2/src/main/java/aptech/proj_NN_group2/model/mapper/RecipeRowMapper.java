@@ -7,7 +7,8 @@ import aptech.proj_NN_group2.model.IMapper;
 import aptech.proj_NN_group2.model.entity.RecipeRow;
 
 public class RecipeRowMapper implements IMapper<RecipeRow> {
-    @Override
+    
+	@Override
     public RecipeRow RowMap(ResultSet rs) throws SQLException {
         RecipeRow r = new RecipeRow();
         r.setRecipe_id(rs.getInt("recipe_id"));

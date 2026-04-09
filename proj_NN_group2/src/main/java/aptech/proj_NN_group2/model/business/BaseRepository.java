@@ -57,7 +57,7 @@ public abstract class BaseRepository<T> {
             return ps.executeUpdate() > 0;
             
         } catch (SQLException e) {
-            System.err.println("Update Error: " + e.getMessage());
+            System.err.println("Update/Insert/Delete Error: " + e.getMessage());
         }
         return false;
     }
