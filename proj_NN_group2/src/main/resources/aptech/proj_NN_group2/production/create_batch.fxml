@@ -12,6 +12,7 @@
     <padding><Insets top="24" right="32" bottom="24" left="32"/></padding>
 
     <Label text="Tạo Mẻ Sản Xuất" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+    <Button text="← Quay lại" onAction="#goBack" style="-fx-padding: 4 12;"/>
 
     <GridPane hgap="12" vgap="12">
         <columnConstraints>

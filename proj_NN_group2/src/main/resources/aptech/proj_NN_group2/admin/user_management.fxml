@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
 
 <BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" 
             fx:controller="aptech.proj_NN_group2.controller.admin.AdminController" style="-fx-padding: 20;">
@@ -25,20 +22,20 @@
     <center>
         <TableView fx:id="tableUsers" prefHeight="400.0" prefWidth="600.0">
             <columns>
-                <TableColumn fx:id="colId" text="ID" prefWidth="50" />
-                <TableColumn fx:id="colUsername" text="Tên đăng nhập" prefWidth="150" />
-                <TableColumn fx:id="colRole" text="Quyền hạn" prefWidth="150" />
-                <TableColumn fx:id="colStatus" text="Trạng thái" prefWidth="100" />
+                <TableColumn fx:id="colId" prefWidth="50" text="ID" />
+                <TableColumn fx:id="colUsername" prefWidth="150" text="Tên đăng nhập" />
+                <TableColumn fx:id="colRole" prefWidth="150" text="Quyền hạn" />
+                <TableColumn fx:id="colStatus" prefWidth="100" text="Trạng thái" />
             </columns>
         </TableView>
     </center>
 
     <right>
         <VBox spacing="15.0" style="-fx-padding: 0 0 0 20;">
-            <Label text="Thêm người dùng mới" style="-fx-font-weight: bold;" />
+            <Label style="-fx-font-weight: bold;" text="Thêm người dùng mới" />
             <TextField fx:id="txtNewUser" promptText="Username" />
             <PasswordField fx:id="txtNewPass" promptText="Password" />
-            <ComboBox fx:id="cbRole" promptText="Chọn quyền..." prefWidth="150" />
+            <ComboBox fx:id="cbRole" prefWidth="150" promptText="Chọn quyền..." />
             
             <Button text="Thêm mới" onAction="#addUser" prefWidth="150" style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-cursor: hand;" />
             <Separator />
@@ -47,4 +44,21 @@
             <Button fx:id="btnDelete" onAction="#handleDeleteUser" text="Xóa tài khoản" prefWidth="150" style="-fx-background-color: #f44336; -fx-text-fill: white; -fx-cursor: hand;" />
         </VBox>
     </right>
+   <top>
+      <MenuBar prefHeight="26.0" prefWidth="234.0" BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="Tài khoản">
+            <items>
+              <MenuItem fx:id="userInfo" mnemonicParsing="false" text="Thông tin cá nhân" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleLogout" text="Đăng xuất" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Trợ giúp">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </top>
 </BorderPane>

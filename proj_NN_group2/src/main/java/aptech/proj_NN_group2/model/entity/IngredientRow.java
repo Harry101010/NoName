@@ -1,29 +1,14 @@
 package aptech.proj_NN_group2.model.entity;
 
-import java.util.Objects;
-
-public class Ingredient {
+public class IngredientRow {
     private int ingredient_id;
     private String ingredient_name;
     private String origin;
     private String storage_condition;
     private int unit_id;
+    private String unit_name;
     private double price_per_unit;
     private boolean is_active;
-
-    public Ingredient() {
-    }
-
-    public Ingredient(int ingredient_id, String ingredient_name, String origin, String storage_condition,
-                      int unit_id, double price_per_unit, boolean is_active) {
-        this.ingredient_id = ingredient_id;
-        this.ingredient_name = ingredient_name;
-        this.origin = origin;
-        this.storage_condition = storage_condition;
-        this.unit_id = unit_id;
-        this.price_per_unit = price_per_unit;
-        this.is_active = is_active;
-    }
 
     public int getIngredient_id() {
         return ingredient_id;
@@ -65,6 +50,14 @@ public class Ingredient {
         this.unit_id = unit_id;
     }
 
+    public String getUnit_name() {
+        return unit_name;
+    }
+
+    public void setUnit_name(String unit_name) {
+        this.unit_name = unit_name;
+    }
+
     public double getPrice_per_unit() {
         return price_per_unit;
     }
@@ -83,23 +76,5 @@ public class Ingredient {
 
     public void setIs_active(boolean is_active) {
         this.is_active = is_active;
-    }
-
-    @Override
-    public String toString() {
-        return ingredient_name == null ? "" : ingredient_name;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Ingredient)) return false;
-        Ingredient that = (Ingredient) o;
-        return ingredient_id == that.ingredient_id;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(ingredient_id);
     }
 }

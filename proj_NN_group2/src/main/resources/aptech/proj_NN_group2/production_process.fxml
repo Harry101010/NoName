@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="12" xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="aptech.proj_NN_group2.controller.ProductionProcessController"
+      style="-fx-background-color: #f4f6f8;">
+    <padding><Insets top="20" right="28" bottom="20" left="28"/></padding>
+
+    <Label text="Theo Dõi Công Đoạn Sản Xuất" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+    <Button text="← Quay lại" onAction="#goBack" style="-fx-padding: 4 12;"/>
+
+    <!-- Chọn lệnh sản xuất -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Lệnh sản xuất:"/>
+        <ComboBox fx:id="cbOrder" prefWidth="300"/>
+        <Button text="Tải công đoạn" onAction="#handleLoadStages"
+                style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-padding: 6 14;"/>
+    </HBox>
+
+    <Label fx:id="lblOrderInfo" style="-fx-text-fill: #555;"/>
+
+    <Separator/>
+
+    <!-- Danh sách 8 công đoạn -->
+    <TableView fx:id="tableStages" VBox.vgrow="ALWAYS" prefHeight="220">
+        <columns>
+            <TableColumn fx:id="colNo" text="#" prefWidth="35"/>
+            <TableColumn fx:id="colName" text="Công đoạn" prefWidth="220"/>
+            <TableColumn fx:id="colStatus" text="Trạng thái" prefWidth="100"/>
+            <TableColumn fx:id="colStart" text="Bắt đầu" prefWidth="140"/>
+            <TableColumn fx:id="colEnd" text="Kết thúc" prefWidth="140"/>
+            <TableColumn fx:id="colDuration" text="Thời gian (phút)" prefWidth="120"/>
+            <TableColumn fx:id="colVolume" text="Dung tích (L)" prefWidth="100"/>
+            <TableColumn fx:id="colMold" text="Số khuôn" prefWidth="80"/>
+        </columns>
+    </TableView>
+
+    <Separator/>
+
+    <!-- Form xác nhận hoàn thành công đoạn -->
+    <Label text="Xác nhận hoàn thành công đoạn đang mở:" style="-fx-font-weight: bold;"/>
+
+    <GridPane hgap="12" vgap="8">
+        <columnConstraints>
+            <ColumnConstraints minWidth="160"/>
+            <ColumnConstraints hgrow="ALWAYS"/>
+            <ColumnConstraints minWidth="160"/>
+            <ColumnConstraints hgrow="ALWAYS"/>
+        </columnConstraints>
+
+        <Label text="Thời gian thực (phút):" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="tfDuration" promptText="VD: 30" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+        <Label text="Dung tích thực (lít):" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+        <TextField fx:id="tfVolume" promptText="VD: 50.5" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
+
+        <Label text="Số khuôn (nếu có):" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="tfMold" promptText="VD: 100" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <Label text="Ghi chú:" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+        <TextField fx:id="tfNote" promptText="Ghi chú (tuỳ chọn)" GridPane.rowIndex="1" GridPane.columnIndex="3"/>
+    </GridPane>
+
+    <Label fx:id="lblMessage" style="-fx-text-fill: red;"/>
+
+    <HBox spacing="10">
+        <Button text="Xác nhận hoàn thành" onAction="#handleComplete"
+                style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 20;"/>
+        <Button text="Làm mới" onAction="#handleReset"
+                style="-fx-padding: 8 20;"/>
+    </HBox>
+</VBox>
