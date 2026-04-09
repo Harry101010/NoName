@@ -441,3 +441,32 @@ VALUES
 (N'staff_heidi',   N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 1),
 (N'staff_ivan',    N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 0); -- One inactive user for testing
 GO
+
+IF NOT EXISTS (SELECT 1 FROM dbo.units)
+BEGIN
+    INSERT INTO dbo.units (unit_name)
+    VALUES (N'kg'), (N'g'), (N'ml'), (N'l'), (N'pcs');
+END
+GO
+
+IF NOT EXISTS (SELECT 1 FROM dbo.ice_creams)
+BEGIN
+    INSERT INTO dbo.ice_creams (ice_cream_name, is_active)
+    VALUES
+    (N'Vanilla', 1),
+    (N'Chocolate', 1),
+    (N'Strawberry', 1);
+END
+GO
+
+IF NOT EXISTS (SELECT 1 FROM dbo.ingredients)
+BEGIN
+    INSERT INTO dbo.ingredients
+    (ingredient_name, origin, storage_condition, unit_id, price_per_unit, is_active)
+    VALUES
+    (N'Milk', N'Veng soure', N'Keep chilled', 3, 12000, 1),
+    (N'Sugar', N'Local', N'Dry place', 2, 25000, 1),
+    (N'Cream', N'Imported', N'Keep chilled', 3, 45000, 1),
+    (N'Cocoa Powder', N'Imported', N'Dry place', 2, 70000, 1);
+END
+GO
