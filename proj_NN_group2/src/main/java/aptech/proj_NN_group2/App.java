@@ -1,27 +1,20 @@
 package aptech.proj_NN_group2;
 
+import java.io.IOException;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-
-import aptech.proj_NN_group2.util.StringValue;
-
-/**
- * JavaFX App
- */
 public class App extends Application {
 
     private static Scene scene;
 
     @Override
     public void start(Stage stage) throws IOException {
-        // Tải giao diện đăng nhập
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("auth/login.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
+        scene = new Scene(loadFXML("auth/login"));
         stage.setTitle("Hệ thống Quản lý Sản xuất Kem");
         stage.setScene(scene);
         stage.show();
