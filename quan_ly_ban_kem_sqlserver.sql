@@ -37,6 +37,7 @@ BEGIN
     CREATE TABLE dbo.users (
         user_id         INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
         username        NVARCHAR(50) NOT NULL UNIQUE,
+        email           NVARCHAR(255) NULL,
         password_hash   NVARCHAR(255) NOT NULL,
         role_id         INT NOT NULL,
         is_active       BIT NOT NULL CONSTRAINT DF_users_is_active DEFAULT (1),
@@ -428,18 +429,18 @@ END
 -- Insert 10 Sample Users
 -- Note: In a real app, 'password_hash' would be a Bcrypt/Argon2 string.
 -- I'm using placeholder strings here for your testing.
-INSERT INTO dbo.users (username, password_hash, role_id, is_active)
+INSERT INTO dbo.users (username, email, password_hash, role_id, is_active)
 VALUES 
-(N'admin_user',    N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 1, 1),
-(N'manager_alice', N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 2, 1),
-(N'manager_bob',   N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 2, 1),
-(N'staff_charlie', N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 1),
-(N'staff_david',   N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 1),
-(N'staff_eve',     N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 1),
-(N'staff_frank',   N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 1),
-(N'staff_grace',   N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 1),
-(N'staff_heidi',   N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 1),
-(N'staff_ivan',    N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 0); -- One inactive user for testing
+(N'admin_user',     N'harryvnsg@gmail.com',     N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 1, 1),
+(N'manager_alice',  N'harryvnsg@gmail.com',     N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 2, 1),
+(N'manager_bob',    N'harryvnsg@gmail.com',     N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 2, 1),
+(N'staff_charlie',  N'harryvnsg@gmail.com',     N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 1),
+(N'staff_david',    N'harryvnsg@gmail.com',     N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 1),
+(N'staff_eve',      N'harryvnsg@gmail.com',     N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 1),
+(N'staff_frank',    N'harryvnsg@gmail.com',     N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 1),
+(N'staff_grace',    N'harryvnsg@gmail.com',     N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 1),
+(N'staff_heidi',    N'harryvnsg@gmail.com',     N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 1),
+(N'staff_ivan',     N'harryvnsg@gmail.com',     N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 0); -- One inactive user for testing
 GO
 
 IF NOT EXISTS (SELECT 1 FROM dbo.units)
