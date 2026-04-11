@@ -13,49 +13,52 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 public class LoginController {
-    @FXML private TextField txtUsername;
-    @FXML private PasswordField txtPassword;
-    
-    private UserRepository userRepo = new UserRepository();
-    
-    @FXML
-    public void handleLogin() {
-        String user = txtUsername.getText().trim();
-        String pass = txtPassword.getText();
+	@FXML
+	private TextField txtUsername;
+	@FXML
+	private PasswordField txtPassword;
 
-        if (user.isEmpty() || pass.isEmpty()) {
-            new Alert(Alert.AlertType.WARNING, "Vui lòng nhập đầy đủ tài khoản và mật khẩu!").show();
-            return;
-        }
+	private UserRepository userRepo = new UserRepository();
 
-        User authenticatedUser = userRepo.login(user);
-        
-        if (authenticatedUser == null) {
-            new Alert(Alert.AlertType.ERROR, "Tài khoản không tồn tại!").show();
-            return;
-        }
+	@FXML
+	public void handleLogin() {
+		String user = txtUsername.getText().trim();
+		String pass = txtPassword.getText();
 
-        if (!authenticatedUser.isActive()) {
-            new Alert(Alert.AlertType.ERROR, "Tài khoản của bạn đã bị khóa!").show();
-            return;
-        }
+		if (user.isEmpty() || pass.isEmpty()) {
+			new Alert(Alert.AlertType.WARNING, "Vui lòng nhập đầy đủ tài khoản và mật khẩu!").show();
+			return;
+		}
 
-        // --- ĐOẠN SỬA LẠI CHỈ DÙNG BCRYPT ---
-        try {
-            String dbHash = authenticatedUser.getPasswordHash() != null ? authenticatedUser.getPasswordHash().trim() : "";
-            
-            // CHỈ kiểm tra bằng BCrypt, không chấp nhận pass.equals("123456") nữa
-            if (org.mindrot.jbcrypt.BCrypt.checkpw(pass, dbHash)) {
-                System.out.println("Đăng nhập thành công!");
-                switchScene(authenticatedUser);
-            } else {
-                new Alert(Alert.AlertType.ERROR, "Mật khẩu không chính xác!").show();
-            }
-        } catch (Exception e) {
-            // Lỗi này xảy ra nếu chuỗi trong DB không đúng định dạng BCrypt
-            new Alert(Alert.AlertType.ERROR, "Lỗi xác thực dữ liệu. Vui lòng liên hệ Admin để reset mật khẩu!").show();
-        }
-    }
+		User authenticatedUser = userRepo.login(user);
+
+		if (authenticatedUser == null) {
+			new Alert(Alert.AlertType.ERROR, "Tài khoản không tồn tại!").show();
+			return;
+		}
+
+		if (!authenticatedUser.isActive()) {
+			new Alert(Alert.AlertType.ERROR, "Tài khoản của bạn đã bị khóa!").show();
+			return;
+		}
+
+		// --- ĐOẠN SỬA LẠI CHỈ DÙNG BCRYPT ---
+		try {
+			String dbHash = authenticatedUser.getPasswordHash() != null ? authenticatedUser.getPasswordHash().trim()
+					: "";
+
+			// CHỈ kiểm tra bằng BCrypt, không chấp nhận pass.equals("123456") nữa
+			if (org.mindrot.jbcrypt.BCrypt.checkpw(pass, dbHash)) {
+				System.out.println("Đăng nhập thành công!");
+				switchScene(authenticatedUser);
+			} else {
+				new Alert(Alert.AlertType.ERROR, "Mật khẩu không chính xác!").show();
+			}
+		} catch (Exception e) {
+			// Lỗi này xảy ra nếu chuỗi trong DB không đúng định dạng BCrypt
+			new Alert(Alert.AlertType.ERROR, "Lỗi xác thực dữ liệu. Vui lòng liên hệ Admin để reset mật khẩu!").show();
+		}
+	}
 
 //    @FXML
 //    public void handleLogin() {
@@ -105,27 +108,44 @@ public class LoginController {
 //        }
 //    }
 
-    private void switchScene(User user) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/aptech/proj_NN_group2/admin/user_management.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) txtUsername.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Hệ thống Quản lý - " + (user.getRoleName() != null ? user.getRoleName() : "User") + ": " + user.getUsername());
-            stage.centerOnScreen();
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            new Alert(Alert.AlertType.ERROR, "Không thể tải giao diện quản lý!").show();
-        }
-    }
+	private void switchScene(User user) {
+		try {
+			FXMLLoader loader = new FXMLLoader(
+					getClass().getResource("/aptech/proj_NN_group2/admin/user_management.fxml"));
+			Parent root = loader.load();
+			Stage stage = (Stage) txtUsername.getScene().getWindow();
+			stage.setScene(new Scene(root));
+			stage.setTitle("Hệ thống Quản lý - " + (user.getRoleName() != null ? user.getRoleName() : "User") + ": "
+					+ user.getUsername());
+			stage.centerOnScreen();
+			stage.show();
+		} catch (IOException e) {
+			e.printStackTrace();
+			new Alert(Alert.AlertType.ERROR, "Không thể tải giao diện quản lý!").show();
+		}
+	}
 
-    @FXML
-    public void handleForgotPassword() {
-        new Alert(Alert.AlertType.INFORMATION, "Vui lòng liên hệ Admin để cấp lại mật khẩu!").show();
-    }
+	@FXML
+	public void handleForgotPassword() {
+		 try {
+		        FXMLLoader loader = new FXMLLoader(
+		                getClass().getResource("/aptech/proj_NN_group2/auth/forgot_password.fxml"));
+		        Parent root = loader.load();
+
+		        Stage stage = (Stage) txtUsername.getScene().getWindow();
+
+		        Scene scene = new Scene(root);
+		        stage.setScene(scene);
+		        stage.setTitle("Quên mật khẩu");
+		        stage.centerOnScreen();
+		        stage.show();
+
+		    } catch (IOException e) {
+		        e.printStackTrace();
+		        new Alert(Alert.AlertType.ERROR, "Lỗi khi chuyển sang màn hình quên mật khẩu: " + e.getMessage()).show();
+		    }
+	}
 }
-
 
 //package aptech.proj_NN_group2.controller;
 //

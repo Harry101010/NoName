@@ -7,6 +7,7 @@ public class User {
     private int roleId;
     private String roleName; // Dùng để hiển thị tên quyền thay vì ID
     private boolean isActive;
+    private String email;
 
     // Constructors
     public User() {}
@@ -24,4 +25,6 @@ public class User {
     public void setRoleName(String roleName) { this.roleName = roleName; }
     public boolean isActive() { return isActive; }
     public void setActive(boolean active) { isActive = active; }
+    public String getEmail() { return email; }
+    public void setEmail(String email) {this.email = email;}
 }
