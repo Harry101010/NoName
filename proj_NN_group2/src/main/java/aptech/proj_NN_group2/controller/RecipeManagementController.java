@@ -244,6 +244,7 @@ public class RecipeManagementController {
         if (ok) {
             loadCombos();
             refreshAllTables();
+//            System.out.println(iceCreamRepository.findAll());
             selectIceCream(iceCream.getIce_cream_id());
             alert(Alert.AlertType.INFORMATION, "Thành công", "Đã lưu thành phẩm kem.");
         } else {

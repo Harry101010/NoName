@@ -15,12 +15,12 @@
                 <Insets top="14" right="14" bottom="14" left="14"/>
             </padding>
 
-            <Label text="5. Recipe Management (SX)"
+            <Label text="Recipe Management"
                    style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #cc0000;"/>
 
             <TabPane tabClosingPolicy="UNAVAILABLE">
 
-                <Tab text="Ice Cream Menu">
+                <Tab text="Ice Cream Products">
                     <content>
                         <VBox spacing="10">
                             <GridPane hgap="10" vgap="10">
@@ -35,7 +35,7 @@
                                 <CheckBox fx:id="chkIceCreamActive" selected="true" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
 
                                 <HBox spacing="10" GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.columnSpan="4">
-                                    <Button text="New" onAction="#newIceCream"/>
+                                    <Button text="Clear" onAction="#newIceCream"/>
                                     <Button text="Save" onAction="#saveIceCream"/>
                                     <Button text="Delete" onAction="#deleteIceCream"/>
                                     <Button text="Refresh" onAction="#refreshAll"/>
@@ -53,7 +53,7 @@
                     </content>
                 </Tab>
 
-                <Tab text="Ingredient Management">
+                <Tab text="Ingredients">
                     <content>
                         <VBox spacing="10">
                             <GridPane hgap="10" vgap="10">
@@ -80,7 +80,7 @@
                                 <CheckBox fx:id="chkIngredientActive" selected="true" GridPane.rowIndex="2" GridPane.columnIndex="3"/>
 
                                 <HBox spacing="10" GridPane.rowIndex="3" GridPane.columnIndex="0" GridPane.columnSpan="4">
-                                    <Button text="New" onAction="#newIngredient"/>
+                                    <Button text="Clear" onAction="#newIngredient"/>
                                     <Button text="Save" onAction="#saveIngredient"/>
                                     <Button text="Delete" onAction="#deleteIngredient"/>
                                     <Button text="Refresh" onAction="#refreshAll"/>
@@ -93,7 +93,7 @@
                                     <TableColumn fx:id="colIngredientName" text="Ingredient" prefWidth="220"/>
                                     <TableColumn fx:id="colIngredientOrigin" text="Origin" prefWidth="180"/>
                                     <TableColumn fx:id="colIngredientStorage" text="Storage" prefWidth="220"/>
-                                    <TableColumn fx:id="colIngredientUnitId" text="Unit ID" prefWidth="90"/>
+                                    <TableColumn fx:id="colIngredientUnitId" text="Unit ID" visible="false"/>
                                     <TableColumn fx:id="colIngredientUnitName" text="Unit" prefWidth="100"/>
                                     <TableColumn fx:id="colIngredientPrice" text="Price" prefWidth="100"/>
                                     <TableColumn fx:id="colIngredientActive" text="Active" prefWidth="90"/>
@@ -103,7 +103,7 @@
                     </content>
                 </Tab>
 
-                <Tab text="Recipe Detail CRUD">
+                <Tab text="Recipe Details">
                     <content>
                         <VBox spacing="10">
                             <GridPane hgap="10" vgap="10">
@@ -121,7 +121,7 @@
                                 <TextField fx:id="txtQuantityPerKg" prefWidth="160" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
                                 <HBox spacing="10" GridPane.rowIndex="2" GridPane.columnIndex="0" GridPane.columnSpan="4">
-                                    <Button text="New" onAction="#newRecipe"/>
+                                    <Button text="Clear" onAction="#newRecipe"/>
                                     <Button text="Save" onAction="#saveRecipe"/>
                                     <Button text="Delete" onAction="#deleteRecipe"/>
                                     <Button text="Refresh" onAction="#refreshAll"/>
@@ -141,7 +141,7 @@
                     </content>
                 </Tab>
 
-                <Tab text="Output-based Calculation">
+                <Tab text="Production Calculator">
                     <content>
                         <VBox spacing="10">
                             <GridPane hgap="10" vgap="10">

@@ -1,13 +1,9 @@
 package aptech.proj_NN_group2.util;
 
-import aptech.proj_NN_group2.util.CurrentUser;
-
-
 import java.io.IOException;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
