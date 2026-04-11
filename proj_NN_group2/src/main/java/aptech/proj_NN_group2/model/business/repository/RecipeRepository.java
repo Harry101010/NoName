@@ -4,13 +4,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import aptech.proj_NN_group2.model.ICreate;
-import aptech.proj_NN_group2.model.IDelete;
-import aptech.proj_NN_group2.model.IFind;
-import aptech.proj_NN_group2.model.IUpdate;
 import aptech.proj_NN_group2.model.business.BaseRepository;
 import aptech.proj_NN_group2.model.entity.Recipe;
 import aptech.proj_NN_group2.model.entity.RecipeRow;
+import aptech.proj_NN_group2.model.interfaces.ICreate;
+import aptech.proj_NN_group2.model.interfaces.IDelete;
+import aptech.proj_NN_group2.model.interfaces.IFind;
+import aptech.proj_NN_group2.model.interfaces.IUpdate;
 import aptech.proj_NN_group2.model.mapper.RecipeMapper;
 
 public class RecipeRepository extends BaseRepository<Recipe> 
@@ -47,7 +47,7 @@ public class RecipeRepository extends BaseRepository<Recipe>
         });
     }
 
-    public boolean save(Recipe r) {
+    public boolean create(Recipe r) {
         String sql = """
             INSERT INTO recipes (ice_cream_id, ingredient_id, quantity_per_kg)
             VALUES (?, ?, ?)

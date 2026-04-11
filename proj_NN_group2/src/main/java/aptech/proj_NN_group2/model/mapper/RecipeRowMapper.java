@@ -3,11 +3,10 @@ package aptech.proj_NN_group2.model.mapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import aptech.proj_NN_group2.model.IMapper;
 import aptech.proj_NN_group2.model.entity.RecipeRow;
+import aptech.proj_NN_group2.model.interfaces.IMapper;
 
 public class RecipeRowMapper implements IMapper<RecipeRow> {
-    
 	@Override
     public RecipeRow RowMap(ResultSet rs) throws SQLException {
         RecipeRow r = new RecipeRow();

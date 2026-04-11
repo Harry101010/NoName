@@ -4,9 +4,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import aptech.proj_NN_group2.model.IFind;
 import aptech.proj_NN_group2.model.business.BaseRepository;
 import aptech.proj_NN_group2.model.entity.RecipeRow;
+import aptech.proj_NN_group2.model.interfaces.IFind;
 import aptech.proj_NN_group2.model.mapper.RecipeRowMapper;
 
 class RecipeRowRepository extends BaseRepository<RecipeRow> implements IFind<RecipeRow> {

@@ -4,12 +4,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import aptech.proj_NN_group2.model.ICreate;
-import aptech.proj_NN_group2.model.IDelete;
-import aptech.proj_NN_group2.model.IFind;
-import aptech.proj_NN_group2.model.IUpdate;
 import aptech.proj_NN_group2.model.business.BaseRepository;
 import aptech.proj_NN_group2.model.entity.IceCream;
+import aptech.proj_NN_group2.model.interfaces.ICreate;
+import aptech.proj_NN_group2.model.interfaces.IDelete;
+import aptech.proj_NN_group2.model.interfaces.IFind;
+import aptech.proj_NN_group2.model.interfaces.IUpdate;
 import aptech.proj_NN_group2.model.mapper.IceCreamMapper;
 
 public class IceCreamRepository extends BaseRepository<IceCream> 
@@ -27,7 +27,7 @@ public class IceCreamRepository extends BaseRepository<IceCream>
         return find("SELECT * FROM ice_creams ORDER BY ice_cream_name", null);
     }
 
-    public boolean save(IceCream i) {
+    public boolean create(IceCream i) {
     	return executeUpdate(
 			"INSERT INTO ice_creams (ice_cream_name, is_active) VALUES (?, ?)",
 			ps -> {
