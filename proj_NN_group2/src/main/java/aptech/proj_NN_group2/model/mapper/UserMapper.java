@@ -19,7 +19,7 @@ public class UserMapper implements IMapper<User> {
         u.setActive(rs.getBoolean("is_active"));
         // Nếu lớp User chưa có created_at, có thể tạm bỏ qua dòng dưới
         // u.setRoleName(rs.getString("role_name")); 
-
+        u.setEmail(rs.getString("email"));
         return u;
     }
 
