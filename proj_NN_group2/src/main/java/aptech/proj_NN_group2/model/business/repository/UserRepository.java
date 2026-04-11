@@ -12,6 +12,7 @@ import aptech.proj_NN_group2.model.entity.User;
 import aptech.proj_NN_group2.model.mapper.UserMapper;
 import aptech.proj_NN_group2.util.Database;
 
+
 public class UserRepository extends BaseRepository<User> implements IFind<User> {
     private final UserMapper mapper = new UserMapper();
 
