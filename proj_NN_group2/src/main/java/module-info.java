@@ -5,6 +5,7 @@ module aptech.proj_NN_group2 {
     requires com.microsoft.sqlserver.jdbc;
     requires com.zaxxer.hikari;
     requires jbcrypt; 
+    requires jakarta.mail;
 
     // Cho phép JavaFX truy cập vào các folder chứa file FXML và Controller
     opens aptech.proj_NN_group2 to javafx.fxml;
