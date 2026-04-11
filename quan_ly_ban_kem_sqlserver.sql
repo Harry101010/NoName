@@ -37,7 +37,7 @@ BEGIN
     CREATE TABLE dbo.users (
         user_id         INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
         username        NVARCHAR(50) NOT NULL UNIQUE,
-        email           NVARCHAR(255) NULL,
+        email           NVARCHAR(255) NULL UNIQUE,
         password_hash   NVARCHAR(255) NOT NULL,
         role_id         INT NOT NULL,
         is_active       BIT NOT NULL CONSTRAINT DF_users_is_active DEFAULT (1),
@@ -432,15 +432,15 @@ END
 INSERT INTO dbo.users (username, email, password_hash, role_id, is_active)
 VALUES 
 (N'admin_user',     N'harryvnsg@gmail.com',     N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 1, 1),
-(N'manager_alice',  N'harryvnsg@gmail.com',     N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 2, 1),
-(N'manager_bob',    N'harryvnsg@gmail.com',     N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 2, 1),
-(N'staff_charlie',  N'harryvnsg@gmail.com',     N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 1),
-(N'staff_david',    N'harryvnsg@gmail.com',     N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 1),
-(N'staff_eve',      N'harryvnsg@gmail.com',     N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 1),
-(N'staff_frank',    N'harryvnsg@gmail.com',     N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 1),
-(N'staff_grace',    N'harryvnsg@gmail.com',     N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 1),
-(N'staff_heidi',    N'harryvnsg@gmail.com',     N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 1),
-(N'staff_ivan',     N'harryvnsg@gmail.com',     N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 0); -- One inactive user for testing
+(N'manager_alice',  N'nghvukt3@gmail.com',     N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 2, 1),
+(N'manager_bob',    N'harryvnsg19@gmail.com',     N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 2, 1),
+(N'staff_charlie',  N'nguyenduy23093@gmail.com',     N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 1),
+(N'staff_david',    N'maitue201@gmail.com',     N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 1),
+(N'staff_eve',      N'a@gmail.com',     N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 1),
+(N'staff_frank',    N'b@gmail.com',     N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 1),
+(N'staff_grace',    N'c@gmail.com',     N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 1),
+(N'staff_heidi',    N'd@gmail.com',     N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 1),
+(N'staff_ivan',     N'e@gmail.com',     N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 0); -- One inactive user for testing
 GO
 
 IF NOT EXISTS (SELECT 1 FROM dbo.units)
