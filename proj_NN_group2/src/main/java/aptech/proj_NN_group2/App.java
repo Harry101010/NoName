@@ -18,11 +18,10 @@ public class App extends Application {
     private static Scene scene;
 
     @Override
-    public void start(Stage stage) throws IOException {
-        // Tải giao diện đăng nhập
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("auth/login.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle("Hệ thống Quản lý Sản xuất Kem");
+    public void start(Stage stage) throws Exception {
+        Parent root = FXMLLoader.load(getClass().getResource("/aptech/proj_NN_group2/saleman/saleman_warehouse_dashboard.fxml"));
+        Scene scene = new Scene(root);
+        stage.setTitle("Hệ thống Quản lý Sản xuất & Xuất kho");
         stage.setScene(scene);
         stage.show();
     }
