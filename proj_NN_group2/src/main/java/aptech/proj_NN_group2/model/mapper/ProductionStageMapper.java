@@ -3,11 +3,10 @@ package aptech.proj_NN_group2.model.mapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import aptech.proj_NN_group2.model.IMapper;
 import aptech.proj_NN_group2.model.entity.ProductionStage;
+import aptech.proj_NN_group2.model.interfaces.IMapper;
 
 public class ProductionStageMapper implements IMapper<ProductionStage> {
-
     @Override
     public ProductionStage RowMap(ResultSet rs) throws SQLException {
         ProductionStage s = new ProductionStage();

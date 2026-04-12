@@ -1,4 +1,4 @@
-package aptech.proj_NN_group2.model;
+package aptech.proj_NN_group2.model.interfaces;
 
 import java.util.List;
 

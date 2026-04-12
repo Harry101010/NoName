@@ -4,13 +4,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import aptech.proj_NN_group2.model.ICreate;
-import aptech.proj_NN_group2.model.IDelete;
-import aptech.proj_NN_group2.model.IFind;
-import aptech.proj_NN_group2.model.IUpdate;
 import aptech.proj_NN_group2.model.business.BaseRepository;
 import aptech.proj_NN_group2.model.entity.Ingredient;
 import aptech.proj_NN_group2.model.entity.IngredientRow;
+import aptech.proj_NN_group2.model.interfaces.ICreate;
+import aptech.proj_NN_group2.model.interfaces.IDelete;
+import aptech.proj_NN_group2.model.interfaces.IFind;
+import aptech.proj_NN_group2.model.interfaces.IUpdate;
 import aptech.proj_NN_group2.model.mapper.IngredientMapper;
 
 public class IngredientRepository extends BaseRepository<Ingredient> 
@@ -33,23 +33,20 @@ public class IngredientRepository extends BaseRepository<Ingredient>
         return ingredientRowRepository.findAll();
     }
 
-    public boolean save(Ingredient i) {
+    public boolean create(Ingredient i) {
         String sql = """
                 INSERT INTO ingredients
                 (ingredient_name, origin, storage_condition, unit_id, price_per_unit, is_active)
                 VALUES (?, ?, ?, ?, ?, ?)
                 """;
-        return executeUpdate(
-        	sql,
-        	ps -> {
-        		ps.setString(1, i.getIngredient_name());
-        		ps.setString(2, i.getOrigin());
-        		ps.setString(3, i.getStorage_condition());
-        		ps.setInt(4, i.getUnit_id());
-        		ps.setDouble(5, i.getPrice_per_unit());
-        		ps.setBoolean(6, i.getIs_active());        		
-        	}
-        );
+        return executeUpdate(sql, ps -> {
+    		ps.setString(1, i.getIngredient_name());
+    		ps.setString(2, i.getOrigin());
+    		ps.setString(3, i.getStorage_condition());
+    		ps.setInt(4, i.getUnit_id());
+    		ps.setDouble(5, i.getPrice_per_unit());
+    		ps.setBoolean(6, i.getIs_active());        		
+        });
     }
 
     public boolean update(Ingredient i) {
@@ -58,18 +55,15 @@ public class IngredientRepository extends BaseRepository<Ingredient>
 	        SET ingredient_name = ?, origin = ?, storage_condition = ?, unit_id = ?, price_per_unit = ?, is_active = ?
 	        WHERE ingredient_id = ?
         """;
-        return executeUpdate(
-        	sql, 
-        	ps -> {
-        		ps.setString(1, i.getIngredient_name());
-        		ps.setString(2, i.getOrigin());
-        		ps.setString(3, i.getStorage_condition());
-        		ps.setInt(4, i.getUnit_id());
-        		ps.setDouble(5, i.getPrice_per_unit());
-        		ps.setBoolean(6, i.getIs_active());
-        		ps.setInt(7, i.getIngredient_id());
-        	}
-        );
+        return executeUpdate(sql, ps -> {
+    		ps.setString(1, i.getIngredient_name());
+    		ps.setString(2, i.getOrigin());
+    		ps.setString(3, i.getStorage_condition());
+    		ps.setInt(4, i.getUnit_id());
+    		ps.setDouble(5, i.getPrice_per_unit());
+    		ps.setBoolean(6, i.getIs_active());
+    		ps.setInt(7, i.getIngredient_id());
+        });
     }
 
     public boolean delete(int id) {

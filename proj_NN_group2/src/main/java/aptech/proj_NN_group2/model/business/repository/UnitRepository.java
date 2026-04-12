@@ -4,9 +4,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import aptech.proj_NN_group2.model.IFind;
 import aptech.proj_NN_group2.model.business.BaseRepository;
 import aptech.proj_NN_group2.model.entity.Unit;
+import aptech.proj_NN_group2.model.interfaces.IFind;
 import aptech.proj_NN_group2.model.mapper.UnitMapper;
 
 public class UnitRepository extends BaseRepository<Unit> implements IFind<Unit> {

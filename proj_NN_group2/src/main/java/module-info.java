@@ -3,7 +3,6 @@ module aptech.proj_NN_group2 {
     requires javafx.fxml;
     requires java.sql;
     requires com.microsoft.sqlserver.jdbc;
-    requires com.zaxxer.hikari;
     requires jbcrypt; 
     requires jakarta.mail;
 

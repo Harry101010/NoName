@@ -3,11 +3,10 @@ package aptech.proj_NN_group2.model.mapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import aptech.proj_NN_group2.model.IMapper;
 import aptech.proj_NN_group2.model.entity.Ingredient;
+import aptech.proj_NN_group2.model.interfaces.IMapper;
 
 public class IngredientMapper implements IMapper<Ingredient> {
-    
 	@Override
     public Ingredient RowMap(ResultSet rs) throws SQLException {
         Ingredient i = new Ingredient();
@@ -20,5 +19,4 @@ public class IngredientMapper implements IMapper<Ingredient> {
         i.setIs_active(rs.getBoolean("is_active"));
         return i;
     }
-
 }
