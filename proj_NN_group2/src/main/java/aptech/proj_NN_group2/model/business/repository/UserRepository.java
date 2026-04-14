@@ -1,37 +1,24 @@
 package aptech.proj_NN_group2.model.business.repository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import aptech.proj_NN_group2.model.IFind;
 import aptech.proj_NN_group2.model.business.BaseRepository;
 import aptech.proj_NN_group2.model.entity.User;
+import aptech.proj_NN_group2.model.interfaces.IDelete;
+import aptech.proj_NN_group2.model.interfaces.IFind;
+import aptech.proj_NN_group2.model.interfaces.IUpdate;
 import aptech.proj_NN_group2.model.mapper.UserMapper;
-import aptech.proj_NN_group2.util.Database;
 
-public class UserRepository extends BaseRepository<User> implements IFind<User> {
+public class UserRepository extends BaseRepository<User> 
+	implements IFind<User>, IDelete<User>, IUpdate<User> {
 	private final UserMapper mapper = new UserMapper();
 
-//    public User login(String username) {
-//        String sql = "SELECT u.*, r.role_name FROM users u JOIN roles r ON u.role_id = r.role_id WHERE u.username = ? AND u.is_active = 1";
-//        return findOne(sql, ps -> ps.setString(1, username));
-//    }
-
 	public User login(String username) {
-		// Bỏ u.is_active = 1 để có thể lấy được cả User đang bị khóa
 		String sql = "SELECT u.*, r.role_name FROM users u " + "JOIN roles r ON u.role_id = r.role_id "
 				+ "WHERE u.username = ?";
-
-		return findOne(sql, ps -> {
-			try {
-				ps.setString(1, username);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		});
+		return findOne(sql, ps -> ps.setString(1, username));
 	}
 
 	@Override
@@ -46,45 +33,26 @@ public class UserRepository extends BaseRepository<User> implements IFind<User> 
 
 	@Override
 	protected User map(ResultSet rs) throws SQLException {
-		User u = mapper.RowMap(rs);
-		// Cắt bỏ khoảng trắng dư thừa từ SQL (đặc biệt nếu dùng kiểu CHAR/NCHAR)
-		if (u.getPasswordHash() != null) {
-			u.setPasswordHash(u.getPasswordHash().trim());
-		}
-		try {
-			// Phải lấy thêm cột này vì nó được JOIN từ bảng roles
-			u.setRoleName(rs.getString("role_name"));
-		} catch (SQLException e) {
-			// Bỏ qua nếu query không có JOIN roles
-		}
-		return u;
+		return mapper.RowMap(rs);
 	}
 
 	// 1. Hàm tạo tài khoản mới
 	public boolean create(User user) {
 		String sql = "INSERT INTO users (username, password_hash, role_id, is_active) VALUES (?, ?, ?, 1)";
-		try (Connection conn = Database.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+		return executeUpdate(sql, ps -> {
 			ps.setString(1, user.getUsername());
 			ps.setString(2, user.getPasswordHash()); // Lưu ý: Nên dùng BCrypt.hashpw ở đây
 			ps.setInt(3, user.getRoleId());
-			return ps.executeUpdate() > 0;
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return false;
-		}
+		});
 	}
 
 	// 2. Hàm Khóa/Mở khóa tài khoản
 	public boolean toggleActive(int userId, boolean newStatus) {
 		String sql = "UPDATE users SET is_active = ? WHERE user_id = ?";
-		try (Connection conn = Database.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+		return executeUpdate(sql, ps -> {
 			ps.setInt(1, newStatus ? 1 : 0);
 			ps.setInt(2, userId);
-			return ps.executeUpdate() > 0;
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return false;
-		}
+		});
 	}
 
 	public boolean delete(int userId) {
@@ -115,44 +83,9 @@ public class UserRepository extends BaseRepository<User> implements IFind<User> 
 	public User findByEmailOrUsername(String input) {
 		String sql = "SELECT u.*, r.role_name FROM users u " + "JOIN roles r ON u.role_id = r.role_id "
 				+ "WHERE u.username = ? OR u.email = ?";
-
 		return findOne(sql, ps -> {
 			ps.setString(1, input);
 			ps.setString(2, input);
 		});
 	}
 }
-
-//package aptech.proj_NN_group2.model.business.repository;
-//
-//import java.util.List;
-//import java.sql.ResultSet;
-//import java.sql.SQLException;
-//
-//import aptech.proj_NN_group2.model.IFind;
-//import aptech.proj_NN_group2.model.business.BaseRepository;
-//import aptech.proj_NN_group2.model.entity.User;
-//import aptech.proj_NN_group2.model.mapper.UserMapper;
-//
-//public class UserRepository extends BaseRepository<User> implements IFind<User>{
-//	private final UserMapper mapper = new UserMapper();
-//	
-//	@Override
-//	public User findById(int id) {
-//		return findOne(
-//			"SELECT * FROM users WHERE user_id = ?", 
-//			ps -> ps.setInt(1, id)
-//		);
-//	}
-//	
-//	@Override
-//	public List<User> findAll() {
-//		return find("SELECT * FROM users", null);
-//	}
-//
-//	@Override
-//	protected User map(ResultSet rs) throws SQLException {
-//		return mapper.RowMap(rs);
-//	}
-//	
-//}

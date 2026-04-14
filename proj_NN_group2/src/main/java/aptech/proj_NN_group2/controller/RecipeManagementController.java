@@ -238,7 +238,7 @@ public class RecipeManagementController {
         iceCream.setIs_active(chkIceCreamActive.isSelected());
 
         boolean ok = iceCream.getIce_cream_id() == 0
-                ? iceCreamRepository.save(iceCream)
+                ? iceCreamRepository.create(iceCream)
                 : iceCreamRepository.update(iceCream);
 
         if (ok) {
@@ -302,7 +302,7 @@ public class RecipeManagementController {
             ingredient.setIs_active(chkIngredientActive.isSelected());
 
             boolean ok = ingredient.getIngredient_id() == 0
-                    ? ingredientRepository.save(ingredient)
+                    ? ingredientRepository.create(ingredient)
                     : ingredientRepository.update(ingredient);
 
             if (ok) {
@@ -386,7 +386,7 @@ public class RecipeManagementController {
             }
 
             boolean ok = recipe.getRecipe_id() == 0
-                    ? recipeRepository.save(recipe)
+                    ? recipeRepository.create(recipe)
                     : recipeRepository.update(recipe);
 
             if (ok) {

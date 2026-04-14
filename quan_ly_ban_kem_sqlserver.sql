@@ -1,14 +1,13 @@
 /* =========================================================
    ICE CREAM MANAGEMENT DATABASE
    SQL Server Management Studio
-   - Create database if not exists
-   - Create tables only if not exists
-   - Normalized to avoid duplicate data such as:
-     unit_name -> units
-     expiry_date -> ingredient_lots
    ========================================================= */
 
-IF DB_ID(N'IceCreamManagement') IS NULL
+IF EXISTS (SELECT name FROM sys.databases WHERE name = N'IceCreamManagement')
+BEGIN
+    DROP DATABASE IceCreamManagement;
+END
+
 BEGIN
     CREATE DATABASE IceCreamManagement;
 END
@@ -37,6 +36,7 @@ BEGIN
     CREATE TABLE dbo.users (
         user_id         INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
         username        NVARCHAR(50) NOT NULL UNIQUE,
+        email           NVARCHAR(255) NULL UNIQUE,
         password_hash   NVARCHAR(255) NOT NULL,
         role_id         INT NOT NULL,
         is_active       BIT NOT NULL CONSTRAINT DF_users_is_active DEFAULT (1),
@@ -115,7 +115,7 @@ IF OBJECT_ID(N'dbo.ice_creams', N'U') IS NULL
 BEGIN
     CREATE TABLE dbo.ice_creams (
         ice_cream_id    INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-        ice_cream_name  NVARCHAR(100) NOT NULL UNIQUE,
+        ice_cream_name  NVARCHAR(100) NOT NULL,
         is_active       BIT NOT NULL CONSTRAINT DF_ice_creams_is_active DEFAULT (1)
     );
 END
@@ -393,124 +393,48 @@ BEGIN
 END
 GO
 
-/* =========================
-   INSERT ROLES (SAFE - NO DUPLICATE)
-   ========================= */
-
--- Admin
-IF NOT EXISTS (SELECT 1 FROM roles WHERE role_name = N'Admin')
+-- 17. BẢNG TỒN KHO THÀNH PHẨM (Nơi chứa số lượng hiện thực tế)
+IF OBJECT_ID(N'dbo.finished_product_inventory', N'U') IS NULL
 BEGIN
-    INSERT INTO roles (role_name)
-    VALUES (N'Admin');
-END
-
--- Trưởng sản xuất
-IF NOT EXISTS (SELECT 1 FROM roles WHERE role_name = N'Trưởng sản xuất')
-BEGIN
-    INSERT INTO roles (role_name)
-    VALUES (N'Trưởng sản xuất');
-END
-
--- Quản lý kho
-IF NOT EXISTS (SELECT 1 FROM roles WHERE role_name = N'Quản lý kho')
-BEGIN
-    INSERT INTO roles (role_name)
-    VALUES (N'Quản lý kho');
-END
-
--- Nhân viên kinh doanh
-IF NOT EXISTS (SELECT 1 FROM roles WHERE role_name = N'Nhân viên kinh doanh')
-BEGIN
-    INSERT INTO roles (role_name)
-    VALUES (N'Nhân viên kinh doanh');
-END
-
--- Insert 10 Sample Users
--- Note: In a real app, 'password_hash' would be a Bcrypt/Argon2 string.
--- I'm using placeholder strings here for your testing.
-INSERT INTO dbo.users (username, password_hash, role_id, is_active)
-VALUES 
-(N'admin_user',    N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 1, 1),
-(N'manager_alice', N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 2, 1),
-(N'manager_bob',   N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 2, 1),
-(N'staff_charlie', N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 1),
-(N'staff_david',   N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 1),
-(N'staff_eve',     N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 1),
-(N'staff_frank',   N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 1),
-(N'staff_grace',   N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 1),
-(N'staff_heidi',   N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 1),
-(N'staff_ivan',    N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 0); -- One inactive user for testing
-GO
-
-IF NOT EXISTS (SELECT 1 FROM dbo.units)
-BEGIN
-    INSERT INTO dbo.units (unit_name)
-    VALUES (N'kg'), (N'l'), (N'pcs');
+    CREATE TABLE dbo.finished_product_inventory (
+        inventory_id INT IDENTITY(1,1) PRIMARY KEY,
+        production_po_code NVARCHAR(50) NULL,
+        product_name NVARCHAR(200) NOT NULL,
+        current_quantity DECIMAL(18,3) NOT NULL DEFAULT (0),
+        mfg_date DATETIME2(0) NULL,
+        exp_date DATETIME2(0) NULL,
+        storage_location NVARCHAR(100) NULL
+    );
 END
 GO
 
-IF NOT EXISTS (SELECT 1 FROM dbo.ice_creams)
+-- 18. BẢNG PHIẾU YÊU CẦU XUẤT KHO (Bảng cha - Lưu thông tin chung của đơn)
+IF OBJECT_ID(N'dbo.product_issue_notes', N'U') IS NULL
 BEGIN
-    INSERT INTO dbo.ice_creams (ice_cream_name, is_active)
-    VALUES
-    (N'Vanilla', 1),
-    (N'Chocolate', 1),
-    (N'Strawberry', 1);
+    CREATE TABLE dbo.product_issue_notes (
+        note_id INT IDENTITY(1,1) PRIMARY KEY,
+        saleman_id INT NOT NULL,
+        customer_name NVARCHAR(200) NOT NULL,
+        customer_order_code NVARCHAR(50) NULL,
+        delivery_date DATETIME2(0) NULL,
+        status NVARCHAR(50) DEFAULT N'Chờ duyệt',
+        note NVARCHAR(MAX) NULL,
+        create_date DATETIME2(0) DEFAULT GETDATE(),
+        FOREIGN KEY (saleman_id) REFERENCES dbo.users(user_id)
+    );
 END
 GO
 
-IF NOT EXISTS (SELECT 1 FROM dbo.ingredients)
+-- 19. BẢNG CHI TIẾT PHIẾU YÊU CẦU (Bảng con - Lưu từng món kem trong phiếu)
+IF OBJECT_ID(N'dbo.product_issue_details', N'U') IS NULL
 BEGIN
-    INSERT INTO dbo.ingredients
-    (ingredient_name, origin, storage_condition, unit_id, price_per_unit, is_active)
-    VALUES
-    (N'Milk', N'Veng soure', N'Keep chilled', 2, 12000, 1),
-    (N'Sugar', N'Local', N'Dry place', 1, 25000, 1),
-    (N'Cream', N'Imported', N'Keep chilled', 2, 45000, 1),
-    (N'Cocoa Powder', N'Imported', N'Dry place', 1, 70000, 1),
-    (N'Strawberry', N'Local', N'Keep chilled', 3, 110000, 1);
+    CREATE TABLE dbo.product_issue_details (
+        detail_id INT IDENTITY(1,1) PRIMARY KEY,
+        note_id INT NOT NULL,
+        ice_cream_id INT NOT NULL,
+        quantity DECIMAL(18,3) NOT NULL DEFAULT (0),
+        FOREIGN KEY (note_id) REFERENCES dbo.product_issue_notes(note_id) ON DELETE CASCADE,
+        FOREIGN KEY (ice_cream_id) REFERENCES dbo.ice_creams(ice_cream_id)
+    );
 END
 GO
-
-/* =========================
-   1) INGREDIENT LOTS
-   ========================= */
-INSERT INTO dbo.ingredient_lots
-    (ingredient_id, import_date, expiry_date, received_quantity, remaining_quantity)
-SELECT i.ingredient_id, v.import_date, v.expiry_date, v.received_quantity, v.remaining_quantity
-FROM (VALUES
-    (N'Milk', '2026-03-20 08:00:00', '2026-06-30', 500.000, 420.000),
-    (N'Milk', '2026-04-01 08:00:00', '2026-07-30', 300.000, 280.000),
-    (N'Sugar','2026-03-25 09:00:00', '2027-01-31',1000.000, 900.000),
-    (N'Cream','2026-03-22 10:00:00', '2026-05-15', 400.000, 350.000),
-    (N'Cocoa Powder','2026-03-18 11:00:00', '2027-02-28',200.000,180.000),
-    (N'Strawberry','2026-03-18 11:00:00', '2027-02-28',10000.000,700.000)
-) v(name, import_date, expiry_date, received_quantity, remaining_quantity)
-JOIN dbo.ingredients i ON i.ingredient_name = v.name;
-
-/* =========================
-   2) RECIPES
-   ========================= */
-INSERT INTO dbo.recipes
-    (ice_cream_id, ingredient_id, quantity_per_kg)
-SELECT ic.ice_cream_id, ing.ingredient_id, v.qty
-FROM (VALUES
-    (N'Vanilla',    N'Milk',         0.550),
-    (N'Vanilla',    N'Sugar',        0.150),
-    (N'Vanilla',    N'Cream',        0.250),
-
-    (N'Chocolate',  N'Milk',         0.500),
-    (N'Chocolate',  N'Sugar',        0.160),
-    (N'Chocolate',  N'Cream',        0.200),
-    (N'Chocolate',  N'Cocoa Powder', 0.080),
-
-    (N'Strawberry', N'Milk',         0.480),
-    (N'Strawberry', N'Sugar',        0.170),
-    (N'Strawberry', N'Cream',        0.200),
-    (N'Strawberry', N'Strawberry',   5)
-
-) v(ice_name, ing_name, qty)
-JOIN dbo.ice_creams ic 
-    ON ic.ice_cream_name = v.ice_name
-JOIN dbo.ingredients ing 
-    ON ing.ingredient_name = v.ing_name;

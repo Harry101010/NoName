@@ -3,11 +3,10 @@ package aptech.proj_NN_group2.model.mapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import aptech.proj_NN_group2.model.IMapper;
 import aptech.proj_NN_group2.model.entity.ProductionOrder;
+import aptech.proj_NN_group2.model.interfaces.IMapper;
 
 public class ProductionOrderMapper implements IMapper<ProductionOrder> {
-
     @Override
     public ProductionOrder RowMap(ResultSet rs) throws SQLException {
         ProductionOrder o = new ProductionOrder();
