@@ -18,7 +18,7 @@ public abstract class BaseRepository<T> {
 
     protected abstract T map(ResultSet rs) throws SQLException;
 
-    protected T findOne(String sql, Binder binder) {
+    public T findOne(String sql, Binder binder) {
         try (Connection conn = Database.getConnection(); 
              PreparedStatement ps = conn.prepareStatement(sql)) {
             
@@ -33,7 +33,7 @@ public abstract class BaseRepository<T> {
         return null;
     }
 
-    protected List<T> find(String sql, Binder binder) {
+    public List<T> find(String sql, Binder binder) {
         List<T> result = new ArrayList<>();
         try (Connection conn = Database.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -60,5 +60,20 @@ public abstract class BaseRepository<T> {
             System.err.println("Update/Insert/Delete Error: " + e.getMessage());
         }
         return false;
+    }
+
+    protected int count(String sql, Binder binder) {
+        try (Connection conn = Database.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            if (binder != null) binder.bind(ps);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.err.println("Count Error: " + e.getMessage());
+        }
+        return 0;
     }
 }

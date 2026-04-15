@@ -14,8 +14,8 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/aptech/proj_NN_group2/saleman/saleman_warehouse_dashboard.fxml"));
-        Scene scene = new Scene(root);
+        Parent root = FXMLLoader.load(getClass().getResource("/aptech/proj_NN_group2/main_menu.fxml"));
+        scene = new Scene(root, 900, 700);
         stage.setTitle("Hệ thống Quản lý Sản xuất & Xuất kho");
         stage.setScene(scene);
         stage.show();
@@ -26,7 +26,10 @@ public class App extends Application {
     }
 
     private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
+        // Hỗ trợ cả absolute path (bắt đầu bằng /) và relative path
+        String path = fxml.startsWith("/") ? fxml + ".fxml"
+                : "/aptech/proj_NN_group2/" + fxml + ".fxml";
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(path));
         return fxmlLoader.load();
     }
 
