@@ -6,7 +6,7 @@
 
 <VBox spacing="20" alignment="CENTER" xmlns="http://javafx.com/javafx/17"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="aptech.proj_NN_group2.controller.MainMenuController"
+      fx:controller="aptech.proj_NN_group2.controller.main.MainMenuController"
       style="-fx-background-color: #f4f6f8;">
     <padding><Insets top="40" right="60" bottom="40" left="60"/></padding>
 

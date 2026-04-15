@@ -6,6 +6,7 @@ import aptech.proj_NN_group2.util.CurrentUser;
 import aptech.proj_NN_group2.util.DialogUtil;
 import aptech.proj_NN_group2.util.NavigationUtil;
 import aptech.proj_NN_group2.util.StringValue;
+import aptech.proj_NN_group2.util.UserRoleUtil;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -45,23 +46,70 @@ public class LoginController {
         try {
             String dbHash = authenticatedUser.getPasswordHash() != null ? authenticatedUser.getPasswordHash().trim() : "";
 
-            if (org.mindrot.jbcrypt.BCrypt.checkpw(password, dbHash)) {
-                CurrentUser.setUser(authenticatedUser);
-
-                String role = authenticatedUser.getRoleName() != null ? authenticatedUser.getRoleName() : "User";
-                String title = "Hệ thống Quản lý - " + role + ": " + authenticatedUser.getUsername();
-
-                NavigationUtil.goTo(txtUsername, StringValue.VIEW_USER_MANAGEMENT, title);
-            } else {
+            if (!org.mindrot.jbcrypt.BCrypt.checkpw(password, dbHash)) {
                 DialogUtil.error(txtUsername, "Đăng nhập thất bại", "Mật khẩu không chính xác!");
+                return;
             }
+
+            String homeView = resolveHomeView(authenticatedUser);
+            if (homeView == null) {
+                DialogUtil.error(
+                        txtUsername,
+                        "Đăng nhập thất bại",
+                        "Vai trò '" + authenticatedUser.getRoleName() + "' chưa được cấu hình màn hình chính."
+                );
+                return;
+            }
+
+            CurrentUser.setUser(authenticatedUser);
+
+            String roleLabel = authenticatedUser.getRoleName() != null && !authenticatedUser.getRoleName().isBlank()
+                    ? authenticatedUser.getRoleName().trim()
+                    : "User";
+
+            String title = "Hệ thống Quản lý - " + roleLabel + ": " + authenticatedUser.getUsername();
+            NavigationUtil.goTo(txtUsername, homeView, title);
         } catch (Exception e) {
-            DialogUtil.error(txtUsername, "Đăng nhập thất bại", "Lỗi xác thực dữ liệu. Vui lòng liên hệ Admin để reset mật khẩu!");
+            DialogUtil.error(
+                    txtUsername,
+                    "Đăng nhập thất bại",
+                    "Lỗi xác thực dữ liệu. Vui lòng liên hệ Admin để reset mật khẩu!"
+            );
         }
     }
 
     @FXML
     public void handleForgotPassword() {
         NavigationUtil.goTo(txtUsername, StringValue.VIEW_FORGOT_PASSWORD, "Quên mật khẩu");
+    }
+
+    private String resolveHomeView(User user) {
+        if (user == null) {
+            return null;
+        }
+
+        int roleId = user.getRoleId();
+        String roleName = user.getRoleName() != null ? user.getRoleName().trim() : "";
+
+        if (roleId == UserRoleUtil.ROLE_ADMIN || UserRoleUtil.ADMIN.equalsIgnoreCase(roleName)) {
+            return StringValue.VIEW_USER_MANAGEMENT;
+        }
+
+        if (roleId == UserRoleUtil.ROLE_PRODUCTION_MANAGER
+                || UserRoleUtil.PRODUCTION_MANAGER.equalsIgnoreCase(roleName)) {
+            return StringValue.VIEW_MAIN_MENU;
+        }
+
+        if (roleId == UserRoleUtil.ROLE_WAREHOUSE_MANAGER
+                || UserRoleUtil.WAREHOUSE_MANAGER.equalsIgnoreCase(roleName)) {
+            return StringValue.VIEW_WAREHOUSE_DASHBOARD;
+        }
+
+        if (roleId == UserRoleUtil.ROLE_SALESMAN
+                || UserRoleUtil.SALESMAN.equalsIgnoreCase(roleName)) {
+            return StringValue.VIEW_SALEMAN_WAREHOUSE_DASHBOARD;
+        }
+
+        return null;
     }
 }

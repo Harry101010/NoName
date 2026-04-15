@@ -6,7 +6,7 @@
 
 <ScrollPane xmlns:fx="http://javafx.com/fxml/1"
             xmlns="http://javafx.com/javafx/21"
-            fx:controller="aptech.proj_NN_group2.controller.RecipeManagementController"
+            fx:controller="aptech.proj_NN_group2.controller.catalog.RecipeManagementController"
             fitToWidth="true">
 
     <content>

@@ -3,23 +3,19 @@
 <?import javafx.scene.control.*?>
 
 <AnchorPane prefHeight="700.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="aptech.proj_NN_group2.controller.saleman.SalemanWarehouseDashboardController">
+            fx:controller="aptech.proj_NN_group2.controller.sales.SalemanWarehouseDashboardController">
    <children>
       <TabPane fx:id="mainTabPane" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <tabs>
-          <!-- TAB 1: LẬP PHIẾU YÊU CẦU -->
           <Tab text="1. LẬP PHIẾU YÊU CẦU">
              <content>
-                <fx:include source="create_issue.fxml" />
+                <fx:include fx:id="createIssue" source="create_issue.fxml" />
              </content>
           </Tab>
-          
 
-          
-          <!-- TAB 2: THỦ KHO THÀNH PHẨM -->
           <Tab text="2. THỦ KHO THÀNH PHẨM">
              <content>
-                <fx:include source="finished_product_warehouse.fxml" />
+                <fx:include fx:id="warehouse" source="finished_product_warehouse.fxml" />
              </content>
           </Tab>
         </tabs>
