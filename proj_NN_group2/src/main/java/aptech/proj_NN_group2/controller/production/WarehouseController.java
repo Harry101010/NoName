@@ -1,4 +1,4 @@
-package aptech.proj_NN_group2.controller;
+package aptech.proj_NN_group2.controller.production;
 
 import aptech.proj_NN_group2.util.NavigationUtil;
 import javafx.event.ActionEvent;

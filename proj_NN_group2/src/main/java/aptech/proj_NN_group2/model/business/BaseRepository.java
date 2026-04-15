@@ -19,13 +19,17 @@ public abstract class BaseRepository<T> {
     protected abstract T map(ResultSet rs) throws SQLException;
 
     public T findOne(String sql, Binder binder) {
-        try (Connection conn = Database.getConnection(); 
+        try (Connection conn = Database.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            
-            if (binder != null) binder.bind(ps);
-            
+
+            if (binder != null) {
+                binder.bind(ps);
+            }
+
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) return map(rs);
+                if (rs.next()) {
+                    return map(rs);
+                }
             }
         } catch (SQLException e) {
             System.err.println("Query Error: " + e.getMessage());
@@ -37,11 +41,15 @@ public abstract class BaseRepository<T> {
         List<T> result = new ArrayList<>();
         try (Connection conn = Database.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            
-            if (binder != null) binder.bind(ps);
-            
+
+            if (binder != null) {
+                binder.bind(ps);
+            }
+
             try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) result.add(map(rs));
+                while (rs.next()) {
+                    result.add(map(rs));
+                }
             }
         } catch (SQLException e) {
             System.err.println("Query Error: " + e.getMessage());
@@ -52,10 +60,12 @@ public abstract class BaseRepository<T> {
     public boolean executeUpdate(String sql, Binder binder) {
         try (Connection conn = Database.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            
-            if (binder != null) binder.bind(ps);
+
+            if (binder != null) {
+                binder.bind(ps);
+            }
             return ps.executeUpdate() > 0;
-            
+
         } catch (SQLException e) {
             System.err.println("Update/Insert/Delete Error: " + e.getMessage());
         }
@@ -63,17 +73,27 @@ public abstract class BaseRepository<T> {
     }
 
     protected int count(String sql, Binder binder) {
+        Integer value = queryInteger(sql, binder);
+        return value != null ? value : 0;
+    }
+
+    protected Integer queryInteger(String sql, Binder binder) {
         try (Connection conn = Database.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            if (binder != null) binder.bind(ps);
+            if (binder != null) {
+                binder.bind(ps);
+            }
 
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) return rs.getInt(1);
+                if (rs.next()) {
+                    int value = rs.getInt(1);
+                    return rs.wasNull() ? null : value;
+                }
             }
         } catch (SQLException e) {
-            System.err.println("Count Error: " + e.getMessage());
+            System.err.println("Query Error: " + e.getMessage());
         }
-        return 0;
+        return null;
     }
 }

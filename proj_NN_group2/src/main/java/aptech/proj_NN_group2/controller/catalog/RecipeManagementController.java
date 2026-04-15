@@ -1,4 +1,4 @@
-package aptech.proj_NN_group2.controller;
+package aptech.proj_NN_group2.controller.catalog;
 
 import java.text.DecimalFormat;
 import java.util.List;

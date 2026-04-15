@@ -8,28 +8,32 @@ import aptech.proj_NN_group2.model.business.repository.IngredientExportReceiptRe
 import aptech.proj_NN_group2.model.business.repository.IngredientExportRequestRepository;
 import aptech.proj_NN_group2.model.entity.IngredientExportReceipt;
 import aptech.proj_NN_group2.model.entity.IngredientExportRequestDetail;
+import aptech.proj_NN_group2.util.DialogUtil;
+import aptech.proj_NN_group2.util.NavigationUtil;
+import aptech.proj_NN_group2.util.StringValue;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 public class ConfirmReceivedIngredientController implements Initializable {
 
-    // --- Bảng phiếu xuất kho chờ xác nhận ---
     @FXML private TableView<IngredientExportReceipt> tableReceipts;
     @FXML private TableColumn<IngredientExportReceipt, Integer> colReceiptId;
-    @FXML private TableColumn<IngredientExportReceipt, String>  colIceCream;
-    @FXML private TableColumn<IngredientExportReceipt, String>  colKg;
-    @FXML private TableColumn<IngredientExportReceipt, String>  colReceiptStatus;
-    @FXML private TableColumn<IngredientExportReceipt, String>  colCreatedAt;
-    @FXML private TableColumn<IngredientExportReceipt, String>  colNote;
+    @FXML private TableColumn<IngredientExportReceipt, String> colIceCream;
+    @FXML private TableColumn<IngredientExportReceipt, String> colKg;
+    @FXML private TableColumn<IngredientExportReceipt, String> colReceiptStatus;
+    @FXML private TableColumn<IngredientExportReceipt, String> colCreatedAt;
+    @FXML private TableColumn<IngredientExportReceipt, String> colNote;
 
-    // --- Bảng chi tiết nguyên liệu ---
     @FXML private TableView<IngredientExportRequestDetail> tableDetails;
-    @FXML private TableColumn<IngredientExportRequestDetail, String>  colIngredient;
-    @FXML private TableColumn<IngredientExportRequestDetail, String>  colUnit;
-    @FXML private TableColumn<IngredientExportRequestDetail, String>  colQty;
+    @FXML private TableColumn<IngredientExportRequestDetail, String> colIngredient;
+    @FXML private TableColumn<IngredientExportRequestDetail, String> colUnit;
+    @FXML private TableColumn<IngredientExportRequestDetail, String> colQty;
 
     @FXML private Label lblSelectedInfo;
     @FXML private Label lblMessage;
@@ -39,7 +43,6 @@ public class ConfirmReceivedIngredientController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // Setup bảng phiếu xuất kho
         colReceiptId.setCellValueFactory(new PropertyValueFactory<>("ingredient_export_receipt_id"));
         colIceCream.setCellValueFactory(new PropertyValueFactory<>("ice_cream_name"));
         colKg.setCellValueFactory(new PropertyValueFactory<>("planned_output_kg"));
@@ -47,30 +50,30 @@ public class ConfirmReceivedIngredientController implements Initializable {
         colCreatedAt.setCellValueFactory(new PropertyValueFactory<>("created_at"));
         colNote.setCellValueFactory(new PropertyValueFactory<>("note"));
 
-        // Setup bảng chi tiết nguyên liệu
         colIngredient.setCellValueFactory(new PropertyValueFactory<>("ingredient_name"));
         colUnit.setCellValueFactory(new PropertyValueFactory<>("unit_name"));
         colQty.setCellValueFactory(new PropertyValueFactory<>("required_quantity"));
 
-        // Khi chọn phiếu → load chi tiết nguyên liệu
-        tableReceipts.getSelectionModel().selectedItemProperty().addListener(
-            (obs, oldVal, selected) -> {
-                if (selected != null) handleReceiptSelected(selected);
-            });
+        tableReceipts.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, selected) -> {
+            if (selected != null) {
+                handleReceiptSelected(selected);
+            }
+        });
 
         loadReceiptTable();
     }
 
     private void handleReceiptSelected(IngredientExportReceipt receipt) {
         lblSelectedInfo.setText(
-            "Phiếu XK #" + receipt.getIngredient_export_receipt_id()
-            + "  |  Kem: " + receipt.getIce_cream_name()
-            + "  |  Số kg: " + receipt.getPlanned_output_kg()
-            + "  |  Trạng thái: " + receipt.getReceipt_status());
+                "Phiếu XK #" + receipt.getIngredient_export_receipt_id()
+                + "  |  Kem: " + receipt.getIce_cream_name()
+                + "  |  Số kg: " + receipt.getPlanned_output_kg()
+                + "  |  Trạng thái: " + receipt.getReceipt_status()
+        );
         lblMessage.setText("");
 
         List<IngredientExportRequestDetail> details =
-            requestRepo.findDetailsByRequestId(receipt.getIngredient_export_request_id());
+                requestRepo.findDetailsByRequestId(receipt.getIngredient_export_request_id());
         tableDetails.setItems(FXCollections.observableArrayList(details));
     }
 
@@ -89,6 +92,10 @@ public class ConfirmReceivedIngredientController implements Initializable {
             return;
         }
 
+        if (!DialogUtil.confirmYesNo(tableReceipts, "Xác nhận", "Xác nhận đã nhận nguyên liệu cho phiếu này?")) {
+            return;
+        }
+
         int productionOrderId = requestRepo.findProductionOrderId(selected.getIngredient_export_request_id());
         if (productionOrderId <= 0) {
             lblMessage.setText("Không tìm thấy lệnh sản xuất liên quan.");
@@ -96,9 +103,10 @@ public class ConfirmReceivedIngredientController implements Initializable {
         }
 
         boolean ok = receiptRepo.confirmReceived(
-            selected.getIngredient_export_receipt_id(),
-            selected.getIngredient_export_request_id(),
-            productionOrderId);
+                selected.getIngredient_export_receipt_id(),
+                selected.getIngredient_export_request_id(),
+                productionOrderId
+        );
 
         if (ok) {
             lblMessage.setStyle("-fx-text-fill: green;");
@@ -120,8 +128,8 @@ public class ConfirmReceivedIngredientController implements Initializable {
     }
 
     @FXML
-    private void goBack() throws java.io.IOException {
-        aptech.proj_NN_group2.App.setRoot(aptech.proj_NN_group2.util.StringValue.VIEW_MAIN_MENU);
+    private void goBack(ActionEvent event) {
+        NavigationUtil.goTo(event, StringValue.VIEW_MAIN_MENU, "Hệ thống Quản lý Sản xuất & Xuất kho");
     }
 
     private void loadReceiptTable() {
