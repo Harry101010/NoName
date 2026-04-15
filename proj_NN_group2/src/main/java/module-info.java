@@ -19,7 +19,6 @@ module aptech.proj_NN_group2 {
     opens aptech.proj_NN_group2.model.entity.saleman to javafx.base;
 
     exports aptech.proj_NN_group2;
-    exports aptech.proj_NN_group2.controller;
     exports aptech.proj_NN_group2.controller.admin;
     exports aptech.proj_NN_group2.controller.auth;
     exports aptech.proj_NN_group2.controller.production;
