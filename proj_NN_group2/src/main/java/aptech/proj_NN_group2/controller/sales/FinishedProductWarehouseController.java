@@ -3,9 +3,9 @@ package aptech.proj_NN_group2.controller.sales;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import aptech.proj_NN_group2.model.business.repository.saleman.SalemanRepository;
-import aptech.proj_NN_group2.model.entity.saleman.FinishedProductInventory;
-import aptech.proj_NN_group2.model.entity.saleman.IssueNote;
+import aptech.proj_NN_group2.model.business.repository.SalemanRepository;
+import aptech.proj_NN_group2.model.entity.FinishedProductInventory;
+import aptech.proj_NN_group2.model.entity.IssueNote;
 import aptech.proj_NN_group2.util.DialogUtil;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

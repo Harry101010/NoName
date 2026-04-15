@@ -4,9 +4,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import aptech.proj_NN_group2.model.business.repository.saleman.SalemanRepository;
-import aptech.proj_NN_group2.model.entity.saleman.IssueNote;
-import aptech.proj_NN_group2.model.entity.saleman.ProductIssueDetail;
+import aptech.proj_NN_group2.model.business.repository.SalemanRepository;
+import aptech.proj_NN_group2.model.entity.IssueNote;
+import aptech.proj_NN_group2.model.entity.ProductIssueDetail;
 import aptech.proj_NN_group2.util.DialogUtil;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

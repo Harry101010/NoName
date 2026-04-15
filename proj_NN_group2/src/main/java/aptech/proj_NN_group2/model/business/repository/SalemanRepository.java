@@ -1,4 +1,4 @@
-package aptech.proj_NN_group2.model.business.repository.saleman;
+package aptech.proj_NN_group2.model.business.repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,9 +9,9 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import aptech.proj_NN_group2.model.entity.saleman.FinishedProductInventory;
-import aptech.proj_NN_group2.model.entity.saleman.IssueNote;
-import aptech.proj_NN_group2.model.entity.saleman.ProductIssueDetail;
+import aptech.proj_NN_group2.model.entity.FinishedProductInventory;
+import aptech.proj_NN_group2.model.entity.IssueNote;
+import aptech.proj_NN_group2.model.entity.ProductIssueDetail;
 import aptech.proj_NN_group2.util.CurrentUser;
 import aptech.proj_NN_group2.util.Database;
 

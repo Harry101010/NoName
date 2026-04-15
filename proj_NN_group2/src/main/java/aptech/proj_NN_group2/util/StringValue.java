@@ -15,9 +15,9 @@ public final class StringValue {
     public static final String VIEW_RECIPE_MANAGEMENT = "/aptech/proj_NN_group2/production/recipe_management.fxml";
     public static final String VIEW_WAREHOUSE_DASHBOARD = "/aptech/proj_NN_group2/production/warehouse_dashboard.fxml";
 
-    public static final String VIEW_SALEMAN_CREATE_ISSUE = "/aptech/proj_NN_group2/saleman/create_issue.fxml";
-    public static final String VIEW_SALEMAN_FINISHED_PRODUCT_WAREHOUSE = "/aptech/proj_NN_group2/saleman/finished_product_warehouse.fxml";
-    public static final String VIEW_SALEMAN_WAREHOUSE_DASHBOARD = "/aptech/proj_NN_group2/saleman/saleman_warehouse_dashboard.fxml";
+    public static final String VIEW_SALEMAN_CREATE_ISSUE = "/aptech/proj_NN_group2/sales/create_issue.fxml";
+    public static final String VIEW_SALEMAN_FINISHED_PRODUCT_WAREHOUSE = "/aptech/proj_NN_group2/sales/finished_product_warehouse.fxml";
+    public static final String VIEW_SALEMAN_WAREHOUSE_DASHBOARD = "/aptech/proj_NN_group2/sales/saleman_warehouse_dashboard.fxml";
 
     public static final String VIEW_INGREDIENT_ISSUE_REQUEST = "/aptech/proj_NN_group2/production/ingredient_issue_request.fxml";
     public static final String VIEW_CONFIRM_RECEIVED_INGREDIENT = "/aptech/proj_NN_group2/production/confirm_received_ingredient.fxml";

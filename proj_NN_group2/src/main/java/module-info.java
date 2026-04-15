@@ -15,7 +15,6 @@ module aptech.proj_NN_group2 {
     opens aptech.proj_NN_group2.controller.sales to javafx.fxml;
 
     opens aptech.proj_NN_group2.model.entity to javafx.base;
-    opens aptech.proj_NN_group2.model.entity.saleman to javafx.base;
 
     exports aptech.proj_NN_group2;
     exports aptech.proj_NN_group2.controller.admin;
@@ -24,9 +23,7 @@ module aptech.proj_NN_group2 {
     exports aptech.proj_NN_group2.controller.sales;
 
     exports aptech.proj_NN_group2.model.entity;
-    exports aptech.proj_NN_group2.model.entity.saleman;
     exports aptech.proj_NN_group2.model.business.repository;
-    exports aptech.proj_NN_group2.model.business.repository.saleman;
     exports aptech.proj_NN_group2.model.mapper;
     exports aptech.proj_NN_group2.util;
 }
