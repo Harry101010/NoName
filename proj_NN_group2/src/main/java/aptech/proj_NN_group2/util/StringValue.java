@@ -21,6 +21,17 @@ public final class StringValue {
     public static final String VIEW_SALEMAN_FINISHED_PRODUCT_WAREHOUSE = "/aptech/proj_NN_group2/saleman/finished_product_warehouse.fxml";
     public static final String VIEW_SALEMAN_WAREHOUSE_DASHBOARD = "/aptech/proj_NN_group2/saleman/saleman_warehouse_dashboard.fxml";
 
+    public static final String VIEW_INGREDIENT_ISSUE_REQUEST = "/aptech/proj_NN_group2/production/ingredient_issue_request";
+    public static final String VIEW_CONFIRM_RECEIVED_INGREDIENT = "/aptech/proj_NN_group2/production/confirm_received_ingredient";
+    public static final String VIEW_STAGE_DETAIL = "/aptech/proj_NN_group2/production/stage_detail";
+
+    private static final String CTR_PACK = "aptech.proj_NN_group2.controller.";
+    public static final String CTR_LOGIN= CTR_PACK + "LoginController";
+    public static final String CTR_ADMIN = CTR_PACK + "AdminController";
+    public static final String CTR_CREATE_BATCH = CTR_PACK + "CreateBatchController";
+    public static final String CTR_RECIPE_MANAGEMENT = CTR_PACK + "RecipeManagementController";
+    public static final String CTR_PRODUCTION_PROCESS = CTR_PACK + "ProductionProcessController";
+    
     private StringValue() {
     }
 }

@@ -20,4 +20,16 @@
     <Button text="Theo Dõi Công Đoạn" onAction="#goToProductionProcess"
             prefWidth="250" prefHeight="45"
             style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+
+    <Button text="Yêu Cầu Xuất Kho Nguyên Liệu" onAction="#goToIngredientIssueRequest"
+            prefWidth="250" prefHeight="45"
+            style="-fx-background-color: #FF9800; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+
+    <Button text="Xác Nhận Nhận Nguyên Liệu" onAction="#goToConfirmReceivedIngredient"
+            prefWidth="250" prefHeight="45"
+            style="-fx-background-color: #9C27B0; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+
+    <Button text="Chi Tiết Công Đoạn Sản Xuất" onAction="#goToStageDetail"
+            prefWidth="250" prefHeight="45"
+            style="-fx-background-color: #00BCD4; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;"/>
 </VBox>
