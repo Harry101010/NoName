@@ -14,7 +14,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/aptech/proj_NN_group2/main_menu.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/aptech/proj_NN_group2/warehouse_dashboard.fxml"));
         scene = new Scene(root, 900, 700);
         stage.setTitle("Hệ thống Quản lý Sản xuất & Xuất kho");
         stage.setScene(scene);

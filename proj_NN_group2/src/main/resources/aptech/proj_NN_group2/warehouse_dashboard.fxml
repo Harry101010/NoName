@@ -1,79 +1,95 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<BorderPane prefHeight="377.0" prefWidth="1076.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
-   <left>
+<BorderPane prefHeight="600.0" prefWidth="1100.0"
+            xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="aptech.proj_NN_group2.controller.WarehouseController">
 
-              <!-- Bảng bên trái -->
-        <TableView fx:id="tblWarehouse" prefHeight="508.0" prefWidth="900.0" style="-fx-background-color: white; -fx-border-color: #d9d9d9; -fx-border-width: 1;" BorderPane.alignment="CENTER">
+    <!-- ================= LEFT: TABLE ================= -->
+    <left>
+        <TableView fx:id="tblWarehouse"
+                   prefWidth="900.0"
+                   BorderPane.alignment="CENTER">
+
             <columns>
-                <TableColumn fx:id="colId" prefWidth="70.0" text="ID" />
-                <TableColumn fx:id="colMaterialName" prefWidth="230.0" text="Tên nguyên liệu" />
-                <TableColumn fx:id="colUnit" prefWidth="120.0" text="Đơn vị" />
-                <TableColumn fx:id="colQuantity" prefWidth="140.0" text="Số lượng tồn" />
-                <TableColumn fx:id="colExpiryDate" prefWidth="170.0" text="Hạn sử dụng" />
-                <TableColumn fx:id="colStatus" prefWidth="160.0" text="Trạng thái" />
+                <TableColumn fx:id="colId" text="ID" prefWidth="60"/>
+                <TableColumn fx:id="colMaterialName" text="Tên nguyên liệu" prefWidth="220"/>
+                <TableColumn fx:id="colUnit" text="Đơn vị" prefWidth="100"/>
+                <TableColumn fx:id="colQuantity" text="Số lượng tồn" prefWidth="130"/>
+                <TableColumn fx:id="colExpiryDate" text="Hạn sử dụng" prefWidth="150"/>
+                <TableColumn fx:id="colStatus" text="Trạng thái" prefWidth="150"/>
             </columns>
+
         </TableView>
-   </left>
-   <right>
+    </left>
 
-              <!-- Khu chức năng bên phải -->
-        <VBox prefHeight="378.0" prefWidth="176.0" spacing="18.0" BorderPane.alignment="CENTER">
-            <children>
-                <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #222222;" text="Cập nhật kho" />
+    <!-- ================= RIGHT: FORM ================= -->
+    <right>
+        <VBox spacing="15" prefWidth="250" style="-fx-padding: 15">
 
-                      <TextField fx:id="txtMaterialName" prefHeight="42.0" promptText="Tên nguyên liệu" style="-fx-background-color: white; -fx-border-color: #cfcfcf; -fx-border-radius: 4; -fx-background-radius: 4; -fx-font-size: 14px;" />
+            <Label text="Cập nhật kho"
+                   style="-fx-font-size:18; -fx-font-weight:bold;" />
 
-                      <TextField fx:id="txtQuantity" prefHeight="42.0" promptText="Số lượng" style="-fx-background-color: white; -fx-border-color: #cfcfcf; -fx-border-radius: 4; -fx-background-radius: 4; -fx-font-size: 14px;" />
+            <!-- Combo chọn nguyên liệu -->
+            <ComboBox fx:id="cbMaterial"
+                      promptText="Chọn nguyên liệu"
+                      prefHeight="40"/>
 
-                      <TextField fx:id="txtExpiryDate" prefHeight="42.0" promptText="Hạn sử dụng (yyyy-mm-dd)" style="-fx-background-color: white; -fx-border-color: #cfcfcf; -fx-border-radius: 4; -fx-background-radius: 4; -fx-font-size: 14px;" />
+            <!-- Số lượng -->
+            <TextField fx:id="txtQuantity"
+                       promptText="Số lượng"
+                       prefHeight="40"/>
 
-                      <ComboBox fx:id="cbUnit" prefHeight="42.0" prefWidth="260.0" promptText="Chọn đơn vị..." style="-fx-background-color: white; -fx-border-color: #cfcfcf; -fx-border-radius: 4; -fx-background-radius: 4; -fx-font-size: 14px;" />
+            <!-- Hạn sử dụng -->
+            <TextField fx:id="txtExpiryDate"
+                       promptText="yyyy-mm-dd"
+                       prefHeight="40"/>
 
-                      <Button fx:id="btnAdd" mnemonicParsing="false" prefHeight="48.0" prefWidth="260.0" style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 4;" text="Nhập kho" />
+            <!-- Buttons -->
+            <Button text="Nhập kho"
+                    fx:id="btnAdd"
+                    onAction="#handleAdd"
+                    prefHeight="45"
+                    style="-fx-background-color:#2ecc71; -fx-text-fill:white;"/>
 
-                      <Button fx:id="btnUpdate" mnemonicParsing="false" prefHeight="48.0" prefWidth="260.0" style="-fx-background-color: #f39c12; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 4;" text="Cập nhật tồn kho" />
+            <Button text="Cập nhật"
+                    fx:id="btnUpdate"
+                    onAction="#handleUpdate"
+                    prefHeight="45"
+                    style="-fx-background-color:#f39c12; -fx-text-fill:white;"/>
 
-                      <Separator prefWidth="260.0" />
+            <Separator/>
 
-                      <Button fx:id="btnExport" mnemonicParsing="false" prefHeight="44.0" prefWidth="260.0" style="-fx-background-color: #e67e22; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 4;" text="Xuất kho" />
+            <Button text="Xuất kho"
+                    fx:id="btnExport"
+                    onAction="#handleExport"
+                    prefHeight="45"
+                    style="-fx-background-color:#e67e22; -fx-text-fill:white;"/>
 
-                      <Button fx:id="btnRefresh" mnemonicParsing="false" prefHeight="44.0" prefWidth="260.0" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 4;" text="Làm mới" />
-            </children>
-            <padding>
-                <Insets bottom="0.0" left="0.0" right="0.0" top="0.0" />
-            </padding>
+            <Button text="Làm mới"
+                    fx:id="btnRefresh"
+                    onAction="#handleRefresh"
+                    prefHeight="45"
+                    style="-fx-background-color:#3498db; -fx-text-fill:white;"/>
+
         </VBox>
-   </right>
-   <top>
-      <MenuBar BorderPane.alignment="CENTER">
-        <menus>
-          <Menu mnemonicParsing="false" text="Tài khoản">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Thông tin tài khoản" />
-                  <MenuItem mnemonicParsing="false" onAction="#handleLogout" text="Đăng xuất" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Trợ giúp">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
-   </top>
+    </right>
+
+    <!-- ================= TOP MENU ================= -->
+    <top>
+        <MenuBar>
+            <Menu text="Tài khoản">
+                <MenuItem text="Thông tin"/>
+                <MenuItem text="Đăng xuất" onAction="#handleLogout"/>
+            </Menu>
+            <Menu text="Trợ giúp">
+                <MenuItem text="About"/>
+            </Menu>
+        </MenuBar>
+    </top>
+
 </BorderPane>

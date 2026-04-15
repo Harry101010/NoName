@@ -18,10 +18,21 @@ module aptech.proj_NN_group2 {
     opens aptech.proj_NN_group2.model.entity to javafx.base;
     opens aptech.proj_NN_group2.model.entity.saleman to javafx.base;
 
+    // ================== THÊM MỚI ==================
+
+    // mở entity warehouse (fix lỗi mapper + tableview)
+    opens aptech.proj_NN_group2.model.entity.warehouse to javafx.base;
+
+    // ================== EXPORT ==================
+
     // Export các package cần thiết
     exports aptech.proj_NN_group2;
     exports aptech.proj_NN_group2.model.entity;
     exports aptech.proj_NN_group2.model.entity.saleman;
+
+    // export warehouse để mapper dùng được
+    exports aptech.proj_NN_group2.model.entity.warehouse;
+
     exports aptech.proj_NN_group2.model.business.repository;
     exports aptech.proj_NN_group2.model.business.repository.saleman;
     exports aptech.proj_NN_group2.model.mapper;
