@@ -9,7 +9,6 @@ module aptech.proj_NN_group2 {
 
     opens aptech.proj_NN_group2 to javafx.fxml;
 
-    opens aptech.proj_NN_group2.controller to javafx.fxml;
     opens aptech.proj_NN_group2.controller.admin to javafx.fxml;
     opens aptech.proj_NN_group2.controller.auth to javafx.fxml;
     opens aptech.proj_NN_group2.controller.production to javafx.fxml;
