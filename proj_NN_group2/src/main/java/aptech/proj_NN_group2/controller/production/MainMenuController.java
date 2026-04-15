@@ -1,4 +1,4 @@
-package aptech.proj_NN_group2.controller.main;
+package aptech.proj_NN_group2.controller.production;
 
 import aptech.proj_NN_group2.util.NavigationUtil;
 import aptech.proj_NN_group2.util.StringValue;
@@ -30,5 +30,10 @@ public class MainMenuController {
     @FXML
     private void goToStageDetail(ActionEvent event) {
         NavigationUtil.goTo(event, StringValue.VIEW_STAGE_DETAIL, "Ghi nhận công đoạn");
+    }
+    
+    @FXML
+    private void goToRecipeManagement(ActionEvent event) {
+        NavigationUtil.goTo(event, StringValue.VIEW_RECIPE_MANAGEMENT, "Quản lý công thức");
     }
 }

@@ -6,12 +6,9 @@
 
 <VBox spacing="20" alignment="CENTER" xmlns="http://javafx.com/javafx/17"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="aptech.proj_NN_group2.controller.main.MainMenuController"
+      fx:controller="aptech.proj_NN_group2.controller.production.MainMenuController"
       style="-fx-background-color: #f4f6f8;">
     <padding><Insets top="40" right="60" bottom="40" left="60"/></padding>
-
-    <Label text="Ice Cream Management" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
-    <Label text="DUY - Production Module" style="-fx-text-fill: #888;"/>
 
     <Button text="Tạo Mẻ Sản Xuất" onAction="#goToCreateBatch"
             prefWidth="250" prefHeight="45"
@@ -32,4 +29,8 @@
     <Button text="Chi Tiết Công Đoạn Sản Xuất" onAction="#goToStageDetail"
             prefWidth="250" prefHeight="45"
             style="-fx-background-color: #00BCD4; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+	<Button text="Quản Lý Công Thức" onAction="#goToRecipeManagement"
+        prefWidth="250" prefHeight="45"
+        style="-fx-background-color: #D35400; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+
 </VBox>

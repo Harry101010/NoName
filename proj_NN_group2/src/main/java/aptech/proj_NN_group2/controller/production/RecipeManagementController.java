@@ -1,4 +1,4 @@
-package aptech.proj_NN_group2.controller.catalog;
+package aptech.proj_NN_group2.controller.production;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -14,7 +14,10 @@ import aptech.proj_NN_group2.model.entity.Recipe;
 import aptech.proj_NN_group2.model.entity.RecipeRow;
 import aptech.proj_NN_group2.model.entity.Unit;
 import aptech.proj_NN_group2.util.DialogUtil;
+import aptech.proj_NN_group2.util.NavigationUtil;
+import aptech.proj_NN_group2.util.StringValue;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -561,5 +564,10 @@ public class RecipeManagementController {
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException(fieldName + " phải là số hợp lệ.");
         }
+    }
+    
+    @FXML
+    private void goHome(ActionEvent event) {
+        NavigationUtil.goTo(event, StringValue.VIEW_MAIN_MENU, "Màn hình chính");
     }
 }
