@@ -17,4 +17,19 @@ public class MainMenuController {
     private void goToProductionProcess() throws IOException {
         App.setRoot(StringValue.VIEW_PRODUCTION_PROCESS);
     }
+
+    @FXML
+    private void goToIngredientIssueRequest() throws IOException {
+        App.setRoot(StringValue.VIEW_INGREDIENT_ISSUE_REQUEST);
+    }
+
+    @FXML
+    private void goToConfirmReceivedIngredient() throws IOException {
+        App.setRoot(StringValue.VIEW_CONFIRM_RECEIVED_INGREDIENT);
+    }
+
+    @FXML
+    private void goToStageDetail() throws IOException {
+        App.setRoot(StringValue.VIEW_STAGE_DETAIL);
+    }
 }

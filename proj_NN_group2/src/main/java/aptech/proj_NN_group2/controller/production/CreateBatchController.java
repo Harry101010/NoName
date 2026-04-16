@@ -77,7 +77,9 @@ public class CreateBatchController implements Initializable {
         order.setIce_cream_id(selected.getIce_cream_id());
         order.setPlanned_output_kg(kg);
         order.setNote(taNote.getText().trim());
-        // TODO: set created_by từ session user sau khi có login
+        if (aptech.proj_NN_group2.util.CurrentUser.isLoggedIn()) {
+            order.setCreated_by(aptech.proj_NN_group2.util.CurrentUser.getUser().getUserId());
+        }
 
         int newId = orderRepo.create(order);
         if (newId > 0) {

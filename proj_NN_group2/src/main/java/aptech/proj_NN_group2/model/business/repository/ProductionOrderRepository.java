@@ -29,6 +29,15 @@ public class ProductionOrderRepository extends BaseRepository<ProductionOrder> {
         return find(sql, null);
     }
 
+    /** Lấy danh sách lệnh sản xuất theo trạng thái */
+    public List<ProductionOrder> findByStatus(String status) {
+        String sql = "SELECT po.*, ic.ice_cream_name FROM production_orders po " +
+                     "JOIN ice_creams ic ON po.ice_cream_id = ic.ice_cream_id " +
+                     "WHERE po.order_status = ? " +
+                     "ORDER BY po.created_at DESC";
+        return find(sql, ps -> ps.setString(1, status));
+    }
+
     /** Insert new order, returns generated ID or -1 on failure */
     public int create(ProductionOrder order) {
         String sql = "INSERT INTO production_orders (ice_cream_id, planned_output_kg, created_by, order_status, note) " +
