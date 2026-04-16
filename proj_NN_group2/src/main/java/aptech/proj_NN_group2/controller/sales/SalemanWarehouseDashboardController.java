@@ -1,4 +1,4 @@
-package aptech.proj_NN_group2.controller.saleman;
+package aptech.proj_NN_group2.controller.sales;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TabPane;

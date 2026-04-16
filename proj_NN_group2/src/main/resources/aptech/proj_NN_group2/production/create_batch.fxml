@@ -7,7 +7,7 @@
 
 <VBox spacing="16" xmlns="http://javafx.com/javafx/17"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="aptech.proj_NN_group2.controller.CreateBatchController"
+      fx:controller="aptech.proj_NN_group2.controller.production.CreateBatchController"
       style="-fx-background-color: #f4f6f8;">
     <padding><Insets top="24" right="32" bottom="24" left="32"/></padding>
 

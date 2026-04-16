@@ -1,4 +1,4 @@
-package aptech.proj_NN_group2.model.entity.saleman;
+package aptech.proj_NN_group2.model.entity;
 
 public class ProductIssueDetail {
     private int iceCreamId;

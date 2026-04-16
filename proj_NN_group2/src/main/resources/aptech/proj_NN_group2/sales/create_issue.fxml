@@ -4,7 +4,7 @@
 <?import javafx.geometry.Insets?>
 
 <VBox spacing="10" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" 
-      fx:controller="aptech.proj_NN_group2.controller.saleman.SalemanController" 
+      fx:controller="aptech.proj_NN_group2.controller.sales.SalemanController"
       style="-fx-background-color: #ecf0f1;">
     
     <padding>

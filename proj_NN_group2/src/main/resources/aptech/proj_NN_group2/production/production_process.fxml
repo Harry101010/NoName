@@ -6,7 +6,7 @@
 
 <VBox spacing="12" xmlns="http://javafx.com/javafx/17"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="aptech.proj_NN_group2.controller.ProductionProcessController"
+      fx:controller="aptech.proj_NN_group2.controller.production.ProductionProcessController"
       style="-fx-background-color: #f4f6f8;">
     <padding><Insets top="20" right="28" bottom="20" left="28"/></padding>
 

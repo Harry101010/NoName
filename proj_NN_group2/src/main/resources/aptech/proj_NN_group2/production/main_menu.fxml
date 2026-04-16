@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="20" alignment="CENTER" xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="aptech.proj_NN_group2.controller.production.MainMenuController"
+      style="-fx-background-color: #f4f6f8;">
+    <padding><Insets top="40" right="60" bottom="40" left="60"/></padding>
+
+    <Button text="Tạo Mẻ Sản Xuất" onAction="#goToCreateBatch"
+            prefWidth="250" prefHeight="45"
+            style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+
+    <Button text="Theo Dõi Công Đoạn" onAction="#goToProductionProcess"
+            prefWidth="250" prefHeight="45"
+            style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+
+    <Button text="Yêu Cầu Xuất Kho Nguyên Liệu" onAction="#goToIngredientIssueRequest"
+            prefWidth="250" prefHeight="45"
+            style="-fx-background-color: #FF9800; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+
+    <Button text="Xác Nhận Nhận Nguyên Liệu" onAction="#goToConfirmReceivedIngredient"
+            prefWidth="250" prefHeight="45"
+            style="-fx-background-color: #9C27B0; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+
+    <Button text="Chi Tiết Công Đoạn Sản Xuất" onAction="#goToStageDetail"
+            prefWidth="250" prefHeight="45"
+            style="-fx-background-color: #00BCD4; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+	<Button text="Quản Lý Công Thức" onAction="#goToRecipeManagement"
+        prefWidth="250" prefHeight="45"
+        style="-fx-background-color: #D35400; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+
+</VBox>

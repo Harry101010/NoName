@@ -1,4 +1,4 @@
-package aptech.proj_NN_group2.controller;
+package aptech.proj_NN_group2.controller.production;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -13,9 +13,12 @@ import aptech.proj_NN_group2.model.entity.IngredientRow;
 import aptech.proj_NN_group2.model.entity.Recipe;
 import aptech.proj_NN_group2.model.entity.RecipeRow;
 import aptech.proj_NN_group2.model.entity.Unit;
+import aptech.proj_NN_group2.util.DialogUtil;
+import aptech.proj_NN_group2.util.NavigationUtil;
+import aptech.proj_NN_group2.util.StringValue;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
@@ -160,7 +163,9 @@ public class RecipeManagementController {
         if (selected == null) {
             tblRecipe.setItems(FXCollections.observableArrayList(recipeRepository.findAllRows()));
         } else {
-            tblRecipe.setItems(FXCollections.observableArrayList(recipeRepository.findRowsByIceCreamId(selected.getIce_cream_id())));
+            tblRecipe.setItems(FXCollections.observableArrayList(
+                recipeRepository.findRowsByIceCreamId(selected.getIce_cream_id())
+            ));
         }
     }
 
@@ -186,8 +191,12 @@ public class RecipeManagementController {
         IceCream iceCream = iceCreamRepository.findById(recipe.getIce_cream_id());
         Ingredient ingredient = ingredientRepository.findById(recipe.getIngredient_id());
 
-        if (iceCream != null) cboRecipeIceCream.getSelectionModel().select(iceCream);
-        if (ingredient != null) cboRecipeIngredient.getSelectionModel().select(ingredient);
+        if (iceCream != null) {
+            cboRecipeIceCream.getSelectionModel().select(iceCream);
+        }
+        if (ingredient != null) {
+            cboRecipeIngredient.getSelectionModel().select(ingredient);
+        }
         txtQuantityPerKg.setText(df.format(recipe.getQuantity_per_kg()));
     }
 
@@ -229,26 +238,33 @@ public class RecipeManagementController {
     private void saveIceCream() {
         String name = txtIceCreamName.getText() == null ? "" : txtIceCreamName.getText().trim();
         if (name.isEmpty()) {
-            alert(Alert.AlertType.WARNING, "Thiếu dữ liệu", "Tên kem không được để trống.");
+            DialogUtil.warning(tblIceCream, "Thiếu dữ liệu", "Tên kem không được để trống.");
             return;
         }
 
-        IceCream iceCream = currentIceCream != null ? currentIceCream : new IceCream();
+        boolean isNew = currentIceCream == null || currentIceCream.getIce_cream_id() == 0;
+        IceCream iceCream = isNew ? new IceCream() : currentIceCream;
+
         iceCream.setIce_cream_name(name);
         iceCream.setIs_active(chkIceCreamActive.isSelected());
 
-        boolean ok = iceCream.getIce_cream_id() == 0
+        boolean ok = isNew
                 ? iceCreamRepository.create(iceCream)
                 : iceCreamRepository.update(iceCream);
 
         if (ok) {
             loadCombos();
             refreshAllTables();
-//            System.out.println(iceCreamRepository.findAll());
-            selectIceCream(iceCream.getIce_cream_id());
-            alert(Alert.AlertType.INFORMATION, "Thành công", "Đã lưu thành phẩm kem.");
+
+            if (isNew) {
+                clearIceCreamForm();
+            } else {
+                selectIceCream(iceCream.getIce_cream_id());
+            }
+
+            DialogUtil.info(tblIceCream, "Thành công", "Đã lưu thành phẩm kem.");
         } else {
-            alert(Alert.AlertType.ERROR, "Lỗi", "Không thể lưu thành phẩm kem.");
+            DialogUtil.error(tblIceCream, "Lỗi", "Không thể lưu thành phẩm kem.");
         }
     }
 
@@ -256,18 +272,24 @@ public class RecipeManagementController {
     private void deleteIceCream() {
         IceCream selected = tblIceCream.getSelectionModel().getSelectedItem();
         if (selected == null) {
-            alert(Alert.AlertType.WARNING, "Thiếu dữ liệu", "Hãy chọn một thành phẩm kem để xóa.");
+            DialogUtil.warning(tblIceCream, "Thiếu dữ liệu", "Hãy chọn một thành phẩm kem để xóa.");
+            return;
+        }
+
+        if (!DialogUtil.confirm(tblIceCream, "Xác nhận", "Bạn có chắc muốn xóa thành phẩm kem này không?")) {
             return;
         }
 
         recipeRepository.deleteByIceCreamId(selected.getIce_cream_id());
+
         if (iceCreamRepository.delete(selected.getIce_cream_id())) {
             loadCombos();
             refreshAllTables();
             clearIceCreamForm();
-            alert(Alert.AlertType.INFORMATION, "Thành công", "Đã xóa thành phẩm kem.");
+            clearRecipeForm();
+            DialogUtil.info(tblIceCream, "Thành công", "Đã xóa thành phẩm kem.");
         } else {
-            alert(Alert.AlertType.ERROR, "Lỗi", "Không thể xóa thành phẩm kem.");
+            DialogUtil.error(tblIceCream, "Lỗi", "Không thể xóa thành phẩm kem.");
         }
     }
 
@@ -281,19 +303,21 @@ public class RecipeManagementController {
         try {
             String name = txtIngredientName.getText() == null ? "" : txtIngredientName.getText().trim();
             if (name.isEmpty()) {
-                alert(Alert.AlertType.WARNING, "Thiếu dữ liệu", "Tên nguyên liệu không được để trống.");
+                DialogUtil.warning(tblIngredient, "Thiếu dữ liệu", "Tên nguyên liệu không được để trống.");
                 return;
             }
 
             Unit unit = cboUnit.getValue();
             if (unit == null) {
-                alert(Alert.AlertType.WARNING, "Thiếu dữ liệu", "Bạn phải chọn đơn vị.");
+                DialogUtil.warning(tblIngredient, "Thiếu dữ liệu", "Bạn phải chọn đơn vị.");
                 return;
             }
 
             double price = parseDouble(txtPricePerUnit.getText(), "Giá thành / đơn vị");
 
-            Ingredient ingredient = currentIngredient != null ? currentIngredient : new Ingredient();
+            boolean isNew = currentIngredient == null || currentIngredient.getIngredient_id() == 0;
+            Ingredient ingredient = isNew ? new Ingredient() : currentIngredient;
+
             ingredient.setIngredient_name(name);
             ingredient.setOrigin(txtIngredientOrigin.getText());
             ingredient.setStorage_condition(txtStorageCondition.getText());
@@ -301,20 +325,26 @@ public class RecipeManagementController {
             ingredient.setPrice_per_unit(price);
             ingredient.setIs_active(chkIngredientActive.isSelected());
 
-            boolean ok = ingredient.getIngredient_id() == 0
+            boolean ok = isNew
                     ? ingredientRepository.create(ingredient)
                     : ingredientRepository.update(ingredient);
 
             if (ok) {
                 loadCombos();
                 refreshAllTables();
-                selectIngredient(ingredient.getIngredient_id());
-                alert(Alert.AlertType.INFORMATION, "Thành công", "Đã lưu nguyên liệu.");
+
+                if (isNew) {
+                    clearIngredientForm();
+                } else {
+                    selectIngredient(ingredient.getIngredient_id());
+                }
+
+                DialogUtil.info(tblIngredient, "Thành công", "Đã lưu nguyên liệu.");
             } else {
-                alert(Alert.AlertType.ERROR, "Lỗi", "Không thể lưu nguyên liệu.");
+                DialogUtil.error(tblIngredient, "Lỗi", "Không thể lưu nguyên liệu.");
             }
         } catch (Exception ex) {
-            alert(Alert.AlertType.ERROR, "Lỗi", ex.getMessage());
+            DialogUtil.error(tblIngredient, "Lỗi", ex.getMessage());
         }
     }
 
@@ -325,18 +355,24 @@ public class RecipeManagementController {
                 : null;
 
         if (selected == null) {
-            alert(Alert.AlertType.WARNING, "Thiếu dữ liệu", "Hãy chọn một nguyên liệu để xóa.");
+            DialogUtil.warning(tblIngredient, "Thiếu dữ liệu", "Hãy chọn một nguyên liệu để xóa.");
+            return;
+        }
+
+        if (!DialogUtil.confirm(tblIngredient, "Xác nhận", "Bạn có chắc muốn xóa nguyên liệu này không?")) {
             return;
         }
 
         recipeRepository.deleteByIngredientId(selected.getIngredient_id());
+
         if (ingredientRepository.delete(selected.getIngredient_id())) {
             loadCombos();
             refreshAllTables();
             clearIngredientForm();
-            alert(Alert.AlertType.INFORMATION, "Thành công", "Đã xóa nguyên liệu.");
+            clearRecipeForm();
+            DialogUtil.info(tblIngredient, "Thành công", "Đã xóa nguyên liệu.");
         } else {
-            alert(Alert.AlertType.ERROR, "Lỗi", "Không thể xóa nguyên liệu.");
+            DialogUtil.error(tblIngredient, "Lỗi", "Không thể xóa nguyên liệu.");
         }
     }
 
@@ -352,11 +388,11 @@ public class RecipeManagementController {
             Ingredient ingredient = cboRecipeIngredient.getValue();
 
             if (iceCream == null) {
-                alert(Alert.AlertType.WARNING, "Thiếu dữ liệu", "Bạn phải chọn một thành phẩm kem.");
+                DialogUtil.warning(tblRecipe, "Thiếu dữ liệu", "Bạn phải chọn một thành phẩm kem.");
                 return;
             }
             if (ingredient == null) {
-                alert(Alert.AlertType.WARNING, "Thiếu dữ liệu", "Bạn phải chọn nguyên liệu.");
+                DialogUtil.warning(tblRecipe, "Thiếu dữ liệu", "Bạn phải chọn nguyên liệu.");
                 return;
             }
 
@@ -367,19 +403,25 @@ public class RecipeManagementController {
             recipe.setIngredient_id(ingredient.getIngredient_id());
             recipe.setQuantity_per_kg(qtyPerKg);
 
+            int selectedRecipeId = recipe.getRecipe_id();
+
             if (recipe.getRecipe_id() == 0) {
                 Recipe existing = recipeRepository.findByIceCreamAndIngredient(
                         iceCream.getIce_cream_id(),
                         ingredient.getIngredient_id()
                 );
+
                 if (existing != null) {
                     recipe.setRecipe_id(existing.getRecipe_id());
+                    selectedRecipeId = existing.getRecipe_id();
+
                     boolean okUpdate = recipeRepository.update(recipe);
                     if (okUpdate) {
                         refreshRecipeTable();
-                        alert(Alert.AlertType.INFORMATION, "Thành công", "Đã cập nhật định mức hiện có.");
+                        selectRecipe(selectedRecipeId);
+                        DialogUtil.info(tblRecipe, "Thành công", "Đã cập nhật định mức hiện có.");
                     } else {
-                        alert(Alert.AlertType.ERROR, "Lỗi", "Không thể cập nhật định mức.");
+                        DialogUtil.error(tblRecipe, "Lỗi", "Không thể cập nhật định mức.");
                     }
                     return;
                 }
@@ -390,14 +432,30 @@ public class RecipeManagementController {
                     : recipeRepository.update(recipe);
 
             if (ok) {
+                if (selectedRecipeId == 0) {
+                    Recipe saved = recipeRepository.findByIceCreamAndIngredient(
+                            iceCream.getIce_cream_id(),
+                            ingredient.getIngredient_id()
+                    );
+                    if (saved != null) {
+                        selectedRecipeId = saved.getRecipe_id();
+                    }
+                }
+
                 refreshRecipeTable();
-                selectRecipe(recipe.getRecipe_id());
-                alert(Alert.AlertType.INFORMATION, "Thành công", "Đã lưu công thức.");
+
+                if (selectedRecipeId > 0) {
+                    selectRecipe(selectedRecipeId);
+                } else {
+                    clearRecipeForm();
+                }
+
+                DialogUtil.info(tblRecipe, "Thành công", "Đã lưu công thức.");
             } else {
-                alert(Alert.AlertType.ERROR, "Lỗi", "Không thể lưu công thức.");
+                DialogUtil.error(tblRecipe, "Lỗi", "Không thể lưu công thức.");
             }
         } catch (Exception ex) {
-            alert(Alert.AlertType.ERROR, "Lỗi", ex.getMessage());
+            DialogUtil.error(tblRecipe, "Lỗi", ex.getMessage());
         }
     }
 
@@ -405,16 +463,20 @@ public class RecipeManagementController {
     private void deleteRecipe() {
         RecipeRow selected = tblRecipe.getSelectionModel().getSelectedItem();
         if (selected == null) {
-            alert(Alert.AlertType.WARNING, "Thiếu dữ liệu", "Hãy chọn một dòng công thức để xóa.");
+            DialogUtil.warning(tblRecipe, "Thiếu dữ liệu", "Hãy chọn một dòng công thức để xóa.");
+            return;
+        }
+
+        if (!DialogUtil.confirm(tblRecipe, "Xác nhận", "Bạn có chắc muốn xóa công thức này không?")) {
             return;
         }
 
         if (recipeRepository.delete(selected.getRecipe_id())) {
             refreshRecipeTable();
             clearRecipeForm();
-            alert(Alert.AlertType.INFORMATION, "Thành công", "Đã xóa công thức.");
+            DialogUtil.info(tblRecipe, "Thành công", "Đã xóa công thức.");
         } else {
-            alert(Alert.AlertType.ERROR, "Lỗi", "Không thể xóa công thức.");
+            DialogUtil.error(tblRecipe, "Lỗi", "Không thể xóa công thức.");
         }
     }
 
@@ -423,7 +485,7 @@ public class RecipeManagementController {
         try {
             IceCream iceCream = cboCalcIceCream.getValue();
             if (iceCream == null) {
-                alert(Alert.AlertType.WARNING, "Thiếu dữ liệu", "Bạn phải chọn thành phẩm kem cần tính.");
+                DialogUtil.warning(txtCalcResult, "Thiếu dữ liệu", "Bạn phải chọn thành phẩm kem cần tính.");
                 return;
             }
 
@@ -431,7 +493,7 @@ public class RecipeManagementController {
             List<RecipeRow> rows = recipeRepository.findRowsByIceCreamId(iceCream.getIce_cream_id());
 
             if (rows.isEmpty()) {
-                alert(Alert.AlertType.WARNING, "Thiếu dữ liệu", "Kem này chưa có định mức nguyên liệu.");
+                DialogUtil.warning(txtCalcResult, "Thiếu dữ liệu", "Kem này chưa có định mức nguyên liệu.");
                 return;
             }
 
@@ -455,7 +517,7 @@ public class RecipeManagementController {
 
             txtCalcResult.setText(sb.toString());
         } catch (Exception ex) {
-            alert(Alert.AlertType.ERROR, "Lỗi", ex.getMessage());
+            DialogUtil.error(txtCalcResult, "Lỗi", ex.getMessage());
         }
     }
 
@@ -503,12 +565,9 @@ public class RecipeManagementController {
             throw new IllegalArgumentException(fieldName + " phải là số hợp lệ.");
         }
     }
-
-    private void alert(Alert.AlertType type, String title, String content) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
+    
+    @FXML
+    private void goHome(ActionEvent event) {
+        NavigationUtil.goTo(event, StringValue.VIEW_MAIN_MENU, "Màn hình chính");
     }
 }

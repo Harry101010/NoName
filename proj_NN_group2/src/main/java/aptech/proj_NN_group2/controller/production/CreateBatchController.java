@@ -8,10 +8,19 @@ import aptech.proj_NN_group2.model.business.repository.IceCreamRepository;
 import aptech.proj_NN_group2.model.business.repository.ProductionOrderRepository;
 import aptech.proj_NN_group2.model.entity.IceCream;
 import aptech.proj_NN_group2.model.entity.ProductionOrder;
+import aptech.proj_NN_group2.util.CurrentUser;
+import aptech.proj_NN_group2.util.NavigationUtil;
+import aptech.proj_NN_group2.util.StringValue;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 public class CreateBatchController implements Initializable {
@@ -34,10 +43,8 @@ public class CreateBatchController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // Load danh sách kem vào ComboBox
         cbIceCream.setItems(FXCollections.observableArrayList(iceCreamRepo.findAllActive()));
 
-        // Setup cột bảng
         colId.setCellValueFactory(new PropertyValueFactory<>("production_order_id"));
         colIceCream.setCellValueFactory(new PropertyValueFactory<>("ice_cream_name"));
         colKg.setCellValueFactory(new PropertyValueFactory<>("planned_output_kg"));
@@ -54,12 +61,14 @@ public class CreateBatchController implements Initializable {
 
         IceCream selected = cbIceCream.getValue();
         if (selected == null) {
+            lblMessage.setStyle("-fx-text-fill: red;");
             lblMessage.setText("Vui lòng chọn loại kem.");
             return;
         }
 
-        String kgText = tfOutputKg.getText().trim();
+        String kgText = tfOutputKg.getText() == null ? "" : tfOutputKg.getText().trim();
         if (kgText.isEmpty()) {
+            lblMessage.setStyle("-fx-text-fill: red;");
             lblMessage.setText("Vui lòng nhập số kg đầu ra.");
             return;
         }
@@ -67,8 +76,11 @@ public class CreateBatchController implements Initializable {
         BigDecimal kg;
         try {
             kg = new BigDecimal(kgText);
-            if (kg.compareTo(BigDecimal.ZERO) <= 0) throw new NumberFormatException();
+            if (kg.compareTo(BigDecimal.ZERO) <= 0) {
+                throw new NumberFormatException();
+            }
         } catch (NumberFormatException e) {
+            lblMessage.setStyle("-fx-text-fill: red;");
             lblMessage.setText("Số kg phải là số dương hợp lệ.");
             return;
         }
@@ -76,8 +88,11 @@ public class CreateBatchController implements Initializable {
         ProductionOrder order = new ProductionOrder();
         order.setIce_cream_id(selected.getIce_cream_id());
         order.setPlanned_output_kg(kg);
-        order.setNote(taNote.getText().trim());
-        // TODO: set created_by từ session user sau khi có login
+        order.setNote(taNote.getText() == null ? "" : taNote.getText().trim());
+
+        if (CurrentUser.isLoggedIn()) {
+            order.setCreated_by(CurrentUser.getUserId());
+        }
 
         int newId = orderRepo.create(order);
         if (newId > 0) {
@@ -100,8 +115,8 @@ public class CreateBatchController implements Initializable {
     }
 
     @FXML
-    private void goBack() throws java.io.IOException {
-        aptech.proj_NN_group2.App.setRoot(aptech.proj_NN_group2.util.StringValue.VIEW_MAIN_MENU);
+    private void goBack(ActionEvent event) {
+        NavigationUtil.goTo(event, StringValue.VIEW_MAIN_MENU, "Hệ thống Quản lý Sản xuất & Xuất kho");
     }
 
     private void loadTable() {
