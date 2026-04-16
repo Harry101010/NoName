@@ -10,12 +10,14 @@
             fitToWidth="true">
 
     <content>
-    	<Button text="← Quay lại" onAction="#goHome"/>
+    	
         <VBox spacing="16" prefWidth="1400">
             <padding>
                 <Insets top="14" right="14" bottom="14" left="14"/>
             </padding>
-
+			  <HBox>
+                <Button text="← Quay lại" onAction="#goHome"/>
+            </HBox>
             <Label text="Recipe Management"
                    style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #cc0000;"/>
 
