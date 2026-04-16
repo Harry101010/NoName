@@ -1,36 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
 
-<VBox spacing="20" alignment="CENTER" xmlns="http://javafx.com/javafx/17"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="aptech.proj_NN_group2.controller.production.MainMenuController"
-      style="-fx-background-color: #f4f6f8;">
-    <padding><Insets top="40" right="60" bottom="40" left="60"/></padding>
+<BorderPane style="-fx-background-color: #f4f6f8;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="aptech.proj_NN_group2.controller.production.MainMenuController">
 
-    <Button text="Tạo Mẻ Sản Xuất" onAction="#goToCreateBatch"
-            prefWidth="250" prefHeight="45"
-            style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+    <top>
+        <MenuBar>
+            <Menu text="Hệ thống">
+                <MenuItem onAction="#handleLogout" text="Đăng xuất" />
+            <MenuItem text="Thông tin cá nhân" />
+            </Menu>
+        </MenuBar>
+    </top>
 
-    <Button text="Theo Dõi Công Đoạn" onAction="#goToProductionProcess"
-            prefWidth="250" prefHeight="45"
-            style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+    <center>
+        <VBox alignment="CENTER" spacing="20">
+            <padding>
+                <Insets bottom="40" left="60" right="60" top="40" />
+            </padding>
 
-    <Button text="Yêu Cầu Xuất Kho Nguyên Liệu" onAction="#goToIngredientIssueRequest"
-            prefWidth="250" prefHeight="45"
-            style="-fx-background-color: #FF9800; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+            <Button onAction="#goToCreateBatch" prefHeight="45" prefWidth="250" style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;" text="Tạo Mẻ Sản Xuất" />
 
-    <Button text="Xác Nhận Nhận Nguyên Liệu" onAction="#goToConfirmReceivedIngredient"
-            prefWidth="250" prefHeight="45"
-            style="-fx-background-color: #9C27B0; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+            <Button onAction="#goToProductionProcess" prefHeight="45" prefWidth="250" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;" text="Theo Dõi Công Đoạn" />
 
-    <Button text="Chi Tiết Công Đoạn Sản Xuất" onAction="#goToStageDetail"
-            prefWidth="250" prefHeight="45"
-            style="-fx-background-color: #00BCD4; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;"/>
-	<Button text="Quản Lý Công Thức" onAction="#goToRecipeManagement"
-        prefWidth="250" prefHeight="45"
-        style="-fx-background-color: #D35400; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+            <Button onAction="#goToIngredientIssueRequest" prefHeight="45" prefWidth="250" style="-fx-background-color: #FF9800; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;" text="Yêu Cầu Xuất Kho Nguyên Liệu" />
 
-</VBox>
+            <Button onAction="#goToConfirmReceivedIngredient" prefHeight="45" prefWidth="250" style="-fx-background-color: #9C27B0; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;" text="Xác Nhận Nhận Nguyên Liệu" />
+
+            <Button onAction="#goToStageDetail" prefHeight="45" prefWidth="250" style="-fx-background-color: #00BCD4; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;" text="Chi Tiết Công Đoạn Sản Xuất" />
+
+            <Button onAction="#goToRecipeManagement" prefHeight="45" prefWidth="250" style="-fx-background-color: #D35400; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;" text="Quản Lý Công Thức" />
+        </VBox>
+    </center>
+
+</BorderPane>

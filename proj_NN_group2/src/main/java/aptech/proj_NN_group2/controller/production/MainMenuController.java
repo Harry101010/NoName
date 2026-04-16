@@ -36,4 +36,9 @@ public class MainMenuController {
     private void goToRecipeManagement(ActionEvent event) {
         NavigationUtil.goTo(event, StringValue.VIEW_RECIPE_MANAGEMENT, "Quản lý công thức");
     }
+
+    @FXML
+    private void handleLogout(ActionEvent event) {
+    	NavigationUtil.logout(event);
+    }
 }
