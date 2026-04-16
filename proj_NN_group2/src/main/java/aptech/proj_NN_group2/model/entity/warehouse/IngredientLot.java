@@ -9,7 +9,7 @@ public class IngredientLot {
     private double receivedQuantity;
     private String importDate;
     private String expiryDate;
-
+    private String supplierName;
     public int getLotId() { return lotId; }
     public void setLotId(int lotId) { this.lotId = lotId; }
 
@@ -33,4 +33,25 @@ public class IngredientLot {
 
     public String getExpiryDate() { return expiryDate; }
     public void setExpiryDate(String expiryDate) { this.expiryDate = expiryDate; }
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
+    }
+    public String getStatus() {
+        if (expiryDate == null || expiryDate.isEmpty()) return "Không rõ";
+
+        try {
+            if (java.time.LocalDate.parse(expiryDate)
+                    .isBefore(java.time.LocalDate.now())) {
+                return "Hết hạn";
+            }
+        } catch (Exception e) {
+            return "Sai định dạng";
+        }
+
+        return "Còn hạn";
+    }
 }

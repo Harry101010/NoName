@@ -35,12 +35,14 @@ public class WarehouseController {
         colUnit.setCellValueFactory(new PropertyValueFactory<>("unitName"));
         colQuantity.setCellValueFactory(new PropertyValueFactory<>("remainingQuantity"));
         colExpiryDate.setCellValueFactory(new PropertyValueFactory<>("expiryDate"));
-        // colStatus.setCellValueFactory(new PropertyValueFactory<>("status")); // Nếu model có status thì bỏ comment
+        colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
+        colSupplier.setCellValueFactory(new PropertyValueFactory<>("supplierName"));
 
         loadData();
         
         // Bạn có thể thêm dữ liệu mẫu cho ComboBox ở đây nếu cần
         // cbMaterial.getItems().addAll("Bột mì", "Đường", "Sữa");
+        cbMaterial.getItems().addAll(repo.getAllIngredientNames());
     }
 
     private void loadData() {
@@ -53,10 +55,15 @@ public class WarehouseController {
     @FXML
     private void handleAdd() {
         try {
-            // Lấy giá trị từ ComboBox (thay vì TextField)
             String name = cbMaterial.getValue(); 
             if (name == null || name.isEmpty()) {
                 showAlert("Vui lòng chọn nguyên liệu!");
+                return;
+            }
+
+            String supplierName = txtSupplier.getText();
+            if (supplierName == null || supplierName.isEmpty()) {
+                showAlert("Vui lòng nhập nhà cung cấp!");
                 return;
             }
 
@@ -66,42 +73,43 @@ public class WarehouseController {
             int ingredientId = repo.findIngredientIdByName(name);
 
             if (ingredientId == -1) {
-                showAlert("Không tìm thấy nguyên liệu trong hệ thống!");
+                showAlert("Không tìm thấy nguyên liệu!");
                 return;
             }
 
-            repo.importStock(ingredientId, qty, expiry);
+            // ✅ ĐÚNG Ở ĐÂY
+            repo.importStock(ingredientId, qty, expiry, supplierName);
+
             loadData();
             clearForm();
 
         } catch (NumberFormatException e) {
-            showAlert("Số lượng phải là một số hợp lệ!");
+            showAlert("Số lượng phải là số!");
         } catch (Exception e) {
-            showAlert("Lỗi khi nhập kho: " + e.getMessage());
+            showAlert("Lỗi: " + e.getMessage());
         }
     }
-
     @FXML
     private void handleExport() {
-        IngredientLot selected = tblWarehouse.getSelectionModel().getSelectedItem();
-        if (selected == null) {
-            showAlert("Vui lòng chọn một dòng trong bảng để xuất!");
-            return;
-        }
-
         try {
+            String name = cbMaterial.getValue();
             double qty = Double.parseDouble(txtQuantity.getText());
-            boolean ok = repo.exportFIFO(selected.getIngredientId(), qty);
 
-            if (!ok) {
-                showAlert("Không đủ hàng trong kho để xuất!");
+            int ingredientId = repo.findIngredientIdByName(name);
+
+            boolean ok = repo.exportWithReceipt(ingredientId, qty, 1);
+
+            if (ok) {
+                showAlert("Xuất kho thành công (đã tạo phiếu)");
+            } else {
+                showAlert("Không đủ hàng!");
             }
 
             loadData();
             clearForm();
 
-        } catch (NumberFormatException e) {
-            showAlert("Số lượng xuất không hợp lệ!");
+        } catch (Exception e) {
+            showAlert("Lỗi xuất kho!");
         }
     }
 
@@ -138,6 +146,7 @@ public class WarehouseController {
         cbMaterial.getSelectionModel().clearSelection();
         txtQuantity.clear();
         txtExpiryDate.clear();
+        txtSupplier.clear();
     }
 
     private void showAlert(String msg) {
@@ -147,4 +156,6 @@ public class WarehouseController {
         alert.setContentText(msg);
         alert.showAndWait();
     }
+    @FXML private TableColumn<IngredientLot, String> colSupplier;
+    @FXML private TextField txtSupplier;
 }

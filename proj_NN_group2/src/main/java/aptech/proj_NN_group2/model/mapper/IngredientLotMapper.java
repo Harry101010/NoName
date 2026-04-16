@@ -17,6 +17,7 @@ public class IngredientLotMapper {
         lot.setReceivedQuantity(rs.getDouble("received_quantity"));
         lot.setImportDate(rs.getString("import_date"));
         lot.setExpiryDate(rs.getString("expiry_date"));
+        lot.setSupplierName(rs.getString("supplier_name"));
 
         return lot;
     }
