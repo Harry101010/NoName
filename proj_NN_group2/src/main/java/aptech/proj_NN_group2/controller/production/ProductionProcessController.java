@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import aptech.proj_NN_group2.model.business.repository.FinishedStockRepository;
 import aptech.proj_NN_group2.model.business.repository.ProductionOrderRepository;
 import aptech.proj_NN_group2.model.business.repository.ProductionStageRepository;
 import aptech.proj_NN_group2.model.entity.ProductionOrder;
@@ -40,6 +41,7 @@ public class ProductionProcessController implements Initializable {
 
     private final ProductionOrderRepository orderRepo = new ProductionOrderRepository();
     private final ProductionStageRepository stageRepo = new ProductionStageRepository();
+    private final FinishedStockRepository finishedStockRepo = new FinishedStockRepository();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -153,12 +155,25 @@ public class ProductionProcessController implements Initializable {
             return;
         }
 
-        if (openStage.getStage_no() < 8) {
+        boolean finalStage = openStage.getStage_no() >= ProductionStageRepository.STAGE_NAMES.length;
+        boolean imported = true;
+        if (finalStage) {
+            double finishedQty = openStage.getActual_volume() != null
+                    ? openStage.getActual_volume().doubleValue()
+                    : order.getPlanned_output_kg().doubleValue();
+            if (finishedQty > 0) {
+                imported = finishedStockRepo.importFinishedStock(order.getProduction_order_id(), finishedQty);
+            }
+        } else {
             stageRepo.unlockNextStage(order.getProduction_order_id(), openStage.getStage_no() + 1);
         }
 
-        lblMessage.setStyle("-fx-text-fill: green;");
-        lblMessage.setText("Hoàn thành công đoạn " + openStage.getStage_no() + ": " + openStage.getStage_name());
+        lblMessage.setStyle(imported ? "-fx-text-fill: green;" : "-fx-text-fill: orange;");
+        lblMessage.setText(finalStage
+                ? (imported
+                    ? "Hoàn thành công đoạn cuối và đã ghi nhận thành phẩm vào kho."
+                    : "Hoàn thành công đoạn cuối, nhưng ghi nhận thành phẩm thất bại.")
+                : "Hoàn thành công đoạn " + openStage.getStage_no() + ": " + openStage.getStage_name());
         handleReset();
         handleLoadStages();
     }

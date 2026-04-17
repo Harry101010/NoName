@@ -31,6 +31,8 @@ GO
 /* =========================
    2) USERS
    ========================= */
+
+/*
 IF OBJECT_ID(N'dbo.users', N'U') IS NULL
 BEGIN
     CREATE TABLE dbo.users (
@@ -41,11 +43,75 @@ BEGIN
         role_id         INT NOT NULL,
         is_active       BIT NOT NULL CONSTRAINT DF_users_is_active DEFAULT (1),
         created_at      DATETIME2(0) NOT NULL CONSTRAINT DF_users_created_at DEFAULT (SYSDATETIME()),
+        reset_token     NVARCHAR(100) NULL,
+	    reset_token_expired_at DATETIME NULL,
         CONSTRAINT FK_users_roles
             FOREIGN KEY (role_id) REFERENCES dbo.roles(role_id)
     );
 END
+GO */
+
+IF NOT EXISTS (SELECT 1 FROM roles)
+BEGIN
+    INSERT INTO roles (role_name)
+    VALUES (N'Admin'),
+    (N'Trưởng sản xuất'),
+    (N'Quản lý kho'),
+    (N'Nhân viên kinh doanh');
+END
+
+SET ANSI_NULLS ON
 GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[users](
+	[user_id] [int] IDENTITY(1,1) NOT NULL,
+	[username] [nvarchar](50) NOT NULL,
+	[password_hash] [nvarchar](255) NOT NULL,
+	[role_id] [int] NOT NULL,
+	[is_active] [bit] NOT NULL,
+	[created_at] [datetime2](0) NOT NULL,
+	[email] [nvarchar](100) NULL,
+	[reset_token] [nvarchar](100) NULL,
+	[reset_token_expired_at] [datetime] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[user_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET IDENTITY_INSERT [dbo].[users] ON 
+
+INSERT [dbo].[users] ([user_id], [username], [password_hash], [role_id], [is_active], [created_at], [email], [reset_token], [reset_token_expired_at]) VALUES (1, N'admin_user', N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 1, 1, CAST(N'2026-04-08T23:38:02.0000000' AS DateTime2), NULL, NULL, NULL)
+INSERT [dbo].[users] ([user_id], [username], [password_hash], [role_id], [is_active], [created_at], [email], [reset_token], [reset_token_expired_at]) VALUES (2, N'manager_alice', N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 2, 1, CAST(N'2026-04-08T23:38:02.0000000' AS DateTime2), N'osutadayoshi@gmail.com', NULL, NULL)
+INSERT [dbo].[users] ([user_id], [username], [password_hash], [role_id], [is_active], [created_at], [email], [reset_token], [reset_token_expired_at]) VALUES (3, N'manager_bob', N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 2, 1, CAST(N'2026-04-08T23:38:02.0000000' AS DateTime2), N'huuphuoc29791@gmail.com', NULL, NULL)
+INSERT [dbo].[users] ([user_id], [username], [password_hash], [role_id], [is_active], [created_at], [email], [reset_token], [reset_token_expired_at]) VALUES (4, N'staff_charlie', N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 1, CAST(N'2026-04-08T23:38:02.0000000' AS DateTime2), NULL, NULL, NULL)
+INSERT [dbo].[users] ([user_id], [username], [password_hash], [role_id], [is_active], [created_at], [email], [reset_token], [reset_token_expired_at]) VALUES (5, N'staff_david', N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 1, CAST(N'2026-04-08T23:38:02.0000000' AS DateTime2), NULL, NULL, NULL)
+INSERT [dbo].[users] ([user_id], [username], [password_hash], [role_id], [is_active], [created_at], [email], [reset_token], [reset_token_expired_at]) VALUES (6, N'staff_eve', N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 1, CAST(N'2026-04-08T23:38:02.0000000' AS DateTime2), NULL, NULL, NULL)
+INSERT [dbo].[users] ([user_id], [username], [password_hash], [role_id], [is_active], [created_at], [email], [reset_token], [reset_token_expired_at]) VALUES (7, N'staff_frank', N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 1, CAST(N'2026-04-08T23:38:02.0000000' AS DateTime2), NULL, NULL, NULL)
+INSERT [dbo].[users] ([user_id], [username], [password_hash], [role_id], [is_active], [created_at], [email], [reset_token], [reset_token_expired_at]) VALUES (8, N'staff_grace', N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 1, CAST(N'2026-04-08T23:38:02.0000000' AS DateTime2), NULL, NULL, NULL)
+INSERT [dbo].[users] ([user_id], [username], [password_hash], [role_id], [is_active], [created_at], [email], [reset_token], [reset_token_expired_at]) VALUES (9, N'staff_heidi', N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 1, CAST(N'2026-04-08T23:38:02.0000000' AS DateTime2), NULL, NULL, NULL)
+INSERT [dbo].[users] ([user_id], [username], [password_hash], [role_id], [is_active], [created_at], [email], [reset_token], [reset_token_expired_at]) VALUES (10, N'staff_ivan', N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 0, CAST(N'2026-04-08T23:38:02.0000000' AS DateTime2), NULL, NULL, NULL)
+SET IDENTITY_INSERT [dbo].[users] OFF
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [UQ__users__F3DBC572EE622957]    Script Date: 11/04/2026 8:44:40 PM ******/
+ALTER TABLE [dbo].[users] ADD UNIQUE NONCLUSTERED 
+(
+	[username] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[users] ADD  CONSTRAINT [DF_users_is_active]  DEFAULT ((1)) FOR [is_active]
+GO
+ALTER TABLE [dbo].[users] ADD  CONSTRAINT [DF_users_created_at]  DEFAULT (sysdatetime()) FOR [created_at]
+GO
+ALTER TABLE [dbo].[users]  WITH CHECK ADD  CONSTRAINT [FK_users_roles] FOREIGN KEY([role_id])
+REFERENCES [dbo].[roles] ([role_id])
+GO
+ALTER TABLE [dbo].[users] CHECK CONSTRAINT [FK_users_roles]
+GO
+
 
 /* =========================
    3) UNITS

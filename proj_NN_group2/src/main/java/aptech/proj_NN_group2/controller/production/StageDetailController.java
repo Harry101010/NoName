@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import aptech.proj_NN_group2.model.business.repository.FinishedStockRepository;
 import aptech.proj_NN_group2.model.business.repository.ProductionOrderRepository;
 import aptech.proj_NN_group2.model.business.repository.ProductionStageRepository;
 import aptech.proj_NN_group2.model.entity.ProductionOrder;
@@ -53,6 +54,7 @@ public class StageDetailController implements Initializable {
 
     private final ProductionOrderRepository orderRepo = new ProductionOrderRepository();
     private final ProductionStageRepository stageRepo = new ProductionStageRepository();
+    private final FinishedStockRepository finishedStockRepo = new FinishedStockRepository();
 
     private ProductionStage selectedStage;
 
@@ -160,6 +162,12 @@ public class StageDetailController implements Initializable {
             return;
         }
 
+        ProductionOrder order = cbOrder.getValue();
+        if (order == null) {
+            lblMessage.setText("Vui lòng chọn lệnh sản xuất.");
+            return;
+        }
+
         if (!"open".equals(selectedStage.getStage_status())) {
             lblMessage.setText("Chỉ có thể ghi nhận công đoạn đang ở trạng thái 'open'.");
             return;
@@ -226,12 +234,25 @@ public class StageDetailController implements Initializable {
             return;
         }
 
-        if (selectedStage.getStage_no() < 8) {
+        boolean finalStage = selectedStage.getStage_no() >= ProductionStageRepository.STAGE_NAMES.length;
+        boolean imported = true;
+        if (finalStage) {
+            double finishedQty = detail.getActual_volume() != null
+                    ? detail.getActual_volume().doubleValue()
+                    : (order.getPlanned_output_kg() != null ? order.getPlanned_output_kg().doubleValue() : 0d);
+            if (finishedQty > 0) {
+                imported = finishedStockRepo.importFinishedStock(selectedStage.getProduction_order_id(), finishedQty);
+            }
+        } else {
             stageRepo.unlockNextStage(selectedStage.getProduction_order_id(), selectedStage.getStage_no() + 1);
         }
 
-        lblMessage.setStyle("-fx-text-fill: green;");
-        lblMessage.setText("Ghi nhận công đoạn " + selectedStage.getStage_no()
+        lblMessage.setStyle(imported ? "-fx-text-fill: green;" : "-fx-text-fill: orange;");
+        lblMessage.setText(finalStage
+                ? (imported
+                    ? "Ghi nhận công đoạn cuối thành công và đã nhập kho thành phẩm."
+                    : "Ghi nhận công đoạn cuối thành công nhưng nhập kho thành phẩm thất bại.")
+                : "Ghi nhận công đoạn " + selectedStage.getStage_no()
                 + " thành công! Công đoạn tiếp theo đã được mở.");
 
         handleLoadStages();

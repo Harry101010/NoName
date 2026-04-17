@@ -1,6 +1,8 @@
 USE IceCreamManagement;
 GO
 
+/*
+
 IF NOT EXISTS (SELECT 1 FROM roles)
 BEGIN
     INSERT INTO roles (role_name)
@@ -23,6 +25,8 @@ VALUES
 (N'staff_heidi',    N'd@gmail.com',     N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 4, 1),
 (N'staff_ivan',     N'e@gmail.com',     N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 3, 0); -- One inactive user for testing
 GO
+
+*/
 
 IF NOT EXISTS (SELECT 1 FROM dbo.units)
 BEGIN

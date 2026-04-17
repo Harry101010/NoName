@@ -13,7 +13,6 @@ module aptech.proj_NN_group2 {
     opens aptech.proj_NN_group2.controller.auth to javafx.fxml;
     opens aptech.proj_NN_group2.controller.production to javafx.fxml;
     opens aptech.proj_NN_group2.controller.sales to javafx.fxml;
-    opens aptech.proj_NN_group2.controller.warehouse to javafx.fxml;
 
     opens aptech.proj_NN_group2.model.entity to javafx.base;
 
@@ -22,7 +21,6 @@ module aptech.proj_NN_group2 {
     exports aptech.proj_NN_group2.controller.auth;
     exports aptech.proj_NN_group2.controller.production;
     exports aptech.proj_NN_group2.controller.sales;
-    exports aptech.proj_NN_group2.controller.warehouse;
 
     exports aptech.proj_NN_group2.model.entity;
     exports aptech.proj_NN_group2.model.business.repository;
