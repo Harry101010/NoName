@@ -1,10 +1,15 @@
 package aptech.proj_NN_group2.controller;
 
+
 import java.io.IOException;
 
 import aptech.proj_NN_group2.App;
+
+import aptech.proj_NN_group2.util.NavigationUtil;
 import aptech.proj_NN_group2.util.StringValue;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+
 
 public class MainMenuController {
 
@@ -31,5 +36,10 @@ public class MainMenuController {
     @FXML
     private void goToStageDetail() throws IOException {
         App.setRoot(StringValue.VIEW_STAGE_DETAIL);
+    }
+    
+    @FXML
+    private void handleLogout(ActionEvent event) {
+    	NavigationUtil.logout(event);
     }
 }

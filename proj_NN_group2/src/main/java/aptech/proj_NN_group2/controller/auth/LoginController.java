@@ -59,7 +59,7 @@ public class LoginController {
             System.out.println("Đăng nhập thành công với quyền: " + authenticatedUser.getRoleName());
 
             if (authenticatedUser.isMustChangePassword()) {
-                openChangePasswordScreen(authenticatedUser);
+                openMustChangePasswordScreen(authenticatedUser);
             } else {
                 switchScene(authenticatedUser);
             }
@@ -82,9 +82,9 @@ public class LoginController {
                 title = "Hệ thống quản lý - Admin " + authenticatedUser.getUsername();
                 break;
 
-            case 4:
-                fxmlPath = "/aptech/proj_NN_group2/production/saleman_warehouse_dashboard.fxml";
-                title = "Giao diện kinh doanh " + authenticatedUser.getUsername();
+            case 2:
+                fxmlPath = "/aptech/proj_NN_group2/main_menu.fxml";
+                title = "Giao diện sản xuất " + authenticatedUser.getUsername();
                 break;
 
             case 3:
@@ -92,9 +92,9 @@ public class LoginController {
                 title = "Giao diện kho " + authenticatedUser.getUsername();
                 break;
 
-            case 2:
-                fxmlPath = "/aptech/proj_NN_group2/production/main_menu.fxml";
-                title = "Giao diện sản xuất " + authenticatedUser.getUsername();
+            case 4:
+                fxmlPath = "/aptech/proj_NN_group2/saleman/saleman_warehouse_dashboard.fxml";
+                title = "Giao diện kinh doanh " + authenticatedUser.getUsername();
                 break;
 
             default:
@@ -120,15 +120,15 @@ public class LoginController {
         }
     }
 
-    private void openChangePasswordScreen(User authenticatedUser) {
+    private void openChangePasswordScreen(User user) {
         try {
             FXMLLoader loader = new FXMLLoader(
                     getClass().getResource("/aptech/proj_NN_group2/change_password.fxml"));
             Parent root = loader.load();
 
             ChangePasswordController controller = loader.getController();
-            controller.setCurrentUser(authenticatedUser);
-            controller.setMode(ChangePasswordController.Mode.FORCE_AFTER_FORGOT);
+            controller.setCurrentUser(user);
+            controller.setMode(ChangePasswordController.Mode.NORMAL);
 
             Stage stage = (Stage) txtUsername.getScene().getWindow();
             Scene scene = new Scene(root);
@@ -141,6 +141,25 @@ public class LoginController {
             e.printStackTrace();
             new Alert(Alert.AlertType.ERROR,
                     "Không thể mở màn hình đổi mật khẩu: " + e.getMessage()).show();
+        }
+    }
+    
+    private void openMustChangePasswordScreen(User authenticatedUser) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/aptech/proj_NN_group2/change_password.fxml"));
+            Parent root = loader.load();
+
+            ChangePasswordController controller = loader.getController();
+            controller.setCurrentUser(authenticatedUser);
+            controller.setMode(ChangePasswordController.Mode.FORCE_AFTER_FORGOT);
+
+            Stage stage = (Stage) txtUsername.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Đổi mật khẩu");
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Không thể mở màn hình đổi mật khẩu!").show();
         }
     }
 

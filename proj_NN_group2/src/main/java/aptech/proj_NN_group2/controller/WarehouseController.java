@@ -8,6 +8,7 @@ import java.util.List;
 
 import aptech.proj_NN_group2.model.business.repository.warehouse.WarehouseRepository;
 import aptech.proj_NN_group2.model.entity.warehouse.IngredientLot;
+import aptech.proj_NN_group2.util.NavigationUtil;
 
 public class WarehouseController {
 
@@ -129,9 +130,7 @@ public class WarehouseController {
 
     @FXML
     private void handleLogout(ActionEvent event) {
-        // Logic chuyển màn hình đăng nhập hoặc đóng ứng dụng
-        System.out.println("Thực hiện đăng xuất...");
-        // Ví dụ: Platform.exit();
+    	NavigationUtil.logout(event);
     }
 
     private void clearForm() {
