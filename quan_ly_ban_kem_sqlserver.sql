@@ -437,4 +437,19 @@ BEGIN
         FOREIGN KEY (ice_cream_id) REFERENCES dbo.ice_creams(ice_cream_id)
     );
 END
+-- Bảng nhà cung cấp
 GO
+CREATE TABLE suppliers (
+    supplier_id INT IDENTITY PRIMARY KEY,
+    supplier_name NVARCHAR(200) NOT NULL,
+    phone NVARCHAR(20),
+    email NVARCHAR(100),
+    address NVARCHAR(255),
+    is_active BIT DEFAULT 1
+);
+ALTER TABLE ingredient_lots
+ADD supplier_id INT;
+
+ALTER TABLE ingredient_lots
+ADD CONSTRAINT FK_lot_supplier
+FOREIGN KEY (supplier_id) REFERENCES suppliers(supplier_id);

@@ -22,6 +22,7 @@
                 <TableColumn fx:id="colQuantity" text="Số lượng tồn" prefWidth="130"/>
                 <TableColumn fx:id="colExpiryDate" text="Hạn sử dụng" prefWidth="150"/>
                 <TableColumn fx:id="colStatus" text="Trạng thái" prefWidth="150"/>
+                <TableColumn fx:id="colSupplier" text="Nhà cung cấp" prefWidth="180"/>
             </columns>
 
         </TableView>
@@ -48,6 +49,9 @@
             <TextField fx:id="txtExpiryDate"
                        promptText="yyyy-mm-dd"
                        prefHeight="40"/>
+             <TextField fx:id="txtSupplier"
+           promptText="Nhập nhà cung cấp"
+           prefHeight="40"/>
 
             <!-- Buttons -->
             <Button text="Nhập kho"
