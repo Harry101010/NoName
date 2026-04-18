@@ -70,13 +70,21 @@ public class UserRepository extends BaseRepository<User>
 		});
 	}
 
-	// 4. Hàm reset mật khẩu (Dùng khi nhân viên quên mật khẩu)
+	// 4.1 Hàm reset mật khẩu (Dùng khi nhân viên quên mật khẩu)
 	public boolean updatePassword(int userId, String newPasswordHash) {
 		String sql = "UPDATE users SET password_hash = ? WHERE user_id = ?";
 		return executeUpdate(sql, ps -> {
 			ps.setString(1, newPasswordHash);
 			ps.setInt(2, userId);
 		});
+	}
+	//4.2 Đổi lại mk sau khi dùng tính năng quên mk
+	public boolean updatePasswordAndClearMustChange(int userId, String newPasswordHash) {
+	    String sql = "UPDATE users SET password_hash = ?, must_change_password = 0 WHERE user_id = ?";
+	    return executeUpdate(sql, ps -> {
+	        ps.setString(1, newPasswordHash);
+	        ps.setInt(2, userId);
+	    });
 	}
 
 	// 5. Hàm quên mật khẩu
