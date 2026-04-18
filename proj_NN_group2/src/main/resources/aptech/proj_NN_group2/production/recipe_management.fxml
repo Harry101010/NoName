@@ -10,20 +10,19 @@
             fitToWidth="true">
 
     <content>
-    	
         <VBox spacing="16" prefWidth="1400">
             <padding>
                 <Insets top="14" right="14" bottom="14" left="14"/>
             </padding>
-			  <HBox>
+            <HBox>
                 <Button text="← Quay lại" onAction="#goHome"/>
             </HBox>
-            <Label text="Recipe Management"
+            <Label text="Quản Lý Công Thức"
                    style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #cc0000;"/>
 
             <TabPane tabClosingPolicy="UNAVAILABLE">
 
-                <Tab text="Ice Cream Products">
+                <Tab text="Sản Phẩm Kem">
                     <content>
                         <VBox spacing="10">
                             <GridPane hgap="10" vgap="10">
@@ -31,32 +30,32 @@
                                     <Insets top="12" right="12" bottom="12" left="12"/>
                                 </padding>
 
-                                <Label text="Ice cream name" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                                <Label text="Tên loại kem" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
                                 <TextField fx:id="txtIceCreamName" prefWidth="280" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
-                                <Label text="Active" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+                                <Label text="Đang hoạt động" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
                                 <CheckBox fx:id="chkIceCreamActive" selected="true" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
 
                                 <HBox spacing="10" GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.columnSpan="4">
-                                    <Button text="Clear" onAction="#newIceCream"/>
-                                    <Button text="Save" onAction="#saveIceCream"/>
-                                    <Button text="Delete" onAction="#deleteIceCream"/>
-                                    <Button text="Refresh" onAction="#refreshAll"/>
+                                    <Button text="Làm mới nhập liệu" onAction="#newIceCream"/>
+                                    <Button text="Lưu" onAction="#saveIceCream"/>
+                                    <Button text="Xóa" onAction="#deleteIceCream"/>
+                                    <Button text="Tải lại tất cả" onAction="#refreshAll"/>
                                 </HBox>
                             </GridPane>
 
                             <TableView fx:id="tblIceCream" prefHeight="320">
                                 <columns>
-                                    <TableColumn fx:id="colIceCreamId" text="ID" prefWidth="80"/>
-                                    <TableColumn fx:id="colIceCreamName" text="Ice cream name" prefWidth="500"/>
-                                    <TableColumn fx:id="colIceCreamActive" text="Active" prefWidth="120"/>
+                                    <TableColumn fx:id="colIceCreamId" text="Mã số" prefWidth="80"/>
+                                    <TableColumn fx:id="colIceCreamName" text="Tên loại kem" prefWidth="500"/>
+                                    <TableColumn fx:id="colIceCreamActive" text="Trạng thái" prefWidth="120"/>
                                 </columns>
                             </TableView>
                         </VBox>
                     </content>
                 </Tab>
 
-                <Tab text="Ingredients">
+                <Tab text="Nguyên Liệu">
                     <content>
                         <VBox spacing="10">
                             <GridPane hgap="10" vgap="10">
@@ -64,49 +63,49 @@
                                     <Insets top="12" right="12" bottom="12" left="12"/>
                                 </padding>
 
-                                <Label text="Ingredient name" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                                <Label text="Tên nguyên liệu" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
                                 <TextField fx:id="txtIngredientName" prefWidth="260" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
-                                <Label text="Origin" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+                                <Label text="Nguồn gốc" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
                                 <TextField fx:id="txtIngredientOrigin" prefWidth="260" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
 
-                                <Label text="Storage condition" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                                <Label text="Điều kiện bảo quản" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
                                 <TextField fx:id="txtStorageCondition" prefWidth="260" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
-                                <Label text="Unit" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+                                <Label text="Đơn vị" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
                                 <ComboBox fx:id="cboUnit" prefWidth="180" GridPane.rowIndex="1" GridPane.columnIndex="3"/>
 
-                                <Label text="Price / unit" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                                <Label text="Giá / Đơn vị" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
                                 <TextField fx:id="txtPricePerUnit" prefWidth="180" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
 
-                                <Label text="Active" GridPane.rowIndex="2" GridPane.columnIndex="2"/>
+                                <Label text="Đang hoạt động" GridPane.rowIndex="2" GridPane.columnIndex="2"/>
                                 <CheckBox fx:id="chkIngredientActive" selected="true" GridPane.rowIndex="2" GridPane.columnIndex="3"/>
 
                                 <HBox spacing="10" GridPane.rowIndex="3" GridPane.columnIndex="0" GridPane.columnSpan="4">
-                                    <Button text="Clear" onAction="#newIngredient"/>
-                                    <Button text="Save" onAction="#saveIngredient"/>
-                                    <Button text="Delete" onAction="#deleteIngredient"/>
-                                    <Button text="Refresh" onAction="#refreshAll"/>
+                                    <Button text="Làm mới nhập liệu" onAction="#newIngredient"/>
+                                    <Button text="Lưu" onAction="#saveIngredient"/>
+                                    <Button text="Xóa" onAction="#deleteIngredient"/>
+                                    <Button text="Tải lại tất cả" onAction="#refreshAll"/>
                                 </HBox>
                             </GridPane>
 
                             <TableView fx:id="tblIngredient" prefHeight="320">
                                 <columns>
-                                    <TableColumn fx:id="colIngredientId" text="ID" prefWidth="70"/>
-                                    <TableColumn fx:id="colIngredientName" text="Ingredient" prefWidth="220"/>
-                                    <TableColumn fx:id="colIngredientOrigin" text="Origin" prefWidth="180"/>
-                                    <TableColumn fx:id="colIngredientStorage" text="Storage" prefWidth="220"/>
-                                    <TableColumn fx:id="colIngredientUnitId" text="Unit ID" visible="false"/>
-                                    <TableColumn fx:id="colIngredientUnitName" text="Unit" prefWidth="100"/>
-                                    <TableColumn fx:id="colIngredientPrice" text="Price" prefWidth="100"/>
-                                    <TableColumn fx:id="colIngredientActive" text="Active" prefWidth="90"/>
+                                    <TableColumn fx:id="colIngredientId" text="Mã số" prefWidth="70"/>
+                                    <TableColumn fx:id="colIngredientName" text="Nguyên liệu" prefWidth="220"/>
+                                    <TableColumn fx:id="colIngredientOrigin" text="Nguồn gốc" prefWidth="180"/>
+                                    <TableColumn fx:id="colIngredientStorage" text="Bảo quản" prefWidth="220"/>
+                                    <TableColumn fx:id="colIngredientUnitId" text="Mã Đơn Vị" visible="false"/>
+                                    <TableColumn fx:id="colIngredientUnitName" text="Đơn vị" prefWidth="100"/>
+                                    <TableColumn fx:id="colIngredientPrice" text="Đơn giá" prefWidth="100"/>
+                                    <TableColumn fx:id="colIngredientActive" text="Trạng thái" prefWidth="90"/>
                                 </columns>
                             </TableView>
                         </VBox>
                     </content>
                 </Tab>
 
-                <Tab text="Recipe Details">
+                <Tab text="Chi Tiết Công Thức">
                     <content>
                         <VBox spacing="10">
                             <GridPane hgap="10" vgap="10">
@@ -114,54 +113,31 @@
                                     <Insets top="12" right="12" bottom="12" left="12"/>
                                 </padding>
 
-                                <Label text="Ice cream" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                                <Label text="Loại kem" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
                                 <ComboBox fx:id="cboRecipeIceCream" prefWidth="280" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
-                                <Label text="Ingredient" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+                                <Label text="Nguyên liệu" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
                                 <ComboBox fx:id="cboRecipeIngredient" prefWidth="280" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
 
-                                <Label text="Quantity / 1kg" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                                <Label text="Số lượng / 1kg" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
                                 <TextField fx:id="txtQuantityPerKg" prefWidth="160" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
                                 <HBox spacing="10" GridPane.rowIndex="2" GridPane.columnIndex="0" GridPane.columnSpan="4">
-                                    <Button text="Clear" onAction="#newRecipe"/>
-                                    <Button text="Save" onAction="#saveRecipe"/>
-                                    <Button text="Delete" onAction="#deleteRecipe"/>
-                                    <Button text="Refresh" onAction="#refreshAll"/>
+                                    <Button text="Làm mới nhập liệu" onAction="#newRecipe"/>
+                                    <Button text="Lưu" onAction="#saveRecipe"/>
+                                    <Button text="Xóa" onAction="#deleteRecipe"/>
+                                    <Button text="Tải lại tất cả" onAction="#refreshAll"/>
                                 </HBox>
                             </GridPane>
 
                             <TableView fx:id="tblRecipe" prefHeight="360">
                                 <columns>
-                                    <TableColumn fx:id="colRecipeId" text="ID" prefWidth="80"/>
-                                    <TableColumn fx:id="colRecipeIceCreamName" text="Ice cream" prefWidth="250"/>
-                                    <TableColumn fx:id="colRecipeIngredientName" text="Ingredient" prefWidth="250"/>
-                                    <TableColumn fx:id="colRecipeUnitName" text="Unit" prefWidth="120"/>
-                                    <TableColumn fx:id="colRecipeQtyPerKg" text="Qty / kg" prefWidth="120"/>
+                                    <TableColumn fx:id="colRecipeId" text="Mã số" prefWidth="80"/>
+                                    <TableColumn fx:id="colRecipeIceCreamName" text="Tên loại kem" prefWidth="300"/>
+                                    <TableColumn fx:id="colRecipeIngredientName" text="Nguyên liệu" prefWidth="300"/>
+                                    <TableColumn fx:id="colRecipeQuantity" text="Số lượng / 1kg" prefWidth="150"/>
                                 </columns>
                             </TableView>
-                        </VBox>
-                    </content>
-                </Tab>
-
-                <Tab text="Production Calculator">
-                    <content>
-                        <VBox spacing="10">
-                            <GridPane hgap="10" vgap="10">
-                                <padding>
-                                    <Insets top="12" right="12" bottom="12" left="12"/>
-                                </padding>
-
-                                <Label text="Ice cream" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-                                <ComboBox fx:id="cboCalcIceCream" prefWidth="280" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
-
-                                <Label text="Output kg" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
-                                <TextField fx:id="txtCalcOutputKg" prefWidth="120" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
-
-                                <Button text="Calculate" onAction="#calculateRecipe" GridPane.rowIndex="0" GridPane.columnIndex="4"/>
-                            </GridPane>
-
-                            <TextArea fx:id="txtCalcResult" prefRowCount="18" wrapText="true"/>
                         </VBox>
                     </content>
                 </Tab>
