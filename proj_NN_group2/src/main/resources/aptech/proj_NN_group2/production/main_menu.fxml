@@ -8,11 +8,11 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane style="-fx-background-color: #f4f6f8;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="aptech.proj_NN_group2.controller.production.MainMenuController">
+<BorderPane xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="aptech.proj_NN_group2.controller.production.MainMenuController">
 
     <top>
         <MenuBar>
-            <Menu text="Hệ thống">
+            <Menu text="Tài Khoản">
                 <MenuItem onAction="#handleLogout" text="Đăng xuất" />
             <MenuItem text="Thông tin cá nhân" />
             </Menu>
@@ -25,17 +25,17 @@
                 <Insets bottom="40" left="60" right="60" top="40" />
             </padding>
 
-            <Button onAction="#goToCreateBatch" prefHeight="45" prefWidth="250" style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;" text="Tạo Mẻ Sản Xuất" />
+            <Button onAction="#goToCreateBatch" prefHeight="45" prefWidth="250" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Tạo Mẻ Sản Xuất" />
 
-            <Button onAction="#goToProductionProcess" prefHeight="45" prefWidth="250" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;" text="Theo Dõi Công Đoạn" />
+            <Button onAction="#goToProductionProcess" prefHeight="45" prefWidth="250" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Theo Dõi Công Đoạn" />
 
-            <Button onAction="#goToIngredientIssueRequest" prefHeight="45" prefWidth="250" style="-fx-background-color: #FF9800; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;" text="Yêu Cầu Xuất Kho Nguyên Liệu" />
+            <Button onAction="#goToIngredientIssueRequest" prefHeight="45" prefWidth="250" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Yêu Cầu Xuất Kho Nguyên Liệu" />
 
-            <Button onAction="#goToConfirmReceivedIngredient" prefHeight="45" prefWidth="250" style="-fx-background-color: #9C27B0; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;" text="Xác Nhận Nhận Nguyên Liệu" />
+            <Button onAction="#goToConfirmReceivedIngredient" prefHeight="45" prefWidth="250" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Xác Nhận Nhận Nguyên Liệu" />
 
-            <Button onAction="#goToStageDetail" prefHeight="45" prefWidth="250" style="-fx-background-color: #00BCD4; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;" text="Chi Tiết Công Đoạn Sản Xuất" />
+            <Button onAction="#goToStageDetail" prefHeight="45" prefWidth="250" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Chi Tiết Công Đoạn Sản Xuất" />
 
-            <Button onAction="#goToRecipeManagement" prefHeight="45" prefWidth="250" style="-fx-background-color: #D35400; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;" text="Quản Lý Công Thức" />
+            <Button onAction="#goToRecipeManagement" prefHeight="45" prefWidth="250" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Quản Lý Công Thức" />
         </VBox>
     </center>
 

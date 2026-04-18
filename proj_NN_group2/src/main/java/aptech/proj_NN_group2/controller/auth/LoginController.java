@@ -6,8 +6,11 @@ import aptech.proj_NN_group2.util.CurrentUser;
 import aptech.proj_NN_group2.util.DialogUtil;
 import aptech.proj_NN_group2.util.NavigationUtil;
 import aptech.proj_NN_group2.util.StringValue;
+import aptech.proj_NN_group2.util.ThemeManager;
 import aptech.proj_NN_group2.util.UserRoleUtil;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 

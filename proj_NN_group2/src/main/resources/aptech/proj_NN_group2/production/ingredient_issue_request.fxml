@@ -1,93 +1,89 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox spacing="12" xmlns="http://javafx.com/javafx/17"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="aptech.proj_NN_group2.controller.production.IngredientIssueRequestController"
-      style="-fx-background-color: #f4f6f8;">
-    <padding><Insets top="16" right="20" bottom="16" left="20"/></padding>
+<VBox spacing="12" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="aptech.proj_NN_group2.controller.production.IngredientIssueRequestController">
+    <padding><Insets bottom="16" left="20" right="20" top="16" /></padding>
 
     <!-- Header -->
     <HBox alignment="CENTER_LEFT" spacing="12">
-        <Button text="← Quay lại" onAction="#goBack"
-                style="-fx-background-color: #6c757d; -fx-text-fill: white; -fx-background-radius: 6;"/>
+        <Button onAction="#goBack" style="-fx-background-color: #6c757d; -fx-text-fill: white; -fx-background-radius: 6;" text="← Quay lại" />
         <Label text="Tạo Phiếu Yêu Cầu Xuất Kho Nguyên Liệu">
-            <font><Font name="System Bold" size="18"/></font>
+            <font><Font name="System Bold" size="18" /></font>
         </Label>
     </HBox>
 
     <!-- Form tạo phiếu -->
-    <TitledPane text="Thông tin phiếu yêu cầu" collapsible="false"
-                style="-fx-background-color: white;">
+    <TitledPane collapsible="false" style="-fx-background-color: white;" text="Thông tin phiếu yêu cầu">
         <VBox spacing="10">
-            <padding><Insets top="10" right="12" bottom="10" left="12"/></padding>
+            <padding><Insets bottom="10" left="12" right="12" top="10" /></padding>
 
-            <HBox spacing="12" alignment="CENTER_LEFT">
-                <Label text="Lệnh sản xuất:" minWidth="140"/>
-                <ComboBox fx:id="cbOrder" prefWidth="380" promptText="-- Chọn lệnh sản xuất (draft) --"/>
+            <HBox alignment="CENTER_LEFT" spacing="12">
+                <Label minWidth="140" text="Lệnh sản xuất:" />
+                <ComboBox fx:id="cbOrder" prefWidth="380" promptText="-- Chọn lệnh sản xuất (draft) --" />
             </HBox>
 
-            <HBox spacing="12" alignment="CENTER_LEFT">
-                <Label text="Thông tin lệnh:" minWidth="140"/>
-                <Label fx:id="lblOrderInfo" style="-fx-text-fill: #555;"/>
+            <HBox alignment="CENTER_LEFT" spacing="12">
+                <Label minWidth="140" text="Thông tin lệnh:" />
+                <Label fx:id="lblOrderInfo" style="-fx-text-fill: #555;" />
             </HBox>
 
-            <HBox spacing="12" alignment="TOP_LEFT">
-                <Label text="Ghi chú:" minWidth="140"/>
-                <TextArea fx:id="taNote" prefWidth="380" prefHeight="60"
-                          promptText="Ghi chú thêm (nếu có)..." wrapText="true"/>
+            <HBox alignment="TOP_LEFT" spacing="12">
+                <Label minWidth="140" text="Ghi chú:" />
+                <TextArea fx:id="taNote" prefHeight="60" prefWidth="380" promptText="Ghi chú thêm (nếu có)..." wrapText="true" />
             </HBox>
 
             <HBox spacing="10">
-                <Button text="Tạo phiếu yêu cầu" onAction="#handleCreate"
-                        style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-background-radius: 6; -fx-font-weight: bold;"/>
-                <Button text="Làm mới" onAction="#handleReset"
-                        style="-fx-background-color: #ffc107; -fx-text-fill: white; -fx-background-radius: 6;"/>
+                <Button onAction="#handleCreate" style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-background-radius: 6; -fx-font-weight: bold;" text="Tạo phiếu yêu cầu" />
+                <Button onAction="#handleReset" style="-fx-background-color: #ffc107; -fx-text-fill: white; -fx-background-radius: 6;" text="Làm mới" />
             </HBox>
 
-            <Label fx:id="lblMessage" style="-fx-font-weight: bold;"/>
+            <Label fx:id="lblMessage" style="-fx-font-weight: bold;" />
         </VBox>
     </TitledPane>
 
     <!-- Bảng preview nguyên liệu -->
-    <TitledPane text="Preview nguyên liệu cần xuất / Chi tiết phiếu đã chọn" collapsible="false"
-                style="-fx-background-color: white;">
+    <TitledPane collapsible="false" style="-fx-background-color: white;" text="Preview nguyên liệu cần xuất / Chi tiết phiếu đã chọn">
         <VBox spacing="6">
-            <padding><Insets top="8" right="12" bottom="8" left="12"/></padding>
+            <padding><Insets bottom="8" left="12" right="12" top="8" /></padding>
             <TableView fx:id="tablePreview" prefHeight="160">
                 <columns>
-                    <TableColumn fx:id="colIngredient" text="Nguyên liệu" prefWidth="220"/>
-                    <TableColumn fx:id="colUnit" text="Đơn vị" prefWidth="100"/>
-                    <TableColumn fx:id="colQty" text="Số lượng cần xuất" prefWidth="160"/>
+                    <TableColumn fx:id="colIngredient" prefWidth="220" text="Nguyên liệu" />
+                    <TableColumn fx:id="colUnit" prefWidth="100" text="Đơn vị" />
+                    <TableColumn fx:id="colQty" prefWidth="160" text="Số lượng cần xuất" />
                 </columns>
-                <placeholder><Label text="Chọn lệnh sản xuất để xem nguyên liệu cần xuất"/></placeholder>
+                <placeholder><Label text="Chọn lệnh sản xuất để xem nguyên liệu cần xuất" /></placeholder>
             </TableView>
         </VBox>
     </TitledPane>
 
     <!-- Danh sách phiếu đã tạo -->
-    <TitledPane text="Danh sách phiếu yêu cầu xuất kho" collapsible="false"
-                style="-fx-background-color: white;" VBox.vgrow="ALWAYS">
+    <TitledPane collapsible="false" style="-fx-background-color: white;" text="Danh sách phiếu yêu cầu xuất kho" VBox.vgrow="ALWAYS">
         <VBox spacing="6">
-            <padding><Insets top="8" right="12" bottom="8" left="12"/></padding>
+            <padding><Insets bottom="8" left="12" right="12" top="8" /></padding>
             <HBox spacing="8">
-                <Button text="Xem chi tiết nguyên liệu" onAction="#handleViewDetails"
-                        style="-fx-background-color: #17a2b8; -fx-text-fill: white; -fx-background-radius: 6;"/>
+                <Button onAction="#handleViewDetails" style="-fx-background-color: #17a2b8; -fx-text-fill: white; -fx-background-radius: 6;" text="Xem chi tiết nguyên liệu" />
             </HBox>
-            <TableView fx:id="tableRequests" VBox.vgrow="ALWAYS" prefHeight="220">
+            <TableView fx:id="tableRequests" prefHeight="220" VBox.vgrow="ALWAYS">
                 <columns>
-                    <TableColumn fx:id="colReqId" text="ID" prefWidth="50"/>
-                    <TableColumn fx:id="colReqIceCream" text="Loại kem" prefWidth="160"/>
-                    <TableColumn fx:id="colReqKg" text="Số kg" prefWidth="80"/>
-                    <TableColumn fx:id="colReqStatus" text="Trạng thái" prefWidth="120"/>
-                    <TableColumn fx:id="colReqDate" text="Ngày tạo" prefWidth="160"/>
-                    <TableColumn fx:id="colReqNote" text="Ghi chú" prefWidth="180"/>
+                    <TableColumn fx:id="colReqId" prefWidth="50" text="ID" />
+                    <TableColumn fx:id="colReqIceCream" prefWidth="160" text="Loại kem" />
+                    <TableColumn fx:id="colReqKg" prefWidth="80" text="Số kg" />
+                    <TableColumn fx:id="colReqStatus" prefWidth="120" text="Trạng thái" />
+                    <TableColumn fx:id="colReqDate" prefWidth="160" text="Ngày tạo" />
+                    <TableColumn fx:id="colReqNote" prefWidth="180" text="Ghi chú" />
                 </columns>
-                <placeholder><Label text="Chưa có phiếu yêu cầu nào"/></placeholder>
+                <placeholder><Label text="Chưa có phiếu yêu cầu nào" /></placeholder>
             </TableView>
         </VBox>
     </TitledPane>

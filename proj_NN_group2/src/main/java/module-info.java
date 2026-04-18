@@ -6,6 +6,7 @@ module aptech.proj_NN_group2 {
     requires com.microsoft.sqlserver.jdbc;
     requires jbcrypt;
     requires jakarta.mail;
+	requires java.prefs;
 
     opens aptech.proj_NN_group2 to javafx.fxml;
 

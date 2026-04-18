@@ -30,11 +30,18 @@ public final class SceneManager {
         return loader.load();
     }
 
+    private static Scene createScene(Parent root, boolean installThemeMenu) {
+        Parent sceneRoot = installThemeMenu ? SceneChrome.installThemeMenu(root) : root;
+        Scene scene = new Scene(sceneRoot);
+        ThemeManager.applyTheme(scene);
+        return scene;
+    }
+
     public static void show(Stage stage, String fxmlPath, String title) throws IOException {
         Objects.requireNonNull(stage, "stage must not be null");
 
         Parent root = loadRoot(fxmlPath);
-        stage.setScene(new Scene(root));
+        stage.setScene(createScene(root, true));
         stage.setTitle(title != null ? title : "");
         stage.centerOnScreen();
         stage.show();
@@ -44,7 +51,7 @@ public final class SceneManager {
         Objects.requireNonNull(stage, "stage must not be null");
 
         Parent root = loadRoot(fxmlPath);
-        stage.setScene(new Scene(root));
+        stage.setScene(createScene(root, true));
         stage.setTitle(title != null ? title : stage.getTitle());
         stage.centerOnScreen();
         stage.show();
@@ -109,7 +116,7 @@ public final class SceneManager {
             stage.initOwner(owner);
         }
         stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setScene(new Scene(root));
+        stage.setScene(createScene(root, false));
         stage.setTitle(title != null ? title : "");
         stage.centerOnScreen();
         stage.showAndWait();
@@ -133,7 +140,7 @@ public final class SceneManager {
             stage.initOwner(owner);
         }
         stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setScene(new Scene(root));
+        stage.setScene(createScene(root, false));
         stage.setTitle(title != null ? title : "");
         stage.centerOnScreen();
         stage.showAndWait();
