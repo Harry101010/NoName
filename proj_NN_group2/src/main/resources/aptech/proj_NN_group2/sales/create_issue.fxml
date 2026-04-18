@@ -23,7 +23,7 @@
     </padding>
 
     <VBox spacing="10" style="-fx-padding: 20; -fx-border-color: #bdc3c7; -fx-border-radius: 5; -fx-background-radius: 5;" VBox.vgrow="NEVER">
-        <Label style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="1. TẠO PHIẾU YÊU CẦU XUẤT THÀNH PHẨM" />
+        <Label style="-fx-font-size: 18; -fx-font-weight: bold;" text="1. TẠO PHIẾU YÊU CẦU XUẤT THÀNH PHẨM" />
         
         <HBox spacing="20">
             <VBox prefWidth="380" spacing="10" style="-fx-padding: 15; -fx-border-color: #e0e0e0; -fx-border-radius: 5; -fx-background-radius: 5;">
@@ -87,7 +87,7 @@
 
     <VBox spacing="10" style="-fx-padding: 20; -fx-border-color: #bdc3c7; -fx-border-radius: 5; -fx-background-radius: 5;" VBox.vgrow="ALWAYS">
         <HBox alignment="CENTER_LEFT" spacing="20">
-            <Label style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="2. LỊCH SỬ PHIẾU YÊU CẦU" />
+            <Label style="-fx-font-size: 18; -fx-font-weight: bold;" text="2. LỊCH SỬ PHIẾU YÊU CẦU" />
             <Region HBox.hgrow="ALWAYS" />
             <Button onAction="#loadHistory" style="-fx-background-color: #34495e; -fx-text-fill: white; -fx-cursor: hand; -fx-font-weight: bold;" text="Tải lại dữ liệu" />
         </HBox>
