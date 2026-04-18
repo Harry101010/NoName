@@ -1,4 +1,4 @@
-package aptech.proj_NN_group2.controller.production;
+package aptech.proj_NN_group2.controller.warehouse;
 
 import aptech.proj_NN_group2.util.NavigationUtil;
 import aptech.proj_NN_group2.util.StringValue;

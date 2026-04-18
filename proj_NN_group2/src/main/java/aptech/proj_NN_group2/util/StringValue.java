@@ -14,7 +14,7 @@ public final class StringValue {
     public static final String VIEW_PRODUCTION_PROCESS = "/aptech/proj_NN_group2/production/production_process.fxml";
     public static final String VIEW_RECIPE_MANAGEMENT = "/aptech/proj_NN_group2/production/recipe_management.fxml";
 
-    public static final String VIEW_WAREHOUSE_DASHBOARD = "/aptech/proj_NN_group2/production/warehouse_dashboard.fxml";
+    public static final String VIEW_WAREHOUSE_DASHBOARD = "/aptech/proj_NN_group2/warehouse/warehouse_dashboard.fxml";
 
     public static final String VIEW_SALEMAN_CREATE_ISSUE = "/aptech/proj_NN_group2/sales/create_issue.fxml";
     public static final String VIEW_SALEMAN_FINISHED_PRODUCT_WAREHOUSE = "/aptech/proj_NN_group2/sales/finished_product_warehouse.fxml";
