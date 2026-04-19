@@ -57,10 +57,10 @@ public class AdminController {
 
                 if (item) {
                     setText("Hoạt động");
-                    setStyle("-fx-text-fill: #27ae60; -fx-font-weight: bold;");
+//                    setStyle("-fx-text-fill: #27ae60; -fx-font-weight: bold;");
                 } else {
                     setText("Đã khóa");
-                    setStyle("-fx-text-fill: #e74c3c; -fx-font-weight: bold;");
+//                    setStyle("-fx-text-fill: #e74c3c; -fx-font-weight: bold;");
                 }
             }
         });

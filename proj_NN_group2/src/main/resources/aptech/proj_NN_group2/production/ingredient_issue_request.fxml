@@ -24,7 +24,7 @@
     </HBox>
 
     <!-- Form tạo phiếu -->
-    <TitledPane collapsible="false" style="-fx-background-color: white;" text="Thông tin phiếu yêu cầu">
+    <TitledPane collapsible="false" text="Thông tin phiếu yêu cầu">
         <VBox spacing="10">
             <padding><Insets bottom="10" left="12" right="12" top="10" /></padding>
 
@@ -53,7 +53,7 @@
     </TitledPane>
 
     <!-- Bảng preview nguyên liệu -->
-    <TitledPane collapsible="false" style="-fx-background-color: white;" text="Preview nguyên liệu cần xuất / Chi tiết phiếu đã chọn">
+    <TitledPane collapsible="false" text="Preview nguyên liệu cần xuất / Chi tiết phiếu đã chọn">
         <VBox spacing="6">
             <padding><Insets bottom="8" left="12" right="12" top="8" /></padding>
             <TableView fx:id="tablePreview" prefHeight="160">
@@ -68,7 +68,7 @@
     </TitledPane>
 
     <!-- Danh sách phiếu đã tạo -->
-    <TitledPane collapsible="false" style="-fx-background-color: white;" text="Danh sách phiếu yêu cầu xuất kho" VBox.vgrow="ALWAYS">
+    <TitledPane collapsible="false" text="Danh sách phiếu yêu cầu xuất kho" VBox.vgrow="ALWAYS">
         <VBox spacing="6">
             <padding><Insets bottom="8" left="12" right="12" top="8" /></padding>
             <HBox spacing="8">

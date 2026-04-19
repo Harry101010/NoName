@@ -32,7 +32,7 @@
     <Separator />
     
     <HBox alignment="CENTER_RIGHT" spacing="15">
-        <Button onAction="#handleCancel" prefHeight="35" prefWidth="100" style="-fx-background-color: #bdc3c7; -fx-cursor: hand;" text="Hủy bỏ" />
+        <Button onAction="#handleCancel" prefHeight="35" prefWidth="100" style="-fx-cursor: hand;" text="Hủy bỏ" />
         <Button onAction="#handleSave" prefHeight="35" prefWidth="140" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;" text="Lưu thay đổi" />
     </HBox>
 </VBox>
