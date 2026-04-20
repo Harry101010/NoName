@@ -204,4 +204,258 @@ public class IngredientExportRequestRepository extends BaseRepository<Ingredient
             return mapper.RowMap(rs);
         }
     }
+    public List<IngredientExportRequest> findPending() {
+        String sql = BASE_SELECT + " WHERE ier.request_status = 'pending'";
+        return find(sql, null);
+    }
+    public boolean updateStatus(int requestId, String status) {
+
+        String sql = """
+            UPDATE ingredient_export_requests
+            SET request_status = ?
+            WHERE ingredient_export_request_id = ?
+        """;
+
+        try (
+                Connection conn = Database.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)
+        ) {
+
+            ps.setString(1, status);
+            ps.setInt(2, requestId);
+
+            return ps.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+    public boolean approveRequestWithFIFO(int requestId) {
+
+        Connection conn = null;
+
+        try {
+            conn = Database.getConnection();
+            conn.setAutoCommit(false);
+
+            // kiểm tra yêu cầu có tồn tại và còn pending không
+            String checkRequestSql = """
+                SELECT request_status
+                FROM ingredient_export_requests
+                WHERE ingredient_export_request_id = ?
+            """;
+
+            try (PreparedStatement ps = conn.prepareStatement(checkRequestSql)) {
+                ps.setInt(1, requestId);
+
+                ResultSet rs = ps.executeQuery();
+
+                if (!rs.next()) {
+                    throw new RuntimeException("Không tìm thấy yêu cầu xuất kho.");
+                }
+
+                String status = rs.getString("request_status");
+
+                if (!REQUEST_STATUS_PENDING.equalsIgnoreCase(status)) {
+                    throw new RuntimeException(
+                            "Yêu cầu này đã được xử lý trước đó. Trạng thái hiện tại: " + status
+                    );
+                }
+            }
+
+            // kiểm tra đã có phiếu xuất chưa
+            String checkReceiptSql = """
+                SELECT ingredient_export_receipt_id
+                FROM ingredient_export_receipts
+                WHERE ingredient_export_request_id = ?
+            """;
+
+            try (PreparedStatement ps = conn.prepareStatement(checkReceiptSql)) {
+                ps.setInt(1, requestId);
+
+                ResultSet rs = ps.executeQuery();
+
+                if (rs.next()) {
+                    throw new RuntimeException("Yêu cầu này đã được duyệt trước đó.");
+                }
+            }
+
+            List<IngredientExportRequestDetail> details =
+                    findDetailsByRequestId(requestId);
+
+            if (details == null || details.isEmpty()) {
+                throw new RuntimeException("Yêu cầu này chưa có nguyên liệu để xuất.");
+            }
+
+            // kiểm tra tồn kho trước khi trừ
+            for (IngredientExportRequestDetail detail : details) {
+
+                String sqlCheck = """
+                    SELECT ISNULL(SUM(remaining_quantity), 0) AS total_quantity
+                    FROM ingredient_lots
+                    WHERE ingredient_id = ?
+                """;
+
+                try (PreparedStatement ps = conn.prepareStatement(sqlCheck)) {
+
+                    ps.setInt(1, detail.getIngredient_id());
+
+                    ResultSet rs = ps.executeQuery();
+                    rs.next();
+
+                    BigDecimal available = rs.getBigDecimal("total_quantity");
+
+                    if (available == null) {
+                        available = BigDecimal.ZERO;
+                    }
+
+                    if (available.compareTo(detail.getRequired_quantity()) < 0) {
+
+                        throw new RuntimeException(
+                                "Không đủ tồn kho cho nguyên liệu: "
+                                        + detail.getIngredient_name()
+                                        + "\nCần: " + detail.getRequired_quantity() + " " + detail.getUnit_name()
+                                        + "\nCòn: " + available + " " + detail.getUnit_name()
+                        );
+                    }
+                }
+            }
+
+            // tạo phiếu xuất kho
+            int receiptId;
+
+            String insertReceiptSql = """
+                INSERT INTO ingredient_export_receipts
+                (ingredient_export_request_id, receipt_status)
+                VALUES (?, 'approved')
+            """;
+
+            try (PreparedStatement ps = conn.prepareStatement(
+                    insertReceiptSql,
+                    Statement.RETURN_GENERATED_KEYS
+            )) {
+
+                ps.setInt(1, requestId);
+
+                int inserted = ps.executeUpdate();
+
+                if (inserted == 0) {
+                    throw new RuntimeException("Không thể tạo phiếu xuất kho.");
+                }
+
+                ResultSet rs = ps.getGeneratedKeys();
+
+                if (!rs.next()) {
+                    throw new RuntimeException("Không lấy được mã phiếu xuất.");
+                }
+
+                receiptId = rs.getInt(1);
+            }
+
+            // trừ kho theo FIFO
+            for (IngredientExportRequestDetail detail : details) {
+
+                BigDecimal need = detail.getRequired_quantity();
+
+                String sqlLots = """
+                	    SELECT lot_id, remaining_quantity
+                	    FROM ingredient_lots
+                	    WHERE ingredient_id = ?
+                	      AND remaining_quantity > 0
+                	    ORDER BY expiry_date ASC, import_date ASC, lot_id ASC
+                	""";
+                try (PreparedStatement ps = conn.prepareStatement(sqlLots)) {
+
+                    ps.setInt(1, detail.getIngredient_id());
+
+                    ResultSet rs = ps.executeQuery();
+
+                    while (rs.next() && need.compareTo(BigDecimal.ZERO) > 0) {
+
+                        int lotId = rs.getInt("lot_id");
+                        BigDecimal remain = rs.getBigDecimal("remaining_quantity");
+
+                        if (remain == null || remain.compareTo(BigDecimal.ZERO) <= 0) {
+                            continue;
+                        }
+
+                        BigDecimal issueQty =
+                                remain.compareTo(need) >= 0 ? need : remain;
+
+                        // cập nhật số lượng còn lại của lô
+                        String updateLotSql = """
+                            UPDATE ingredient_lots
+                            SET remaining_quantity = remaining_quantity - ?
+                            WHERE lot_id = ?
+                        """;
+
+                        try (PreparedStatement psUpdate = conn.prepareStatement(updateLotSql)) {
+                            psUpdate.setBigDecimal(1, issueQty);
+                            psUpdate.setInt(2, lotId);
+                            psUpdate.executeUpdate();
+                        }
+
+                        // lưu chi tiết phiếu xuất
+                        String insertDetailSql = """
+                            INSERT INTO ingredient_export_receipt_details
+                            (
+                                ingredient_export_receipt_id,
+                                ingredient_export_request_detail_id,
+                                lot_id,
+                                issued_quantity
+                            )
+                            VALUES (?, ?, ?, ?)
+                        """;
+
+                        try (PreparedStatement psInsert = conn.prepareStatement(insertDetailSql)) {
+                            psInsert.setInt(1, receiptId);
+                            psInsert.setInt(2, detail.getIngredient_export_request_detail_id());
+                            psInsert.setInt(3, lotId);
+                            psInsert.setBigDecimal(4, issueQty);
+                            psInsert.executeUpdate();
+                        }
+
+                        need = need.subtract(issueQty);
+                    }
+                }
+
+                // nếu sau FIFO mà vẫn chưa đủ
+                if (need.compareTo(BigDecimal.ZERO) > 0) {
+                    throw new RuntimeException(
+                            "Không thể xuất đủ nguyên liệu: " + detail.getIngredient_name()
+                    );
+                }
+            }
+
+            // cập nhật trạng thái yêu cầu
+            String updateRequestSql = """
+                UPDATE ingredient_export_requests
+                SET request_status = 'approved'
+                WHERE ingredient_export_request_id = ?
+            """;
+
+            try (PreparedStatement ps = conn.prepareStatement(updateRequestSql)) {
+                ps.setInt(1, requestId);
+                ps.executeUpdate();
+            }
+
+            conn.commit();
+            return true;
+
+        } catch (Exception e) {
+
+            rollbackQuietly(conn);
+
+            if (e instanceof RuntimeException) {
+                throw (RuntimeException) e;
+            }
+
+            throw new RuntimeException("Không thể duyệt yêu cầu: " + e.getMessage());
+
+        } finally {
+            closeQuietly(conn);
+        }
+    }
 }

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/23"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="aptech.proj_NN_group2.controller.warehouse.ExportRequestController"
+            style="-fx-background-color: #f4f6f7;">
+
+    <!-- ================= CENTER TABLE ================= -->
+    <center>
+        <VBox spacing="10" style="-fx-padding: 15;">
+
+            <Label text="DANH SÁCH YÊU CẦU XUẤT KHO"
+                   style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+
+            <TableView fx:id="tblRequests">
+
+                <columns>
+                    <TableColumn fx:id="colId" text="ID" prefWidth="60"/>
+                    <TableColumn fx:id="colOrder" text="Lệnh SX" prefWidth="150"/>
+                    <TableColumn fx:id="colStatus" text="Trạng thái" prefWidth="120"/>
+                    <TableColumn fx:id="colDate" text="Ngày yêu cầu" prefWidth="180"/>
+                    <TableColumn fx:id="colNote" text="Ghi chú" prefWidth="200"/>
+                </columns>
+
+            </TableView>
+
+        </VBox>
+    </center>
+
+    <!-- ================= RIGHT ACTION PANEL ================= -->
+    <right>
+        <VBox spacing="12"
+              prefWidth="220"
+              style="-fx-background-color: white; -fx-padding: 15; -fx-border-color: #ddd;">
+
+            <Label text="Hành động"
+                   style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+
+            <!-- Xem chi tiết -->
+            <Button text="Xem chi tiết"
+                    onAction="#handleViewDetails"
+                    style="-fx-background-color: #3498db; -fx-text-fill: white;"/>
+
+            <!-- DUYỆT -->
+            <Button text="Duyệt yêu cầu"
+                    onAction="#handleApprove"
+                    style="-fx-background-color: #27ae60; -fx-text-fill: white;"/>
+
+            <!-- TỪ CHỐI -->
+            <Button text="Từ chối"
+                    onAction="#handleReject"
+                    style="-fx-background-color: #e74c3c; -fx-text-fill: white;"/>
+
+            
+            <!-- REFRESH -->
+            <Button text="Làm mới"
+                    onAction="#handleRefresh"
+                    style="-fx-background-color: #8e44ad; -fx-text-fill: white;"/>
+                    <Button text="Quay lại"
+        onAction="#handleBack"
+        style="-fx-background-color: #7f8c8d; -fx-text-fill: white;"/>
+
+        </VBox>
+    </right>
+
+</BorderPane>

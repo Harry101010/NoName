@@ -519,3 +519,38 @@ ADD supplier_id INT;
 ALTER TABLE ingredient_lots
 ADD CONSTRAINT FK_lot_supplier
 FOREIGN KEY (supplier_id) REFERENCES suppliers(supplier_id);
+IF OBJECT_ID(N'dbo.product_issue_details', N'U') IS NOT NULL DROP TABLE dbo.product_issue_details;
+IF OBJECT_ID(N'dbo.product_issue_notes', N'U') IS NOT NULL DROP TABLE dbo.product_issue_notes;
+IF OBJECT_ID(N'dbo.ingredient_lots', N'U') IS NOT NULL DROP TABLE dbo.ingredient_lots;
+IF OBJECT_ID(N'dbo.suppliers', N'U') IS NOT NULL DROP TABLE dbo.suppliers;
+CREATE TABLE [dbo].[suppliers](
+    [supplier_id] INT IDENTITY(1,1) PRIMARY KEY,
+    [supplier_name] NVARCHAR(200) NOT NULL,
+    [phone] NVARCHAR(20),
+    [email] NVARCHAR(100),
+    [address] NVARCHAR(255),
+    [is_active] BIT DEFAULT 1
+);
+CREATE TABLE [dbo].[ingredient_lots](
+    [lot_id]             INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    [ingredient_id]      INT NOT NULL,
+    [import_date]        DATETIME2(0) NOT NULL DEFAULT (SYSDATETIME()),
+    [expiry_date]        DATE NOT NULL,
+    [received_quantity]  DECIMAL(18, 3) NOT NULL,
+    [remaining_quantity] DECIMAL(18, 3) NOT NULL,
+    [supplier_id]        INT NULL,
+    [is_deleted]         BIT NOT NULL DEFAULT (0),
+    CONSTRAINT [FK_ingredient_lots_ingredients] FOREIGN KEY([ingredient_id]) REFERENCES [dbo].[ingredients] ([ingredient_id]),
+    CONSTRAINT [FK_lot_supplier] FOREIGN KEY([supplier_id]) REFERENCES [dbo].[suppliers] ([supplier_id])
+);
+CREATE TABLE [dbo].[product_issue_notes](
+    [note_id]             INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    [saleman_id]          INT NOT NULL,
+    [customer_name]       NVARCHAR(200) NOT NULL,
+    [customer_order_code] NVARCHAR(50) NULL,
+    [delivery_date]       DATETIME2(0) NULL,
+    [status]              NVARCHAR(50) DEFAULT (N'Chờ duyệt'),
+    [note]                NVARCHAR(MAX) NULL,
+    [create_date]         DATETIME2(0) DEFAULT (GETDATE()),
+    CONSTRAINT [FK_product_issue_notes_users] FOREIGN KEY([saleman_id]) REFERENCES [dbo].[users] ([user_id])
+);

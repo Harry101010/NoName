@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import aptech.proj_NN_group2.model.entity.IngredientLot;
 
 public class IngredientLotMapper {
+
     public static IngredientLot map(ResultSet rs) throws SQLException {
         IngredientLot lot = new IngredientLot();
 

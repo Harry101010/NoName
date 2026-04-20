@@ -47,7 +47,7 @@ public class LoginController {
         }
 
         try {
-            String dbHash = authenticatedUser.getPasswordHash() != null ? authenticatedUser.getPasswordHash().trim() : "";
+        	String dbHash = authenticatedUser.getPasswordHash();
 
             if (!org.mindrot.jbcrypt.BCrypt.checkpw(password, dbHash)) {
                 DialogUtil.error(txtUsername, "Đăng nhập thất bại", "Mật khẩu không chính xác!");

@@ -20,33 +20,37 @@ public class WarehouseRepository {
     // =========================
     // LẤY TỒN KHO
     // =========================
-    public List<IngredientLot> getAllStock() {
-        List<IngredientLot> list = new ArrayList<>();
+ // =========================
+ // LẤY TỒN KHO
+ // =========================
+ public List<IngredientLot> getAllStock() {
+     List<IngredientLot> list = new ArrayList<>();
 
-        String sql = """
-        	    SELECT l.*, i.ingredient_name, u.unit_name, s.supplier_name
-        	    FROM ingredient_lots l
-        	    JOIN ingredients i ON l.ingredient_id = i.ingredient_id
-        	    JOIN units u ON i.unit_id = u.unit_id
-        	    LEFT JOIN suppliers s ON l.supplier_id = s.supplier_id
-        	    WHERE l.remaining_quantity > 0
-        	    ORDER BY l.import_date ASC
-        	""";
+     String sql = """
+             SELECT l.*, i.ingredient_name, u.unit_name, s.supplier_name
+             FROM ingredient_lots l
+             JOIN ingredients i ON l.ingredient_id = i.ingredient_id
+             JOIN units u ON i.unit_id = u.unit_id
+             LEFT JOIN suppliers s ON l.supplier_id = s.supplier_id
+             WHERE l.remaining_quantity > 0
+               AND l.is_deleted = 0
+             ORDER BY l.import_date ASC
+         """;
 
-        try (Connection conn = getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+     try (Connection conn = getConnection();
+          PreparedStatement ps = conn.prepareStatement(sql);
+          ResultSet rs = ps.executeQuery()) {
 
-            while (rs.next()) {
-                list.add(IngredientLotMapper.map(rs));
-            }
+         while (rs.next()) {
+             list.add(IngredientLotMapper.map(rs));
+         }
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+     } catch (Exception e) {
+         e.printStackTrace();
+     }
 
-        return list;
-    }
+     return list;
+ }
 	    public List<String> getAllIngredientNames() {
 	        List<String> list = new ArrayList<>();
 	        String sql = "SELECT ingredient_name FROM ingredients";
@@ -100,61 +104,66 @@ public class WarehouseRepository {
     // =========================
     // FIFO XUẤT KHO
     // =========================
-    public boolean exportFIFO(int ingredientId, double quantity) {
+	 // =========================
+	 // FIFO XUẤT KHO
+	 // =========================
+	 public boolean exportFIFO(int ingredientId, double quantity) {
 
-        try (Connection conn = getConnection()) {
+	     try (Connection conn = getConnection()) {
 
-            conn.setAutoCommit(false);
+	         conn.setAutoCommit(false);
 
-            String selectSql = """
-                SELECT * FROM ingredient_lots
-                WHERE ingredient_id = ? AND remaining_quantity > 0
-                ORDER BY import_date ASC
-            """;
+	         String selectSql = """
+	             SELECT * FROM ingredient_lots
+	             WHERE ingredient_id = ?
+	               AND remaining_quantity > 0
+	               AND is_deleted = 0
+	             ORDER BY import_date ASC
+	         """;
 
-            PreparedStatement ps = conn.prepareStatement(selectSql);
-            ps.setInt(1, ingredientId);
+	         PreparedStatement ps = conn.prepareStatement(selectSql);
+	         ps.setInt(1, ingredientId);
 
-            ResultSet rs = ps.executeQuery();
+	         ResultSet rs = ps.executeQuery();
 
-            double need = quantity;
+	         double need = quantity;
 
-            while (rs.next() && need > 0) {
+	         while (rs.next() && need > 0) {
 
-                int lotId = rs.getInt("lot_id");
-                double remain = rs.getDouble("remaining_quantity");
+	             int lotId = rs.getInt("lot_id");
+	             double remain = rs.getDouble("remaining_quantity");
 
-                double used = Math.min(remain, need);
-                double newRemain = remain - used;
+	             double used = Math.min(remain, need);
+	             double newRemain = remain - used;
 
-                String updateSql = """
-                    UPDATE ingredient_lots
-                    SET remaining_quantity = ?
-                    WHERE lot_id = ?
-                """;
+	             String updateSql = """
+	                 UPDATE ingredient_lots
+	                 SET remaining_quantity = ?
+	                 WHERE lot_id = ?
+	             """;
 
-                PreparedStatement ups = conn.prepareStatement(updateSql);
-                ups.setDouble(1, newRemain);
-                ups.setInt(2, lotId);
-                ups.executeUpdate();
+	             PreparedStatement ups = conn.prepareStatement(updateSql);
+	             ups.setDouble(1, newRemain);
+	             ups.setInt(2, lotId);
+	             ups.executeUpdate();
 
-                need -= used;
-            }
+	             need -= used;
+	         }
 
-            if (need > 0) {
-                conn.rollback();
-                return false;
-            }
+	         if (need > 0) {
+	             conn.rollback();
+	             return false;
+	         }
 
-            conn.commit();
-            return true;
+	         conn.commit();
+	         return true;
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+	     } catch (Exception e) {
+	         e.printStackTrace();
+	     }
 
-        return false;
-    }
+	     return false;
+	 }
 
     // =========================
     // TÌM ID NGUYÊN LIỆU
@@ -184,7 +193,6 @@ public class WarehouseRepository {
 
             conn.setAutoCommit(false);
 
-            // 1. Tạo phiếu xuất
             String insertReceipt = """
                 INSERT INTO ingredient_export_receipts
                 (ingredient_export_request_id, receipt_status)
@@ -192,17 +200,18 @@ public class WarehouseRepository {
             """;
 
             PreparedStatement psReceipt = conn.prepareStatement(insertReceipt, Statement.RETURN_GENERATED_KEYS);
-            psReceipt.setInt(1, 1); // tạm để 1 (bạn có thể nối production sau)
+            psReceipt.setInt(1, 1);
             psReceipt.executeUpdate();
 
             ResultSet rsKey = psReceipt.getGeneratedKeys();
             rsKey.next();
             int receiptId = rsKey.getInt(1);
 
-            // 2. FIFO
             String selectLot = """
                 SELECT * FROM ingredient_lots
-                WHERE ingredient_id = ? AND remaining_quantity > 0
+                WHERE ingredient_id = ?
+                  AND remaining_quantity > 0
+                  AND is_deleted = 0
                 ORDER BY import_date ASC
             """;
 
@@ -220,7 +229,6 @@ public class WarehouseRepository {
                 double used = Math.min(remain, need);
                 double newRemain = remain - used;
 
-                // 3. Lưu chi tiết phiếu xuất
                 String insertDetail = """
                     INSERT INTO ingredient_export_receipt_details
                     (ingredient_export_receipt_id, ingredient_export_request_detail_id, lot_id, issued_quantity)
@@ -229,12 +237,11 @@ public class WarehouseRepository {
 
                 PreparedStatement psDetail = conn.prepareStatement(insertDetail);
                 psDetail.setInt(1, receiptId);
-                psDetail.setInt(2, requestDetailId); // tạm = 1
+                psDetail.setInt(2, requestDetailId);
                 psDetail.setInt(3, lotId);
                 psDetail.setDouble(4, used);
                 psDetail.executeUpdate();
 
-                // 4. Trừ kho
                 String updateLot = """
                     UPDATE ingredient_lots
                     SET remaining_quantity = ?
@@ -263,6 +270,7 @@ public class WarehouseRepository {
 
         return false;
     }
+    
     public int getOrCreateSupplier(String name) {
 
         String findSql = "SELECT supplier_id FROM suppliers WHERE supplier_name = ?";
@@ -292,5 +300,27 @@ public class WarehouseRepository {
         }
 
         return -1;
+    }
+    public List<IngredientLot> findAll() {
+        return getAllStock();
+    }
+    public boolean deleteLot(int lotId) {
+
+        String updateSql = """
+            UPDATE ingredient_lots
+            SET is_deleted = 1
+            WHERE lot_id = ?
+        """;
+
+        try (Connection conn = Database.getConnection();
+             PreparedStatement ps = conn.prepareStatement(updateSql)) {
+
+            ps.setInt(1, lotId);
+
+            return ps.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            throw new RuntimeException("Không thể xoá nguyên liệu: " + e.getMessage());
+        }
     }
 }
