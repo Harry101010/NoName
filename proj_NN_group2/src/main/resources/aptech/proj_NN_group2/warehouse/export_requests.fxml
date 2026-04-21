@@ -2,67 +2,98 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
 <BorderPane xmlns="http://javafx.com/javafx/23"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="aptech.proj_NN_group2.controller.warehouse.ExportRequestController"
-            style="-fx-background-color: #f4f6f7;">
+            style="-fx-background-color: #ecf0f1;">
 
-    <!-- ================= CENTER TABLE ================= -->
+    <!-- ===== HEADER ===== -->
+    <top>
+        <HBox spacing="10"
+              style="-fx-background-color: #2c3e50; -fx-padding: 12;">
+            <Label text="📦 QUẢN LÝ YÊU CẦU XUẤT KHO"
+                   style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;"/>
+        </HBox>
+    </top>
+
+    <!-- ===== CENTER TABLE ===== -->
     <center>
-        <VBox spacing="10" style="-fx-padding: 15;">
+        <VBox spacing="12">
+            <padding>
+                <Insets top="15" right="15" bottom="15" left="15"/>
+            </padding>
 
-            <Label text="DANH SÁCH YÊU CẦU XUẤT KHO"
-                   style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+            <!-- Card -->
+            <VBox spacing="10"
+                  style="-fx-background-color: white;
+                         -fx-padding: 15;
+                         -fx-background-radius: 10;
+                         -fx-border-radius: 10;
+                         -fx-border-color: #ddd;">
 
-            <TableView fx:id="tblRequests">
+                <Label text="Danh sách yêu cầu"
+                       style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
 
-                <columns>
-                    <TableColumn fx:id="colId" text="ID" prefWidth="60"/>
-                    <TableColumn fx:id="colOrder" text="Lệnh SX" prefWidth="150"/>
-                    <TableColumn fx:id="colStatus" text="Trạng thái" prefWidth="120"/>
-                    <TableColumn fx:id="colDate" text="Ngày yêu cầu" prefWidth="180"/>
-                    <TableColumn fx:id="colNote" text="Ghi chú" prefWidth="200"/>
-                </columns>
+                <TableView fx:id="tblRequests"
+                           style="-fx-background-radius: 8;">
 
-            </TableView>
+                    <columns>
+                        <TableColumn fx:id="colId" text="ID" prefWidth="60"/>
+                        <TableColumn fx:id="colOrder" text="Lệnh SX" prefWidth="150"/>
+                        <TableColumn fx:id="colStatus" text="Trạng thái" prefWidth="120"/>
+                        <TableColumn fx:id="colDate" text="Ngày yêu cầu" prefWidth="180"/>
+                        <TableColumn fx:id="colNote" text="Ghi chú" prefWidth="220"/>
+                    </columns>
 
+                </TableView>
+
+            </VBox>
         </VBox>
     </center>
 
-    <!-- ================= RIGHT ACTION PANEL ================= -->
+    <!-- ===== RIGHT PANEL ===== -->
     <right>
         <VBox spacing="12"
-              prefWidth="220"
-              style="-fx-background-color: white; -fx-padding: 15; -fx-border-color: #ddd;">
+              prefWidth="240"
+              style="-fx-background-color: white;
+                     -fx-padding: 15;
+                     -fx-border-color: #ddd;
+                     -fx-border-radius: 10;
+                     -fx-background-radius: 10;">
 
-            <Label text="Hành động"
-                   style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+            <Label text="⚙ Hành động"
+                   style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
 
-            <!-- Xem chi tiết -->
-            <Button text="Xem chi tiết"
+            <Separator/>
+
+            <Button text="🔍 Xem chi tiết"
+                    maxWidth="Infinity"
                     onAction="#handleViewDetails"
-                    style="-fx-background-color: #3498db; -fx-text-fill: white;"/>
+                    style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold;"/>
 
-            <!-- DUYỆT -->
-            <Button text="Duyệt yêu cầu"
+            <Button text="✔ Duyệt"
+                    maxWidth="Infinity"
                     onAction="#handleApprove"
-                    style="-fx-background-color: #27ae60; -fx-text-fill: white;"/>
+                    style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold;"/>
 
-            <!-- TỪ CHỐI -->
-            <Button text="Từ chối"
+            <Button text="✖ Từ chối"
+                    maxWidth="Infinity"
                     onAction="#handleReject"
-                    style="-fx-background-color: #e74c3c; -fx-text-fill: white;"/>
+                    style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold;"/>
 
-            
-            <!-- REFRESH -->
-            <Button text="Làm mới"
+            <Separator/>
+
+            <Button text="🔄 Làm mới"
+                    maxWidth="Infinity"
                     onAction="#handleRefresh"
                     style="-fx-background-color: #8e44ad; -fx-text-fill: white;"/>
-                    <Button text="Quay lại"
-        onAction="#handleBack"
-        style="-fx-background-color: #7f8c8d; -fx-text-fill: white;"/>
 
+            <Button text="⬅ Quay lại"
+                    maxWidth="Infinity"
+                    onAction="#handleBack"
+                    style="-fx-background-color: #7f8c8d; -fx-text-fill: white;"/>
         </VBox>
     </right>
 

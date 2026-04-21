@@ -277,4 +277,98 @@ BEGIN
     VALUES
         (@ReqIdApproved, @QuanLyKho, N'approved', N'Đã kiểm tra đủ nguyên liệu, sẵn sàng xuất kho');
 END
+
+) AS v(ingredient_name, origin, storage_condition, unit_id, price_per_unit)
+
+WHERE NOT EXISTS (
+    SELECT 1 
+    FROM ingredients i 
+    WHERE i.ingredient_name = v.ingredient_name
+);
+SELECT 
+    i.ingredient_name,
+    il.lot_id,
+    il.remaining_quantity,
+    il.expiry_date
+FROM ingredients i
+LEFT JOIN ingredient_lots il ON i.ingredient_id = il.ingredient_id
+ORDER BY i.ingredient_name;
+
+
+/* =========================================================
+   1) STANDARDIZE UNITS
+   ========================================================= */
+-- Clear old units if necessary, then insert standard English units
+INSERT INTO dbo.units (unit_name)
+SELECT v.unit_name
+FROM (VALUES 
+    (N'kg'),    -- Solids (Sugar, Milk Powder)
+    (N'g'),     -- Fine Powders/Additives (Matcha, Salt)
+    (N'l'),     -- Bulk Liquids (Fresh Milk, Cream)
+    (N'ml'),    -- Concentrates (Extracts, Flavors)
+    ()N'pcs'),   -- Countable items (Eggs, Cones)
+    (N'tray'),  -- Production output
+    (N'box')    -- Packaging
+) AS v(unit_name)
+WHERE NOT EXISTS (SELECT 1 FROM units WHERE unit_name = v.unit_name);
+GO
+
+/* =========================================================
+   2) INGREDIENTS (Master Data)
+   ========================================================= */
+INSERT INTO ingredients (ingredient_name, origin, storage_condition, unit_id, price_per_unit, is_active)
+SELECT v.name, v.origin, v.storage, u.unit_id, v.price, 1
+FROM (VALUES 
+    (N'Whole Fresh Milk',     N'TH True Milk',   N'Chilled 2-4°C',     N'l',   22000),
+    (N'Full Cream Milk Powder', N'New Zealand',   N'Dry & Cool',        N'kg',  145000),
+    (N'Whipping Cream',       N'Anchor',         N'Chilled 2-4°C',     N'l',   160000),
+    (N'Bourbon Vanilla Extract', N'France',       N'Room Temp',         N'ml',  5000),
+    (N'Pure Cocoa Powder',    N'Belgium',        N'Dry & Cool',        N'kg',  280000),
+    (N'Refined Sugar',        N'Bien Hoa',       N'Dry & Cool',        N'kg',  24000),
+    (N'Glucose Syrup',        N'South Korea',    N'Room Temp',         N'kg',  45000),
+    (N'Fresh Eggs',           N'Ba Huan',        N'Chilled',           N'pcs', 3500),
+    (N'Frozen Blueberries',   N'Chile',          N'Frozen -18°C',      N'kg',  320000),
+    (N'Pistachio Kernels',    N'USA',            N'Dry & Cool',        N'kg',  550000),
+    (N'Matcha Powder',        N'Japan',          N'Airtight, Dark',    N'g',   2500),
+    (N'Chocolate Chips',      N'Vietnam',        N'Light Chilled',     N'kg',  120000),
+    (N'Strawberry Jam',       N'Da Lat',         N'Chilled after open',N'kg',  85000),
+    (N'Stabilizer (CMC)',     N'Germany',        N'Dry & Cool',        N'kg',  190000),
+    (N'Sea Salt',             N'Vietnam',        N'Dry',               N'kg',  12000),
+    (N'Shredded Coconut',     N'Ben Tre',        N'Frozen',            N'kg',  60000),
+    (N'Peppermint Essence',   N'India',          N'Cool',              N'ml',  3000),
+    (N'Walnut Kernels',       N'USA',            N'Dry & Cool',        N'kg',  480000),
+    (N'Unsalted Butter',      N'France',         N'Chilled',           N'kg',  210000),
+    (N'Caramel Sauce',        N'Internal',       N'Chilled',           N'l',   90000)
+) AS v(name, origin, storage, unit_name, price)
+JOIN units u ON u.unit_name = v.unit_name
+WHERE NOT EXISTS (SELECT 1 FROM ingredients WHERE ingredient_name = v.name);
+
+/* =========================================================
+   3) INGREDIENT LOTS (Stock Data)
+   ========================================================= */
+INSERT INTO ingredient_lots (ingredient_id, import_date, expiry_date, received_quantity, remaining_quantity, supplier_id)
+SELECT i.ingredient_id, v.imp, v.exp, v.qty, v.qty, 1
+FROM (VALUES
+    (N'Whole Fresh Milk',     '2026-04-10', '2026-05-10', 100.0),
+    (N'Whole Fresh Milk',     '2026-04-20', '2026-05-20', 150.0), 
+    (N'Full Cream Milk Powder', '2026-03-01', '2027-03-01', 50.0),
+    (N'Whipping Cream',       '2026-04-15', '2026-06-15', 40.0),
+    (N'Bourbon Vanilla Extract', '2026-01-10', '2027-01-10', 1000.0),
+    (N'Pure Cocoa Powder',    '2026-02-15', '2027-02-15', 20.0),
+    (N'Refined Sugar',        '2026-04-01', '2027-04-01', 200.0),
+    (N'Glucose Syrup',        '2026-03-20', '2027-03-20', 30.0),
+    (N'Fresh Eggs',           '2026-04-21', '2026-05-05', 500.0),
+    (N'Frozen Blueberries',   '2026-04-05', '2026-10-05', 15.0),
+    (N'Pistachio Kernels',    '2026-03-10', '2026-09-10', 10.0),
+    (N'Matcha Powder',        '2026-04-12', '2026-10-12', 5000.0),
+    (N'Chocolate Chips',      '2026-04-01', '2026-08-01', 25.0),
+    (N'Strawberry Jam',       '2026-04-18', '2026-10-18', 12.0),
+    (N'Stabilizer (CMC)',     '2026-02-20', '2028-02-20', 5.0),
+    (N'Sea Salt',             '2026-01-01', '2028-01-01', 10.0),
+    (N'Shredded Coconut',     '2026-04-10', '2026-07-10', 30.0),
+    (N'Peppermint Essence',   '2026-03-05', '2027-03-05', 500.0),
+    (N'Walnut Kernels',       '2026-04-01', '2026-10-01', 8.0),
+    (N'Unsalted Butter',      '2026-04-15', '2026-07-15', 20.0)
+) AS v(name, imp, exp, qty)
+JOIN ingredients i ON i.ingredient_name = v.name;
 GO
