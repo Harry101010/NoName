@@ -1,6 +1,8 @@
 package aptech.proj_NN_group2.controller.warehouse;
 
 import aptech.proj_NN_group2.model.business.repository.WarehouseRepository;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import aptech.proj_NN_group2.model.entity.InventorySummary;
 import aptech.proj_NN_group2.model.entity.IngredientLot;
 import aptech.proj_NN_group2.util.NavigationUtil;
@@ -13,6 +15,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import javafx.stage.FileChooser;
+import java.io.File;
+import java.io.FileOutputStream;
+
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -29,7 +37,6 @@ public class WarehouseController implements Initializable {
     @FXML private TableColumn<InventorySummary, String> colSummaryStatus;
     @FXML private TableColumn<InventorySummary, String> colStorage;
 
-
     // ===== LOT TABLE =====
     @FXML private TableView<IngredientLot> tblLots;
     @FXML private TableColumn<IngredientLot, Integer> colLotId;
@@ -40,18 +47,20 @@ public class WarehouseController implements Initializable {
     @FXML private TableColumn<IngredientLot, Double> colRemain;
     @FXML private TableColumn<IngredientLot, String> colStatus;
     @FXML private TableColumn<IngredientLot, String> colLotStorage;
-    
-    
 
-    
     // ===== INPUT =====
     @FXML private TextField txtMaterialName;
     @FXML private TextField txtQuantity;
     @FXML private DatePicker dpExpiryDate;
     @FXML private TextField txtSupplierName;
     @FXML private ComboBox<String> cbUnit;
+    @FXML private TextField txtSearch;
 
     private final WarehouseRepository repo = new WarehouseRepository();
+
+    // ===== FILTER DATA =====
+    private FilteredList<IngredientLot> filteredLots;
+    private FilteredList<InventorySummary> filteredSummary;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -63,9 +72,7 @@ public class WarehouseController implements Initializable {
         colUnit.setCellValueFactory(new PropertyValueFactory<>("unitName"));
         colTotal.setCellValueFactory(new PropertyValueFactory<>("totalStock"));
         colExpiry.setCellValueFactory(new PropertyValueFactory<>("nearestExpiry"));
-        colStorage.setCellValueFactory(
-                new PropertyValueFactory<>("storageCondition")
-        );
+        colStorage.setCellValueFactory(new PropertyValueFactory<>("storageCondition"));
 
         colSummaryStatus.setCellValueFactory(cell -> {
             InventorySummary item = cell.getValue();
@@ -90,20 +97,46 @@ public class WarehouseController implements Initializable {
 
         colStatus.setCellFactory(column -> createStatusCell());
 
-        loadAllTables();
+        // ===== LOAD DATA WITH FILTER =====
+        filteredLots = new FilteredList<>(FXCollections.observableArrayList(repo.getLots()), b -> true);
+        SortedList<IngredientLot> sortedLots = new SortedList<>(filteredLots);
+        sortedLots.comparatorProperty().bind(tblLots.comparatorProperty());
+        tblLots.setItems(sortedLots);
 
-        // Khi chọn 1 dòng trong bảng thì đổ dữ liệu lên form
+        filteredSummary = new FilteredList<>(FXCollections.observableArrayList(repo.getSummary()), b -> true);
+        SortedList<InventorySummary> sortedSummary = new SortedList<>(filteredSummary);
+        sortedSummary.comparatorProperty().bind(tblSummary.comparatorProperty());
+        tblSummary.setItems(sortedSummary);
+
+        // ===== SEARCH =====
+        txtSearch.textProperty().addListener((obs, oldValue, newValue) -> {
+
+            String keyword = newValue == null ? "" : newValue.toLowerCase();
+
+            filteredLots.setPredicate(lot -> {
+                if (keyword.isBlank()) return true;
+
+                return lot.getIngredientName().toLowerCase().contains(keyword)
+                        || (lot.getSupplierName() != null &&
+                            lot.getSupplierName().toLowerCase().contains(keyword))
+                        || lot.getStatus().toLowerCase().contains(keyword);
+            });
+
+            filteredSummary.setPredicate(item -> {
+                if (keyword.isBlank()) return true;
+
+                return item.getIngredientName().toLowerCase().contains(keyword)
+                        || item.getUnitName().toLowerCase().contains(keyword)
+                        || item.getStatus().toLowerCase().contains(keyword);
+            });
+        });
+
+        // ===== CLICK ROW → LOAD FORM =====
         tblLots.getSelectionModel().selectedItemProperty().addListener((obs, oldItem, selected) -> {
             if (selected != null) {
                 txtMaterialName.setText(selected.getIngredientName());
                 txtQuantity.setText(String.valueOf(selected.getRemainingQuantity()));
-
-                txtSupplierName.setText(
-                        selected.getSupplierName() != null
-                                ? selected.getSupplierName()
-                                : ""
-                );
-
+                txtSupplierName.setText(selected.getSupplierName() != null ? selected.getSupplierName() : "");
                 dpExpiryDate.setValue(selected.getExpiryDate());
 
                 String unitName = selected.getUnitName();
@@ -116,6 +149,7 @@ public class WarehouseController implements Initializable {
         });
     }
 
+    // ===== STATUS UI =====
     private <T> TableCell<T, String> createStatusCell() {
         return new TableCell<>() {
             @Override
@@ -128,32 +162,34 @@ public class WarehouseController implements Initializable {
                     return;
                 }
 
-                Label dot = new Label("●");
-                dot.setStyle("-fx-font-size: 14px;");
+                Label dot = new Label();
+                dot.setMinSize(10, 10);
+                dot.setMaxSize(10, 10);
+
+                Label text = new Label(status);
+                HBox box = new HBox(8, dot, text);
 
                 String lower = status.toLowerCase();
 
                 if (lower.contains("hết hạn") || lower.contains("expired")) {
-                    dot.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
-                } else if (lower.contains("sắp") || lower.contains("soon")) {
-                    dot.setStyle("-fx-text-fill: orange; -fx-font-size: 14px;");
-                } else {
-                    dot.setStyle("-fx-text-fill: green; -fx-font-size: 14px;");
+                    dot.setStyle("-fx-background-color: #ff4d4f; -fx-background-radius: 50%;");
+                } 
+                else if (lower.contains("sắp") || lower.contains("soon")) {
+                    dot.setStyle("-fx-background-color: #faad14; -fx-background-radius: 50%;");
+                } 
+                else if (lower.contains("không rõ") || lower.contains("unknown")) {
+                    dot.setStyle("-fx-background-color: gray; -fx-background-radius: 50%;");
                 }
-
-                Label text = new Label(status);
-                HBox box = new HBox(6, dot, text);
-
+                else {
+                    dot.setStyle("-fx-background-color: #52c41a; -fx-background-radius: 50%;");
+                }
                 setGraphic(box);
                 setText(null);
             }
         };
     }
 
-    private void loadAllTables() {
-        tblSummary.setItems(FXCollections.observableArrayList(repo.getSummary()));
-        tblLots.setItems(FXCollections.observableArrayList(repo.getLots()));
-    }
+    // ===== ACTIONS =====
 
     @FXML
     private void handleAdd(ActionEvent event) {
@@ -164,176 +200,90 @@ public class WarehouseController implements Initializable {
             String selectedUnit = cbUnit.getValue();
 
             if (ingredientName.isEmpty()) {
-                showWarning("Vui lòng nhập tên nguyên liệu");
+                showWarning("Please enter ingredient name");
                 return;
             }
 
             if (selectedUnit == null || selectedUnit.isBlank()) {
-                showWarning("Vui lòng chọn đơn vị");
+                showWarning("Please select unit");
                 return;
             }
 
             if (quantityText.isEmpty()) {
-                showWarning("Vui lòng nhập số lượng");
+                showWarning("Please enter quantity");
                 return;
             }
 
-            double quantity;
-            try {
-                quantity = Double.parseDouble(quantityText);
-            } catch (NumberFormatException e) {
-                showWarning("Số lượng phải là số");
-                return;
-            }
+            double quantity = Double.parseDouble(quantityText);
 
             int ingredientId = repo.findIngredientIdByName(ingredientName);
 
-            // Nếu nguyên liệu chưa tồn tại thì tạo mới
             if (ingredientId == -1) {
                 int unitId = repo.findUnitIdByName(selectedUnit);
-
-                if (unitId == -1) {
-                    showError("Không tìm thấy đơn vị trong database");
-                    return;
-                }
-
                 ingredientId = repo.createIngredient(ingredientName, unitId);
-
-                if (ingredientId == -1) {
-                    showError("Không thể tạo nguyên liệu mới");
-                    return;
-                }
             }
 
             LocalDate expiry = dpExpiryDate.getValue();
+            if (expiry == null) expiry = LocalDate.now().plusYears(1);
 
-            // Nếu không nhập hạn dùng thì mặc định 1 năm sau
-            if (expiry == null) {
-                expiry = LocalDate.now().plusYears(1);
-            }
+            repo.importStock(ingredientId, quantity, expiry.toString(), supplierName);
 
-            repo.importStock(
-                    ingredientId,
-                    quantity,
-                    expiry.toString(),
-                    supplierName
-            );
-
-            clearInputs();
-            loadAllTables();
-
-            new Alert(Alert.AlertType.INFORMATION, "Nhập kho thành công").showAndWait();
+            handleRefresh(null);
+            new Alert(Alert.AlertType.INFORMATION, "Added successfully").showAndWait();
 
         } catch (Exception e) {
-            e.printStackTrace();
-            showError("Dữ liệu không hợp lệ");
+            showError("Invalid data");
         }
     }
 
     @FXML
     private void handleUpdate(ActionEvent event) {
-
         IngredientLot selected = tblLots.getSelectionModel().getSelectedItem();
-
         if (selected == null) {
-            showWarning("Hãy chọn lô cần cập nhật");
+            showWarning("Select a lot to update");
             return;
         }
 
         try {
-            String ingredientName = txtMaterialName.getText().trim();
-            String quantityText = txtQuantity.getText().trim();
-            String supplierName = txtSupplierName.getText().trim();
-
-            if (ingredientName.isEmpty()) {
-                showWarning("Vui lòng nhập tên nguyên liệu");
-                return;
-            }
-
-            if (quantityText.isEmpty()) {
-                showWarning("Vui lòng nhập số lượng");
-                return;
-            }
-
-            double quantity;
-            try {
-                quantity = Double.parseDouble(quantityText);
-            } catch (NumberFormatException e) {
-                showWarning("Số lượng phải là số");
-                return;
-            }
-
-            int ingredientId = repo.findIngredientIdByName(ingredientName);
-
-            if (ingredientId == -1) {
-                showError("Không tìm thấy nguyên liệu");
-                return;
-            }
+            double quantity = Double.parseDouble(txtQuantity.getText());
+            int ingredientId = repo.findIngredientIdByName(txtMaterialName.getText());
 
             LocalDate expiry = dpExpiryDate.getValue();
-
-            // Nếu không chọn hạn dùng mới thì giữ hạn cũ
-            if (expiry == null) {
-                expiry = selected.getExpiryDate();
-            }
-
-            // Nếu vẫn null thì gán mặc định
-            if (expiry == null) {
-                expiry = LocalDate.now().plusYears(1);
-            }
+            if (expiry == null) expiry = selected.getExpiryDate();
 
             repo.deleteLot(selected.getLotId());
+            repo.importStock(ingredientId, quantity, expiry.toString(), txtSupplierName.getText());
 
-            repo.importStock(
-                    ingredientId,
-                    quantity,
-                    expiry.toString(),
-                    supplierName
-            );
-
-            clearInputs();
-            loadAllTables();
-
-            new Alert(Alert.AlertType.INFORMATION, "Cập nhật thành công").showAndWait();
+            handleRefresh(null);
+            new Alert(Alert.AlertType.INFORMATION, "Updated successfully").showAndWait();
 
         } catch (Exception e) {
-            e.printStackTrace();
-            showError("Lỗi cập nhật dữ liệu");
+            showError("Update failed");
         }
     }
 
     @FXML
     private void handleDelete(ActionEvent event) {
-
         IngredientLot selected = tblLots.getSelectionModel().getSelectedItem();
-
         if (selected == null) {
-            showWarning("Hãy chọn lô cần xóa");
+            showWarning("Select a lot to delete");
             return;
         }
 
-        if (repo.deleteLot(selected.getLotId())) {
-            clearInputs();
-            loadAllTables();
-            new Alert(Alert.AlertType.INFORMATION, "Xóa thành công").showAndWait();
-        } else {
-            showError("Không thể xóa");
-        }
+        repo.deleteLot(selected.getLotId());
+        handleRefresh(null);
+        new Alert(Alert.AlertType.INFORMATION, "Deleted successfully").showAndWait();
     }
 
     @FXML
     private void handleRefresh(ActionEvent event) {
-        clearInputs();
-        loadAllTables();
+        txtSearch.clear();
+        initialize(null, null);
     }
 
     @FXML
     private void handleViewExportRequests(ActionEvent event) {
-        NavigationUtil.goTo(
-                event,
-                StringValue.VIEW_EXPORT_REQUESTS,
-                "Danh sách yêu cầu xuất kho"
-        );
+        NavigationUtil.goTo(event, StringValue.VIEW_EXPORT_REQUESTS, "Export Requests");
     }
 
     @FXML
@@ -341,20 +291,108 @@ public class WarehouseController implements Initializable {
         NavigationUtil.logout(event);
     }
 
-    private void clearInputs() {
-        txtMaterialName.clear();
-        txtQuantity.clear();
-        txtSupplierName.clear();
-        dpExpiryDate.setValue(null);
-        cbUnit.getSelectionModel().clearSelection();
-        tblLots.getSelectionModel().clearSelection();
+    private void showWarning(String msg) {
+        new Alert(Alert.AlertType.WARNING, msg).showAndWait();
     }
 
-    private void showWarning(String message) {
-        new Alert(Alert.AlertType.WARNING, message).showAndWait();
+    private void showError(String msg) {
+        new Alert(Alert.AlertType.ERROR, msg).showAndWait();
     }
+    @FXML
+    private void handleExport(ActionEvent event) {
+        try {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Save Excel File");
+            fileChooser.getExtensionFilters().add(
+                    new FileChooser.ExtensionFilter("Excel Files", "*.xlsx")
+            );
+            fileChooser.setInitialFileName("inventory.xlsx");
 
-    private void showError(String message) {
-        new Alert(Alert.AlertType.ERROR, message).showAndWait();
+            File file = fileChooser.showSaveDialog(null);
+            if (file == null) return;
+
+            Workbook workbook = new XSSFWorkbook();
+
+            // ===== SHEET 1: SUMMARY =====
+            Sheet summarySheet = workbook.createSheet("Summary");
+
+            Row header1 = summarySheet.createRow(0);
+            String[] summaryHeaders = {
+                    "Ingredient", "Unit", "Total Stock",
+                    "Nearest Expiry", "Storage", "Status"
+            };
+
+            for (int i = 0; i < summaryHeaders.length; i++) {
+                header1.createCell(i).setCellValue(summaryHeaders[i]);
+            }
+
+            int rowIndex = 1;
+            for (InventorySummary item : tblSummary.getItems()) {
+                Row row = summarySheet.createRow(rowIndex++);
+
+                row.createCell(0).setCellValue(item.getIngredientName());
+                row.createCell(1).setCellValue(item.getUnitName());
+                row.createCell(2).setCellValue(item.getTotalStock());
+                row.createCell(3).setCellValue(
+                        item.getNearestExpiry() != null ? item.getNearestExpiry().toString() : ""
+                );
+                row.createCell(4).setCellValue(item.getStorageCondition());
+                row.createCell(5).setCellValue(item.getStatus());
+            }
+
+            // ===== SHEET 2: LOTS =====
+            Sheet lotSheet = workbook.createSheet("Lots");
+
+            Row header2 = lotSheet.createRow(0);
+            String[] lotHeaders = {
+                    "Lot ID", "Ingredient", "Supplier",
+                    "Import Date", "Expiry Date",
+                    "Remaining", "Storage", "Status"
+            };
+
+            for (int i = 0; i < lotHeaders.length; i++) {
+                header2.createCell(i).setCellValue(lotHeaders[i]);
+            }
+
+            rowIndex = 1;
+            for (IngredientLot lot : tblLots.getItems()) {
+                Row row = lotSheet.createRow(rowIndex++);
+
+                row.createCell(0).setCellValue(lot.getLotId());
+                row.createCell(1).setCellValue(lot.getIngredientName());
+                row.createCell(2).setCellValue(lot.getSupplierName());
+
+                row.createCell(3).setCellValue(
+                        lot.getImportDate() != null ? lot.getImportDate().toString() : ""
+                );
+                row.createCell(4).setCellValue(
+                        lot.getExpiryDate() != null ? lot.getExpiryDate().toString() : ""
+                );
+
+                row.createCell(5).setCellValue(lot.getRemainingQuantity());
+                row.createCell(6).setCellValue(lot.getStorageCondition());
+                row.createCell(7).setCellValue(lot.getStatus());
+            }
+
+            // ===== AUTO SIZE =====
+            for (int i = 0; i < summaryHeaders.length; i++) {
+                summarySheet.autoSizeColumn(i);
+            }
+            for (int i = 0; i < lotHeaders.length; i++) {
+                lotSheet.autoSizeColumn(i);
+            }
+
+            // ===== SAVE FILE =====
+            FileOutputStream fos = new FileOutputStream(file);
+            workbook.write(fos);
+            fos.close();
+            workbook.close();
+
+            new Alert(Alert.AlertType.INFORMATION, "Export successful!").showAndWait();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Export failed!").showAndWait();
+        }
     }
 }

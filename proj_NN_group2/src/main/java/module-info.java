@@ -7,6 +7,8 @@ module aptech.proj_NN_group2 {
     requires jbcrypt;
     requires jakarta.mail;
 	requires java.prefs;
+	requires org.apache.poi.poi;
+	requires org.apache.poi.ooxml;
 
     opens aptech.proj_NN_group2 to javafx.fxml;
 
