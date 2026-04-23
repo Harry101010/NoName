@@ -28,4 +28,6 @@ public class CurrentUser {
 	public static String getRoleName() {
 		return user != null ? user.getRoleName() : "";
 	}
+	
+	
 }

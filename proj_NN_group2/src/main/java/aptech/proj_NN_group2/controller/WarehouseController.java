@@ -140,6 +140,11 @@ public class WarehouseController {
     private void handleLogout(ActionEvent event) {
     	NavigationUtil.logout(event);
     }
+    
+    @FXML
+    private void goToProfile(ActionEvent event) {
+    	NavigationUtil.toAccountProfile(event);
+    }
 
     private void clearForm() {
         cbMaterial.getSelectionModel().clearSelection();

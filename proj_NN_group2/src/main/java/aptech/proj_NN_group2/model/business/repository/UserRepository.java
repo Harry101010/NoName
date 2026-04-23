@@ -78,7 +78,16 @@ public class UserRepository extends BaseRepository<User>
 			ps.setInt(2, userId);
 		});
 	}
-	//4.2 Đổi lại mk sau khi dùng tính năng quên mk
+	
+	//4.2 Hàm update mk tạm và ép đổi mk
+	public boolean updatePasswordAndSetMustChange(int userId, String newPasswordHash) {
+		String sql = "UPDATE users SET password_hash = ?, must_change_password = 1 WHERE user_id = ?";
+		return executeUpdate(sql, ps -> {
+			ps.setString(1, newPasswordHash);
+			ps.setInt(2, userId);
+		});
+	}
+	//4.3 Đổi lại mk sau khi dùng tính năng quên mk
 	public boolean updatePasswordAndClearMustChange(int userId, String newPasswordHash) {
 	    String sql = "UPDATE users SET password_hash = ?, must_change_password = 0 WHERE user_id = ?";
 	    return executeUpdate(sql, ps -> {

@@ -42,4 +42,11 @@ public class MainMenuController {
     private void handleLogout(ActionEvent event) {
     	NavigationUtil.logout(event);
     }
+    
+    @FXML
+    private void goToProfile(ActionEvent event) {
+    	NavigationUtil.toAccountProfile(event);
+    }
+    
+    
 }

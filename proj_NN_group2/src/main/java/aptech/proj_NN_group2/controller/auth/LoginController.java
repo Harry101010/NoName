@@ -5,8 +5,12 @@ import java.io.IOException;
 import aptech.proj_NN_group2.model.business.repository.UserRepository;
 import aptech.proj_NN_group2.model.entity.User;
 import aptech.proj_NN_group2.util.CurrentUser;
+import aptech.proj_NN_group2.util.NavigationUtil;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -146,7 +150,7 @@ public class LoginController {
     
     private void openMustChangePasswordScreen(User authenticatedUser) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/aptech/proj_NN_group2/change_password.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/aptech/proj_NN_group2/auth/change_password.fxml"));
             Parent root = loader.load();
 
             ChangePasswordController controller = loader.getController();
@@ -162,9 +166,11 @@ public class LoginController {
             new Alert(Alert.AlertType.ERROR, "Không thể mở màn hình đổi mật khẩu!").show();
         }
     }
-
+    
+    //gọi hàm quên mk bên navigation util
     @FXML
-    public void handleForgotPassword() {
-        new Alert(Alert.AlertType.INFORMATION, "Vui lòng liên hệ Admin để cấp lại mật khẩu!").show();
+    public void handleForgotPassword(ActionEvent event) {
+        NavigationUtil.toForgotPassword(event);
     }
+    	
 }

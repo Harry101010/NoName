@@ -35,7 +35,7 @@
         <menus>
           <Menu mnemonicParsing="false" text="Tài khoản">
             <items>
-              <MenuItem mnemonicParsing="false" text="Thông tin tài khoản" />
+              <MenuItem mnemonicParsing="false" onAction="#goToProfile" text="Thông tin tài khoản" />
                   <MenuItem mnemonicParsing="false" onAction="#handleLogout" text="Đăng xuất" />
             </items>
           </Menu>

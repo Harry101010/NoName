@@ -87,7 +87,7 @@
     <top>
         <MenuBar>
             <Menu text="Tài khoản">
-                <MenuItem text="Thông tin"/>
+                <MenuItem text="Thông tin"  onAction="#goToProfile"/>
                 <MenuItem text="Đăng xuất" onAction="#handleLogout"/>
             </Menu>
             <Menu text="Trợ giúp">
