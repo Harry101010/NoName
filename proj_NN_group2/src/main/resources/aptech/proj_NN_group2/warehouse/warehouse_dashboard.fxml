@@ -1,54 +1,46 @@
+
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="720.0" prefWidth="1250.0"
-            xmlns="http://javafx.com/javafx/23"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="aptech.proj_NN_group2.controller.warehouse.WarehouseController"
-            style="-fx-background-color: #f5f7fa;">
+<BorderPane prefHeight="720.0" prefWidth="1250.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="aptech.proj_NN_group2.controller.warehouse.WarehouseController">
 
     <!-- ===== TOP BAR ===== -->
     <top>
-        <HBox spacing="12" alignment="CENTER_LEFT"
-              style="-fx-padding: 12; -fx-background-color: white; -fx-border-color: #e5e7eb;">
+        <HBox alignment="CENTER_LEFT" spacing="12" style="-fx-padding: 12;">
 
             <!-- SEARCH -->
-            <TextField fx:id="txtSearch"
-                       promptText="🔍 Search ingredients..."
-                       prefWidth="260"
-                       style="-fx-background-radius: 20;
-                              -fx-border-radius: 20;
-                              -fx-border-color: #d1d5db;
-                              -fx-padding: 6 12;" />
+            <TextField fx:id="txtSearch" prefWidth="260" promptText="🔍 Search ingredients..." style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-padding: 6 12;" />
 
             <Region HBox.hgrow="ALWAYS" />
 
             <!-- BUTTONS -->
-            <Button text="Add" onAction="#handleAdd"
-                    style="-fx-background-color: #22c55e; -fx-text-fill: white; -fx-background-radius: 8;"/>
+            <Button onAction="#handleAdd" style="-fx-background-color: #22c55e; -fx-text-fill: white; -fx-background-radius: 8;" text="Add" />
 
-            <Button text="Update" onAction="#handleUpdate"
-                    style="-fx-background-color: #3b82f6; -fx-text-fill: white; -fx-background-radius: 8;"/>
+            <Button onAction="#handleUpdate" style="-fx-background-color: #3b82f6; -fx-text-fill: white; -fx-background-radius: 8;" text="Update" />
 
-            <Button text="Delete" onAction="#handleDelete"
-                    style="-fx-background-color: #ef4444; -fx-text-fill: white; -fx-background-radius: 8;"/>
+            <Button onAction="#handleDelete" style="-fx-background-color: #ef4444; -fx-text-fill: white; -fx-background-radius: 8;" text="Delete" />
 
-            <Button text="Refresh" onAction="#handleRefresh"
-                    style="-fx-background-radius: 8;"/>
+            <Button onAction="#handleRefresh" style="-fx-background-radius: 8;" text="Refresh" />
 
-            <Button text="Export" onAction="#handleExport"
-                    style="-fx-background-radius: 8;"/>
+            <Button onAction="#handleExport" style="-fx-background-radius: 8;" text="Export" />
 
-            <Button text="Export Requests" onAction="#handleViewExportRequests"
-                    style="-fx-background-radius: 8;"/>
-			
-			  <Button text="Account" onAction="#goToProfile"
-                    style="-fx-background-radius: 8;"/>
-			
-            <Button text="Logout" onAction="#handleLogout"
-                    style="-fx-background-radius: 8;"/>
+            <Button onAction="#handleViewExportRequests" style="-fx-background-radius: 8;" text="Export Requests" />
+
+            <Button onAction="#handleLogout" style="-fx-background-radius: 8;" text="Logout" />
 
         </HBox>
     </top>
@@ -58,47 +50,37 @@
         <VBox spacing="15" style="-fx-padding: 15;">
 
             <!-- ===== SUMMARY ===== -->
-            <VBox spacing="10"
-                  style="-fx-background-color: white;
-                         -fx-padding: 10;
-                         -fx-background-radius: 12;
-                         -fx-border-color: #e5e7eb;">
+            <VBox spacing="10" style="-fx-padding: 10; -fx-background-radius: 12;">
 
-                <Label text="Inventory Summary"
-                       style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Inventory Summary" />
 
                 <TableView fx:id="tblSummary" prefHeight="220">
                     <columns>
-                        <TableColumn fx:id="colName" text="Ingredient" prefWidth="150"/>
-                        <TableColumn fx:id="colUnit" text="Unit" prefWidth="90"/>
-                        <TableColumn fx:id="colTotal" text="Stock" prefWidth="100"/>
-                        <TableColumn fx:id="colExpiry" text="Nearest Expiry" prefWidth="150"/>
-                        <TableColumn fx:id="colStorage" text="Storage" prefWidth="150"/>
-                        <TableColumn fx:id="colSummaryStatus" text="Status" prefWidth="140"/>
+                        <TableColumn fx:id="colName" prefWidth="150" text="Ingredient" />
+                        <TableColumn fx:id="colUnit" prefWidth="90" text="Unit" />
+                        <TableColumn fx:id="colTotal" prefWidth="100" text="Stock" />
+                        <TableColumn fx:id="colExpiry" prefWidth="150" text="Nearest Expiry" />
+                        <TableColumn fx:id="colStorage" prefWidth="150" text="Storage" />
+                        <TableColumn fx:id="colSummaryStatus" prefWidth="140" text="Status" />
                     </columns>
                 </TableView>
             </VBox>
 
             <!-- ===== LOT ===== -->
-            <VBox spacing="10"
-                  style="-fx-background-color: white;
-                         -fx-padding: 10;
-                         -fx-background-radius: 12;
-                         -fx-border-color: #e5e7eb;">
+            <VBox spacing="10" style="-fx-padding: 10; -fx-background-radius: 12;">
 
-                <Label text="Lot Details"
-                       style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Lot Details" />
 
                 <TableView fx:id="tblLots" prefHeight="260">
                     <columns>
-                        <TableColumn fx:id="colLotId" text="ID" prefWidth="60"/>
-                        <TableColumn fx:id="colLotName" text="Ingredient" prefWidth="150"/>
-                        <TableColumn fx:id="colSupplier" text="Supplier" prefWidth="140"/>
-                        <TableColumn fx:id="colImport" text="Import Date" prefWidth="120"/>
-                        <TableColumn fx:id="colLotExpiry" text="Expiry" prefWidth="120"/>
-                        <TableColumn fx:id="colRemain" text="Remaining" prefWidth="100"/>
-                        <TableColumn fx:id="colLotStorage" text="Storage" prefWidth="140"/>
-                        <TableColumn fx:id="colStatus" text="Status" prefWidth="130"/>
+                        <TableColumn fx:id="colLotId" prefWidth="60" text="ID" />
+                        <TableColumn fx:id="colLotName" prefWidth="150" text="Ingredient" />
+                        <TableColumn fx:id="colSupplier" prefWidth="140" text="Supplier" />
+                        <TableColumn fx:id="colImport" prefWidth="120" text="Import Date" />
+                        <TableColumn fx:id="colLotExpiry" prefWidth="120" text="Expiry" />
+                        <TableColumn fx:id="colRemain" prefWidth="100" text="Remaining" />
+                        <TableColumn fx:id="colLotStorage" prefWidth="140" text="Storage" />
+                        <TableColumn fx:id="colStatus" prefWidth="130" text="Status" />
                     </columns>
                 </TableView>
             </VBox>
@@ -108,40 +90,41 @@
 
     <!-- ===== FORM ===== -->
     <bottom>
-        <VBox spacing="10"
-              style="-fx-padding: 15;
-                     -fx-background-color: white;
-                     -fx-border-color: #e5e7eb;">
+        <VBox spacing="10" style="-fx-padding: 15;">
 
-            <Label text="Manage Inventory"
-                   style="-fx-font-size: 15px; -fx-font-weight: bold;"/>
+            <Label style="-fx-font-size: 15px; -fx-font-weight: bold;" text="Manage Inventory" />
 
             <GridPane hgap="12" vgap="10">
 
                 <columnConstraints>
-                    <ColumnConstraints percentWidth="15"/>
-                    <ColumnConstraints percentWidth="35"/>
-                    <ColumnConstraints percentWidth="15"/>
-                    <ColumnConstraints percentWidth="35"/>
+                    <ColumnConstraints percentWidth="15" />
+                    <ColumnConstraints percentWidth="35" />
+                    <ColumnConstraints percentWidth="15" />
+                    <ColumnConstraints percentWidth="35" />
                 </columnConstraints>
 
                 <!-- ROW 1 -->
-                <Label text="Ingredient:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-                <TextField fx:id="txtMaterialName" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                <Label text="Ingredient:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                <TextField fx:id="txtMaterialName" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-                <Label text="Quantity:" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
-                <TextField fx:id="txtQuantity" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
+                <Label text="Quantity:" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                <TextField fx:id="txtQuantity" GridPane.columnIndex="3" GridPane.rowIndex="0" />
 
                 <!-- ROW 2 -->
-                <Label text="Unit:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-                <ComboBox fx:id="cbUnit" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                <Label text="Unit:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                <ComboBox fx:id="cbUnit" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-                <Label text="Supplier:" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
-                <TextField fx:id="txtSupplierName" GridPane.rowIndex="1" GridPane.columnIndex="3"/>
+                <Label text="Supplier:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                <TextField fx:id="txtSupplierName" GridPane.columnIndex="3" GridPane.rowIndex="1" />
 
                 <!-- ROW 3 -->
-                <Label text="Expiry Date:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-                <DatePicker fx:id="dpExpiryDate" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                <Label text="Expiry Date:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                <DatePicker fx:id="dpExpiryDate" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <rowConstraints>
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+            </rowConstraints>
 
             </GridPane>
 
