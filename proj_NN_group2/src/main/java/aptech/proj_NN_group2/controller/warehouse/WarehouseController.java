@@ -290,6 +290,11 @@ public class WarehouseController implements Initializable {
     private void handleLogout(ActionEvent event) {
         NavigationUtil.logout(event);
     }
+    
+    @FXML
+    private void goToProfile(ActionEvent event) {
+    	NavigationUtil.toAccountProfile(event);
+    }
 
     private void showWarning(String msg) {
         new Alert(Alert.AlertType.WARNING, msg).showAndWait();

@@ -43,7 +43,10 @@
 
             <Button text="Export Requests" onAction="#handleViewExportRequests"
                     style="-fx-background-radius: 8;"/>
-
+			
+			  <Button text="Account" onAction="#goToProfile"
+                    style="-fx-background-radius: 8;"/>
+			
             <Button text="Logout" onAction="#handleLogout"
                     style="-fx-background-radius: 8;"/>
 
