@@ -67,12 +67,10 @@ public class ProductionStageRepository extends BaseRepository<ProductionStage> {
             closeQuietly(conn);
         }
     }
-
     public ProductionStage findById(int stageId) {
         return findOne("SELECT * FROM production_stages WHERE production_stage_id = ?",
                 ps -> ps.setInt(1, stageId));
     }
-
     public boolean completeStage(ProductionStage stage) {
         String sql = "UPDATE production_stages SET stage_status=?, actual_duration_min=?, " +
                      "actual_volume=?, mold_count=?, end_time=SYSDATETIME(), recorded_by=?, note=? " +
@@ -117,7 +115,6 @@ public class ProductionStageRepository extends BaseRepository<ProductionStage> {
             ps.setInt(6, detail.getProduction_stage_id());
         });
     }
-
     public boolean unlockNextStage(int orderId, int nextStageNo) {
         return executeUpdate(
             "UPDATE production_stages SET stage_status=?, start_time=SYSDATETIME() " +

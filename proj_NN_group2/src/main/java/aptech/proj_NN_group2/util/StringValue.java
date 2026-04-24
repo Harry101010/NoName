@@ -25,6 +25,7 @@ public final class StringValue {
     public static final String VIEW_CONFIRM_RECEIVED_INGREDIENT = "/aptech/proj_NN_group2/production/confirm_received_ingredient.fxml";
     public static final String VIEW_STAGE_DETAIL = "/aptech/proj_NN_group2/production/stage_detail.fxml";
 
+
     private StringValue() {
     }
 }

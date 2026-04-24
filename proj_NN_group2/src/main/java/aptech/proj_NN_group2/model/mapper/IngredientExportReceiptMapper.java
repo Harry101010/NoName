@@ -1,3 +1,4 @@
+
 package aptech.proj_NN_group2.model.mapper;
 
 import java.sql.ResultSet;
@@ -46,3 +47,4 @@ public class IngredientExportReceiptMapper implements IMapper<IngredientExportRe
         }
     }
 }
+

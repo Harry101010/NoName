@@ -36,6 +36,7 @@ public class IngredientExportRequestRepository extends BaseRepository<Ingredient
         return mapper.RowMap(rs);
     }
 
+
     public List<IngredientExportRequest> findAll() {
         return find(BASE_SELECT + " ORDER BY ier.requested_at DESC", null);
     }
@@ -43,12 +44,10 @@ public class IngredientExportRequestRepository extends BaseRepository<Ingredient
     public IngredientExportRequest findById(int id) {
         return findOne(BASE_SELECT + " WHERE ier.ingredient_export_request_id = ?", ps -> ps.setInt(1, id));
     }
-
     public boolean existsByOrderId(int productionOrderId) {
         String sql = "SELECT COUNT(1) FROM ingredient_export_requests WHERE production_order_id = ?";
         return count(sql, ps -> ps.setInt(1, productionOrderId)) > 0;
     }
-
     public int createWithDetails(IngredientExportRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("request must not be null");
@@ -136,7 +135,6 @@ public class IngredientExportRequestRepository extends BaseRepository<Ingredient
         }
         return -1;
     }
-
     public List<IngredientExportRequestDetail> previewDetails(int productionOrderId, BigDecimal plannedKg) {
         String sql = """
             SELECT
@@ -153,6 +151,7 @@ public class IngredientExportRequestRepository extends BaseRepository<Ingredient
             WHERE po.production_order_id = ?
             ORDER BY i.ingredient_name
             """;
+    
         return detailRepository.find(sql, ps -> {
             ps.setBigDecimal(1, plannedKg);
             ps.setInt(2, productionOrderId);
@@ -164,7 +163,6 @@ public class IngredientExportRequestRepository extends BaseRepository<Ingredient
         Integer productionOrderId = queryInteger(sql, ps -> ps.setInt(1, requestId));
         return productionOrderId != null ? productionOrderId : -1;
     }
-
     public List<IngredientExportRequestDetail> findDetailsByRequestId(int requestId) {
         String sql = """
             SELECT d.*, i.ingredient_name, u.unit_name

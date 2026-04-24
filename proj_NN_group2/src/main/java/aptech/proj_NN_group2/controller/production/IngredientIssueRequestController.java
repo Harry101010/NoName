@@ -10,6 +10,7 @@ import aptech.proj_NN_group2.model.entity.IngredientExportRequest;
 import aptech.proj_NN_group2.model.entity.IngredientExportRequestDetail;
 import aptech.proj_NN_group2.model.entity.ProductionOrder;
 import aptech.proj_NN_group2.util.CurrentUser;
+
 import aptech.proj_NN_group2.util.NavigationUtil;
 import aptech.proj_NN_group2.util.StringValue;
 import javafx.collections.FXCollections;
@@ -21,9 +22,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
+
 import javafx.scene.control.cell.PropertyValueFactory;
 
 public class IngredientIssueRequestController implements Initializable {
+
 
     @FXML private ComboBox<ProductionOrder> cbOrder;
     @FXML private Label lblOrderInfo;
@@ -48,6 +51,7 @@ public class IngredientIssueRequestController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
         colIngredient.setCellValueFactory(new PropertyValueFactory<>("ingredient_name"));
         colUnit.setCellValueFactory(new PropertyValueFactory<>("unit_name"));
         colQty.setCellValueFactory(new PropertyValueFactory<>("required_quantity"));
@@ -73,8 +77,7 @@ public class IngredientIssueRequestController implements Initializable {
             }
         });
 
-        cbOrder.setOnAction(e -> handleOrderSelected());
-        loadRequestTable();
+        cbOrder.setOnAction(e -> handleOrderSelected());loadRequestTable();
     }
 
     @FXML
@@ -91,21 +94,22 @@ public class IngredientIssueRequestController implements Initializable {
                 + "  |  Số kg: " + order.getPlanned_output_kg()
                 + "  |  Trạng thái: " + order.getOrder_status());
 
+
         if (requestRepo.existsByOrderId(order.getProduction_order_id())) {
             lblMessage.setStyle("-fx-text-fill: orange;");
             lblMessage.setText("Lệnh sản xuất này đã có phiếu yêu cầu xuất kho.");
         } else {
             lblMessage.setText("");
         }
-
         loadPreview(order);
     }
-
+    
     private void loadPreview(ProductionOrder order) {
+
         List<IngredientExportRequestDetail> preview = requestRepo.previewDetails(
                 order.getProduction_order_id(),
                 order.getPlanned_output_kg()
-        );
+        ); 
         tablePreview.setItems(FXCollections.observableArrayList(preview));
     }
 
@@ -133,8 +137,7 @@ public class IngredientIssueRequestController implements Initializable {
             request.setRequested_by(CurrentUser.requireUser().getUserId());
         } catch (IllegalStateException ex) {
             lblMessage.setText(ex.getMessage());
-            return;
-        }
+            return; }
 
         int newId = requestRepo.createWithDetails(request);
         if (newId > 0) {
@@ -165,7 +168,6 @@ public class IngredientIssueRequestController implements Initializable {
             lblMessage.setText("Vui lòng chọn một phiếu để xem chi tiết.");
             return;
         }
-
         List<IngredientExportRequestDetail> details =
                 requestRepo.findDetailsByRequestId(selected.getIngredient_export_request_id());
         tablePreview.setItems(FXCollections.observableArrayList(details));
@@ -183,3 +185,4 @@ public class IngredientIssueRequestController implements Initializable {
         tableRequests.setItems(FXCollections.observableArrayList(requestRepo.findAll()));
     }
 }
+

@@ -1,5 +1,7 @@
 package aptech.proj_NN_group2.controller.sales;
 
+import aptech.proj_NN_group2.util.NavigationUtil;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TabPane;
 
@@ -20,5 +22,15 @@ public class SalemanWarehouseDashboardController {
                 if (warehouseController != null) warehouseController.refreshData();
             }
         });
+    }
+    
+    @FXML
+    private void handleLogout(ActionEvent event) {
+    	NavigationUtil.logout(event);
+    }
+    
+    @FXML
+    private void goToProfile(ActionEvent event) {
+    	NavigationUtil.toAccountProfile(event);
     }
 }

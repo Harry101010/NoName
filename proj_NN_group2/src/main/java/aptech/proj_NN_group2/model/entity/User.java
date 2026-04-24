@@ -11,7 +11,8 @@ public class User {
     private boolean isActive;
     private String email;
     private Date created_at;
-
+    private boolean mustChangePassword;
+    
     public User() {}
 
 	public int getUserId() {
@@ -76,6 +77,14 @@ public class User {
 
 	public void setCreated_at(Date created_at) {
 		this.created_at = created_at;
+	}
+	
+	public boolean isMustChangePassword() {
+	    return mustChangePassword;
+	}
+
+	public void setMustChangePassword(boolean mustChangePassword) {
+	    this.mustChangePassword = mustChangePassword;
 	}
 
 }

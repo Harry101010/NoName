@@ -49,3 +49,4 @@ public class IngredientExportRequest {
         return "ID " + production_order_id + " - " + ice_cream_name + " (" + planned_output_kg + " kg)";
     }
 }
+

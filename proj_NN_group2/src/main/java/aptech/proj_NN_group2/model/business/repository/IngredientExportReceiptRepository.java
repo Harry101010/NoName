@@ -1,5 +1,6 @@
 package aptech.proj_NN_group2.model.business.repository;
 
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -26,14 +27,12 @@ public class IngredientExportReceiptRepository extends BaseRepository<Ingredient
         JOIN production_orders po ON ier.production_order_id = po.production_order_id
         JOIN ice_creams ic ON po.ice_cream_id = ic.ice_cream_id
         """;
-
     private final IngredientExportReceiptMapper mapper = new IngredientExportReceiptMapper();
 
     @Override
     protected IngredientExportReceipt map(ResultSet rs) throws SQLException {
         return mapper.RowMap(rs);
     }
-
     public List<IngredientExportReceipt> findApproved() {
         String sql = BASE_SELECT + " WHERE ier2.receipt_status = ? ORDER BY ier2.created_at DESC";
         return find(sql, ps -> ps.setString(1, RECEIPT_STATUS_APPROVED));
