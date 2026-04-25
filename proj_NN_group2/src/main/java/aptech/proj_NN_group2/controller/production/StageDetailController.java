@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import aptech.proj_NN_group2.model.business.repository.FinishedStockRepository;
+
 import aptech.proj_NN_group2.model.business.repository.ProductionOrderRepository;
 import aptech.proj_NN_group2.model.business.repository.ProductionStageRepository;
 import aptech.proj_NN_group2.model.entity.ProductionOrder;
@@ -38,14 +39,12 @@ public class StageDetailController implements Initializable {
     @FXML private TableColumn<ProductionStage, Integer> colDuration;
     @FXML private TableColumn<ProductionStage, BigDecimal> colVolume;
     @FXML private TableColumn<ProductionStage, String> colNote;
-
     @FXML private VBox panelDetail;
     @FXML private Label lblStageTitle;
     @FXML private TextField tfDuration;
     @FXML private TextField tfVolume;
     @FXML private TextField tfMold;
     @FXML private TextField tfNote;
-
     @FXML private VBox panelMixing;
     @FXML private TextField tfMixingTemp;
     @FXML private TextArea taMixingRatio;
@@ -55,7 +54,6 @@ public class StageDetailController implements Initializable {
     private final ProductionOrderRepository orderRepo = new ProductionOrderRepository();
     private final ProductionStageRepository stageRepo = new ProductionStageRepository();
     private final FinishedStockRepository finishedStockRepo = new FinishedStockRepository();
-
     private ProductionStage selectedStage;
 
     @Override
@@ -68,7 +66,6 @@ public class StageDetailController implements Initializable {
         colDuration.setCellValueFactory(new PropertyValueFactory<>("actual_duration_min"));
         colVolume.setCellValueFactory(new PropertyValueFactory<>("actual_volume"));
         colNote.setCellValueFactory(new PropertyValueFactory<>("note"));
-
         List<ProductionOrder> orders = orderRepo.findAll();
         cbOrder.setItems(FXCollections.observableArrayList(orders));
         cbOrder.setConverter(new javafx.util.StringConverter<ProductionOrder>() {
@@ -102,7 +99,6 @@ public class StageDetailController implements Initializable {
             lblMessage.setText("Vui lòng chọn lệnh sản xuất.");
             return;
         }
-
         lblMessage.setText("");
         lblOrderInfo.setText("Kem: " + order.getIce_cream_name()
                 + "  |  Số kg: " + order.getPlanned_output_kg()
@@ -113,7 +109,6 @@ public class StageDetailController implements Initializable {
             stageRepo.initStages(order.getProduction_order_id());
             stages = stageRepo.findByOrderId(order.getProduction_order_id());
         }
-
         tableStages.setItems(FXCollections.observableArrayList(stages));
         panelDetail.setVisible(false);
         panelDetail.setManaged(false);
@@ -123,18 +118,14 @@ public class StageDetailController implements Initializable {
     private void handleStageSelected(ProductionStage stage) {
         selectedStage = stage;
         lblMessage.setText("");
-
         panelDetail.setVisible(true);
         panelDetail.setManaged(true);
-
         lblStageTitle.setText("Công đoạn " + stage.getStage_no() + ": " + stage.getStage_name()
                 + "  [" + stage.getStage_status() + "]");
-
         tfDuration.setText(stage.getActual_duration_min() != null ? stage.getActual_duration_min().toString() : "");
         tfVolume.setText(stage.getActual_volume() != null ? stage.getActual_volume().toPlainString() : "");
         tfMold.setText(stage.getMold_count() != null ? stage.getMold_count().toString() : "");
         tfNote.setText(stage.getNote() != null ? stage.getNote() : "");
-
         boolean isMixing = stage.getStage_no() == 1;
         panelMixing.setVisible(isMixing);
         panelMixing.setManaged(isMixing);
@@ -143,7 +134,6 @@ public class StageDetailController implements Initializable {
             tfMixingTemp.clear();
             taMixingRatio.clear();
         }
-
         boolean editable = "open".equals(stage.getStage_status());
         tfDuration.setDisable(!editable);
         tfVolume.setDisable(!editable);
@@ -161,13 +151,11 @@ public class StageDetailController implements Initializable {
             lblMessage.setText("Vui lòng chọn một công đoạn.");
             return;
         }
-
         ProductionOrder order = cbOrder.getValue();
         if (order == null) {
             lblMessage.setText("Vui lòng chọn lệnh sản xuất.");
             return;
         }
-
         if (!"open".equals(selectedStage.getStage_status())) {
             lblMessage.setText("Chỉ có thể ghi nhận công đoạn đang ở trạng thái 'open'.");
             return;
@@ -205,7 +193,6 @@ public class StageDetailController implements Initializable {
                 return;
             }
         }
-
         ProductionStageDetail detail = new ProductionStageDetail();
         detail.setProduction_stage_id(selectedStage.getProduction_stage_id());
         detail.setProduction_order_id(selectedStage.getProduction_order_id());
@@ -254,7 +241,6 @@ public class StageDetailController implements Initializable {
                     : "Ghi nhận công đoạn cuối thành công nhưng nhập kho thành phẩm thất bại.")
                 : "Ghi nhận công đoạn " + selectedStage.getStage_no()
                 + " thành công! Công đoạn tiếp theo đã được mở.");
-
         handleLoadStages();
     }
 
@@ -274,3 +260,4 @@ public class StageDetailController implements Initializable {
         NavigationUtil.goTo(event, StringValue.VIEW_MAIN_MENU, "Hệ thống Quản lý Sản xuất & Xuất kho");
     }
 }
+

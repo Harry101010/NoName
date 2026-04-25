@@ -69,6 +69,10 @@ public class WarehouseController implements Initializable {
     private ObservableList<InventorySummary> masterData = FXCollections.observableArrayList();
     private final WarehouseRepository repo = new WarehouseRepository();
 
+    // ===== FILTER DATA =====
+    private FilteredList<IngredientLot> filteredLots;
+    private FilteredList<InventorySummary> filteredSummary;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // 1. Cấu hình ban đầu
@@ -194,6 +198,7 @@ public class WarehouseController implements Initializable {
             double quantity = Double.parseDouble(txtQuantity.getText().trim());
             String supplierName = txtSupplierName.getText().trim();
             LocalDate expiry = dpExpiryDate.getValue();
+            if (expiry == null) expiry = LocalDate.now().plusYears(1);
 
             // --- BƯỚC QUAN TRỌNG: LẤY ID TỪ TÊN ---
             // Bạn cần khởi tạo IngredientRepository để tìm ID
@@ -249,7 +254,7 @@ public class WarehouseController implements Initializable {
     	if (!isInputValid()) return;
         IngredientLot selected = tblDetailLots.getSelectionModel().getSelectedItem();
         if (selected == null) {
-            showWarning("Hãy chọn lô cần cập nhật");
+            showWarning("Select a lot to update");
             return;
         }
 
@@ -279,17 +284,13 @@ public class WarehouseController implements Initializable {
     private void handleDelete(ActionEvent event) {
         IngredientLot selected = tblDetailLots.getSelectionModel().getSelectedItem();
         if (selected == null) {
-            showWarning("Hãy chọn lô cần xóa");
+            showWarning("Select a lot to delete");
             return;
         }
 
-        if (repo.deleteLot(selected.getLotId())) {
-            clearInputs();
-            loadAllTables();
-            new Alert(Alert.AlertType.INFORMATION, "Xóa thành công").showAndWait();
-        } else {
-            showError("Không thể xóa");
-        }
+        repo.deleteLot(selected.getLotId());
+        handleRefresh(null);
+        new Alert(Alert.AlertType.INFORMATION, "Deleted successfully").showAndWait();
     }
 
        

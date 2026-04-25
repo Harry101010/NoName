@@ -20,6 +20,7 @@ public abstract class BaseRepository<T> {
 
     public T findOne(String sql, Binder binder) {
         try (Connection conn = Database.getConnection();
+
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             if (binder != null) {

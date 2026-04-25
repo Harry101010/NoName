@@ -16,7 +16,7 @@ public class IngredientLotMapper {
 	    lot.setUnitName(rs.getString("unit_name"));
 	    lot.setRemainingQuantity(rs.getDouble("remaining_quantity"));
 	    lot.setReceivedQuantity(rs.getDouble("received_quantity"));
-	    lot.setStorageCondition(rs.getString("storage_condition"));
+//	    lot.setStorageCondition(rs.getString("storage_condition"));
 
 	    // ✅ FIX DATE
 	    if (rs.getDate("import_date") != null) {
@@ -31,4 +31,5 @@ public class IngredientLotMapper {
 
 	    return lot;
 	}
+
 }

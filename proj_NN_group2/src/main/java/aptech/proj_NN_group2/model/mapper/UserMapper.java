@@ -18,6 +18,7 @@ public class UserMapper implements IMapper<User> {
         u.setActive(rs.getBoolean("is_active"));
         u.setRoleName(rs.getString("role_name")); 
         u.setEmail(rs.getString("email"));
+        u.setMustChangePassword(rs.getBoolean("must_change_password"));
         return u;
     }
 }

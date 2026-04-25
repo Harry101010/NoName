@@ -1,3 +1,4 @@
+
 package aptech.proj_NN_group2.model.entity;
 
 import java.sql.Timestamp;
