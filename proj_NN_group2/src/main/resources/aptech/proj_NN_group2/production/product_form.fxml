@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="15" style="-fx-padding: 20;" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="aptech.proj_NN_group2.controller.production.ProductDialogController">
+    
+    <Label text="Tên sản phẩm:"/>
+    <TextField fx:id="txtProductName" promptText="Nhập tên sản phẩm..."/>
+    
+    <CheckBox fx:id="chkActive" text="Kích hoạt sản phẩm" selected="true" />
+    
+    <Separator />
+    
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button text="Lưu" onAction="#handleSave" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-pref-width: 80;"/>
+        <Button text="Hủy" onAction="#handleClose" style="-fx-pref-width: 80;"/>
+    </HBox>
+</VBox>

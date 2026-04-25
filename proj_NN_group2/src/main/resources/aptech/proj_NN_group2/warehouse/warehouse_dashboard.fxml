@@ -3,78 +3,73 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane prefHeight="650.0" prefWidth="1350.0"
-            xmlns="http://javafx.com/javafx/23"
+<BorderPane xmlns="http://javafx.com/javafx/23"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="aptech.proj_NN_group2.controller.warehouse.WarehouseController"
             style="-fx-background-color: #f5f6fa;">
 
-    <top>
-        <MenuBar>
-            <Menu text="Tài khoản">
-                <MenuItem text="Thông tin"/>
-                <MenuItem text="Đăng xuất" onAction="#handleLogout"/>
-            </Menu>
-            <Menu text="Trợ giúp">
-                <MenuItem text="About"/>
-            </Menu>
-        </MenuBar>
-    </top>
-
     <center>
-        <VBox spacing="12">
-            <padding>
-                <Insets top="15" right="15" bottom="15" left="15"/>
-            </padding>
+        <ScrollPane fitToWidth="true" fitToHeight="true" style="-fx-background-color: transparent;">
+            <VBox spacing="12" style="-fx-padding: 15;">
+                
+                <Label text="Quản lý tồn kho nguyên liệu"
+                       style="-fx-font-size: 22px; -fx-font-weight: bold;"/>
 
-            <Label text="Quản lý tồn kho nguyên liệu"
-                   style="-fx-font-size: 22px; -fx-font-weight: bold;"/>
+                <Label text="Tổng quan tồn kho"/>
+                <TableView fx:id="tblSummary" prefHeight="250" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colName" text="Nguyên liệu" prefWidth="200"/>
+                        <TableColumn fx:id="colUnit" text="Đơn vị" prefWidth="80"/>
+                        <TableColumn fx:id="colTotal" text="Tổng tồn" prefWidth="100"/>
+                        <TableColumn fx:id="colExpiry" text="Hạn gần nhất" prefWidth="120"/>
+                        <TableColumn fx:id="colStorage" text="Bảo quản" prefWidth="150"/> 
+                        <TableColumn fx:id="colSummaryStatus" text="Trạng thái" prefWidth="120"/>
+                    </columns>
+                </TableView>
 
-            <Label text="Tổng quan tồn kho"/>
-            <TableView fx:id="tblSummary" VBox.vgrow="ALWAYS">
-                <columns>
-                    <TableColumn fx:id="colName" text="Nguyên liệu"/>
-                    <TableColumn fx:id="colUnit" text="Đơn vị"/>
-                    <TableColumn fx:id="colTotal" text="Tổng tồn"/>
-                    <TableColumn fx:id="colExpiry" text="Hạn gần nhất"/>
-                    <TableColumn fx:id="colStorage" text="Bảo quản"/> <TableColumn fx:id="colSummaryStatus" text="Trạng thái"/>
-                </columns>
-            </TableView>
-
-            <Label text="Chi tiết lô (FIFO)"/>
-            <TableView fx:id="tblLots" VBox.vgrow="ALWAYS">
-                <columns>
-                    <TableColumn fx:id="colLotId" text="ID"/>
-                    <TableColumn fx:id="colLotName" text="Nguyên liệu"/>
-                    <TableColumn fx:id="colSupplier" text="Nhà cung cấp"/>
-                    <TableColumn fx:id="colImport" text="Ngày nhập"/>
-                    <TableColumn fx:id="colLotExpiry" text="Hạn dùng"/>
-
-                    <TableColumn fx:id="colLotStorage" text="Bảo quản"/>
-
-                    <TableColumn fx:id="colRemain" text="Còn lại"/>
-                    <TableColumn fx:id="colStatus" text="Trạng thái"/>
-                </columns>
-            </TableView>
-        </VBox>
+                <Label text="Chi tiết lô (FIFO)"/>
+                <TableView fx:id="tblLots" prefHeight="250" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colLotId" text="ID" prefWidth="50"/>
+                        <TableColumn fx:id="colLotName" text="Nguyên liệu" prefWidth="150"/>
+                        <TableColumn fx:id="colSupplier" text="Nhà cung cấp" prefWidth="150"/>
+                        <TableColumn fx:id="colImport" text="Ngày nhập" prefWidth="100"/>
+                        <TableColumn fx:id="colLotExpiry" text="Hạn dùng" prefWidth="100"/>
+                        <TableColumn fx:id="colLotStorage" text="Bảo quản" prefWidth="120"/>
+                        <TableColumn fx:id="colRemain" text="Còn lại" prefWidth="100"/>
+                        <TableColumn fx:id="colStatus" text="Trạng thái" prefWidth="100"/>
+                    </columns>
+                </TableView>
+            </VBox>
+        </ScrollPane>
     </center>
 
     <right>
-        <VBox spacing="12" prefWidth="300" style="-fx-background-color: white; -fx-border-color: #ddd;">
-            <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
-            <Label text="Cập nhật kho" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
-            <Label text="Tên nguyên liệu"/><TextField fx:id="txtMaterialName" promptText="Ví dụ: Sữa tươi"/>
-            <Label text="Đơn vị"/><ComboBox fx:id="cbUnit" promptText="Chọn đơn vị"/>
-            <Label text="Số lượng"/><TextField fx:id="txtQuantity" promptText="Ví dụ: 100"/>
-            <Label text="Hạn sử dụng"/><DatePicker fx:id="dpExpiryDate"/>
-            <Label text="Nhà cung cấp"/><TextField fx:id="txtSupplierName" promptText="Nhập tên nhà cung cấp"/>
+        <VBox spacing="12" prefWidth="300" style="-fx-background-color: white; -fx-padding: 20; -fx-border-color: #ddd;">
+            <Label text="Stock Update" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+            
+            <Label text="Ingredient Name"/><TextField fx:id="txtMaterialName" promptText="Ví dụ: Sữa tươi"/>
+            <Label text="Unit"/><ComboBox fx:id="cbUnit" maxWidth="Infinity" promptText="Chọn đơn vị"/>
+            <Label text="Quantity"/><TextField fx:id="txtQuantity" promptText="Ví dụ: 100"/>
+            <Label text="Expiry Date"/><DatePicker fx:id="dpExpiryDate" maxWidth="Infinity"/>
+            <Label text="Supplier Name"/><TextField fx:id="txtSupplierName" promptText="Nhập tên nhà cung cấp"/>
+            
             <Separator/>
-            <Button fx:id="btnAdd" text="Nhập kho" maxWidth="Infinity" onAction="#handleAdd" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold;"/>
-            <Button fx:id="btnUpdate" text="Cập nhật" maxWidth="Infinity" onAction="#handleUpdate" style="-fx-background-color: #f39c12; -fx-text-fill: white; -fx-font-weight: bold;"/>
-            <Button fx:id="btnDelete" text="Xóa nguyên liệu" maxWidth="Infinity" onAction="#handleDelete" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold;"/>
+            
+            <Button fx:id="btnAdd" text="Stock Ingredient" maxWidth="Infinity" onAction="#handleAdd" 
+                    style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold;"/>
+            <Button fx:id="btnUpdate" text="Edit Ingredient" maxWidth="Infinity" onAction="#handleUpdate" 
+                    style="-fx-background-color: #f39c12; -fx-text-fill: white; -fx-font-weight: bold;"/>
+            <Button fx:id="btnDelete" text="Delete Ingredient" maxWidth="Infinity" onAction="#handleDelete" 
+                    style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold;"/>
+            
             <Separator/>
-            <Button fx:id="btnViewRequests" text="Xem yêu cầu xuất kho" maxWidth="Infinity" onAction="#handleViewExportRequests" style="-fx-background-color: #8e44ad; -fx-text-fill: white; -fx-font-weight: bold;"/>
-            <Button fx:id="btnRefresh" text="Làm mới" maxWidth="Infinity" onAction="#handleRefresh" style="-fx-background-color: #2980b9; -fx-text-fill: white; -fx-font-weight: bold;"/>
+            
+            <Button text="Add New Ingredient" onAction="#openNewIngredientDialog" 
+			        style="-fx-background-color: #17a2b8; -fx-text-fill: white; -fx-font-weight: bold;" 
+			        maxWidth="Infinity"/>
+            <Button fx:id="btnRefresh" text="Refresh" maxWidth="Infinity" onAction="#handleRefresh" 
+                    style="-fx-background-color: #2980b9; -fx-text-fill: white; -fx-font-weight: bold;"/>
         </VBox>
     </right>
 </BorderPane>

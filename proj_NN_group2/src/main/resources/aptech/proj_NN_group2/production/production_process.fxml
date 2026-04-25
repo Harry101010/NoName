@@ -18,7 +18,7 @@
     <padding><Insets bottom="20" left="28" right="28" top="20" /></padding>
 
     <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Theo Dõi Công Đoạn Sản Xuất" />
-    <Button onAction="#goBack" style="-fx-padding: 4 12;" text="← Quay lại" />
+ 
 
     <!-- Chọn lệnh sản xuất -->
     <HBox alignment="CENTER_LEFT" spacing="10">

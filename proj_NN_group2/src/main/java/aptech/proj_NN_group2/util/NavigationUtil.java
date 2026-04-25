@@ -1,7 +1,6 @@
 package aptech.proj_NN_group2.util;
 
 import java.io.IOException;
-
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 
@@ -14,7 +13,10 @@ public final class NavigationUtil {
         try {
             SceneManager.switchScene(event, fxmlPath, title);
         } catch (IOException e) {
-            DialogUtil.error("Lỗi điều hướng", e.getMessage());
+            // QUAN TRỌNG: In toàn bộ Stack Trace ra Console để xem lỗi thực sự
+            e.printStackTrace(); 
+            // Hiển thị thông báo thân thiện hơn cho người dùng
+            DialogUtil.error("Lỗi điều hướng", "Không thể tải giao diện: " + fxmlPath);
         }
     }
 
@@ -22,7 +24,9 @@ public final class NavigationUtil {
         try {
             SceneManager.switchScene(ownerNode, fxmlPath, title);
         } catch (IOException e) {
-            DialogUtil.error(ownerNode, "Lỗi điều hướng", e.getMessage());
+            // QUAN TRỌNG: In toàn bộ Stack Trace ra Console để xem lỗi thực sự
+            e.printStackTrace();
+            DialogUtil.error(ownerNode, "Lỗi điều hướng", "Không thể tải giao diện: " + fxmlPath);
         }
     }
 

@@ -2,6 +2,7 @@ package aptech.proj_NN_group2.controller.production;
 
 import java.math.BigDecimal;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import aptech.proj_NN_group2.model.business.repository.IceCreamRepository;
@@ -22,6 +23,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.StringConverter;
 
 public class CreateBatchController implements Initializable {
 
@@ -38,13 +40,14 @@ public class CreateBatchController implements Initializable {
     @FXML private TableColumn<ProductionOrder, String> colCreatedAt;
     @FXML private TableColumn<ProductionOrder, String> colNote;
 
-    private final IceCreamRepository iceCreamRepo = new IceCreamRepository();
+    // Chỉ giữ lại một repository duy nhất
+    private final IceCreamRepository iceCreamRepository = new IceCreamRepository();
     private final ProductionOrderRepository orderRepo = new ProductionOrderRepository();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        cbIceCream.setItems(FXCollections.observableArrayList(iceCreamRepo.findAllActive()));
-
+        setupConverter();
+        
         colId.setCellValueFactory(new PropertyValueFactory<>("production_order_id"));
         colIceCream.setCellValueFactory(new PropertyValueFactory<>("ice_cream_name"));
         colKg.setCellValueFactory(new PropertyValueFactory<>("planned_output_kg"));
@@ -52,7 +55,27 @@ public class CreateBatchController implements Initializable {
         colCreatedAt.setCellValueFactory(new PropertyValueFactory<>("created_at"));
         colNote.setCellValueFactory(new PropertyValueFactory<>("note"));
 
+        refreshData();
         loadTable();
+    }
+
+    private void setupConverter() {
+        cbIceCream.setConverter(new StringConverter<IceCream>() {
+            @Override
+            public String toString(IceCream ic) {
+                return ic == null ? "" : ic.getIce_cream_name();
+            }
+            @Override
+            public IceCream fromString(String string) { return null; }
+        });
+    }
+
+    public void refreshData() {
+        System.out.println("DEBUG: Đang chạy vào refreshData ở CreateBatchController");
+        List<IceCream> iceCreams = iceCreamRepository.findAllActive();
+        System.out.println("DEBUG: Số lượng sản phẩm lấy được từ DB: " + (iceCreams != null ? iceCreams.size() : "null"));
+        
+        cbIceCream.setItems(FXCollections.observableArrayList(iceCreams));
     }
 
     @FXML

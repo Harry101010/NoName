@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/23" 
+            xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="aptech.proj_NN_group2.controller.warehouse.ExportHistoryController">
+    <TableView fx:id="tblHistory" AnchorPane.bottomAnchor="10" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10" AnchorPane.topAnchor="10">
+        <columns>
+            <TableColumn fx:id="colId" text="Mã phiếu" prefWidth="100"/>
+            <TableColumn fx:id="colStatus" text="Trạng thái" prefWidth="150"/>
+            <TableColumn fx:id="colDate" text="Ngày xuất" prefWidth="200"/>
+        </columns>
+    </TableView>
+</AnchorPane>

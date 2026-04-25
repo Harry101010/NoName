@@ -1,0 +1,4 @@
+<VBox spacing="10">
+    <Button text="Vào Kho" onAction="#toKho"/>
+    <Button text="Vào Sản Xuất" onAction="#toSanXuat"/>
+</VBox>

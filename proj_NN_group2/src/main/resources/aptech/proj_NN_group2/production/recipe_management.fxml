@@ -14,10 +14,7 @@
             <padding>
                 <Insets top="14" right="14" bottom="14" left="14"/>
             </padding>
-
-            <HBox>
-                <Button text="← Quay lại" onAction="#goHome"/>
-            </HBox>
+            
 
             <Label text="Quản lý công thức"
                    style="-fx-font-size: 22px; -fx-font-weight: bold;"/>

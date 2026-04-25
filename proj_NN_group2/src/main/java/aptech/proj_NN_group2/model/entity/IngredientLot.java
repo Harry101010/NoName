@@ -14,7 +14,11 @@ public class IngredientLot {
     private LocalDate expiryDate;
     private String storageCondition;
     private String supplierName;
+    private int supplierId;
     
+       
+    
+  
     public String getStorageCondition() {
         return storageCondition;
     }
@@ -22,6 +26,15 @@ public class IngredientLot {
     public void setStorageCondition(String storageCondition) {
         this.storageCondition = storageCondition;
     }
+ // Thêm các phương thức này
+    public int getSupplierId() {
+        return supplierId;
+    }
+
+    public void setSupplierId(int supplierId) {
+        this.supplierId = supplierId;
+    }
+    
     public int getLotId() {
         return lotId;
     }

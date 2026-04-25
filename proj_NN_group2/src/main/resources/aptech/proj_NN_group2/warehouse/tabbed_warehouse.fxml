@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="aptech.proj_NN_group2.controller.warehouse.WarehouseDashboardController" 
+            prefWidth="1200.0" prefHeight="800.0">
+    <TabPane fx:id="mainTabPane" tabClosingPolicy="UNAVAILABLE" 
+             AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" 
+             AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"
+             >
+        <tabs>
+        	<Tab text="1. ĐỊNH MỨC VẬT TƯ">
+                <content>
+                    <fx:include fx:id="recipeManagement" source="../production/recipe_management_cleaned.fxml" />
+                </content>
+            </Tab>
+            <Tab text="2. XUẤT KHO">
+                <content>
+                    <fx:include fx:id="exportRequests" source="export_requests_cleaned.fxml" />
+                </content>
+            </Tab>
+           <Tab text="3. LỊCH SỬ XUẤT KHO">
+			    <content>
+			        <fx:include fx:id="exportHistory" source="export_history.fxml" />
+			    </content>
+			</Tab>
+			<Tab text="4. QUẢN LÝ TỒN KHO">
+                <content>
+                    <fx:include fx:id="mainWarehouse" source="warehouse_dashboard_content.fxml" />
+                </content>
+            </Tab>
+            
+            
+        </tabs>
+    </TabPane>
+</AnchorPane>

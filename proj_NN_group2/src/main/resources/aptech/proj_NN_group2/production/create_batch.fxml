@@ -19,7 +19,7 @@
     <padding><Insets bottom="24" left="32" right="32" top="24" /></padding>
 
     <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Tạo Mẻ Sản Xuất" />
-    <Button onAction="#goBack" style="-fx-padding: 4 12;" text="← Quay lại" />
+  
 
     <GridPane hgap="12" vgap="12">
         <columnConstraints>

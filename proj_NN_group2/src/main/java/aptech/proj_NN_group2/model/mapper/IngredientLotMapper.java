@@ -3,7 +3,7 @@ package aptech.proj_NN_group2.model.mapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import aptech.proj_NN_group2.model.entity.IngredientLot;
+import aptech.proj_NN_group2.model.entity.ingredient.IngredientLot;
 
 public class IngredientLotMapper {
 

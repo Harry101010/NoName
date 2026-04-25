@@ -17,7 +17,7 @@
 
     <!-- Header -->
     <HBox alignment="CENTER_LEFT" spacing="12">
-        <Button onAction="#goBack" style="-fx-background-color: #6c757d; -fx-text-fill: white; -fx-background-radius: 6;" text="← Quay lại" />
+        
         <Label text="Tạo Phiếu Yêu Cầu Xuất Kho Nguyên Liệu">
             <font><Font name="System Bold" size="18" /></font>
         </Label>

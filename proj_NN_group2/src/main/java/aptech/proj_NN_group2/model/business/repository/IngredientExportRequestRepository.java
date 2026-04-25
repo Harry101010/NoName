@@ -6,9 +6,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import aptech.proj_NN_group2.model.business.BaseRepository;
+import aptech.proj_NN_group2.model.entity.IngredientExportReceipt;
 import aptech.proj_NN_group2.model.entity.IngredientExportRequest;
 import aptech.proj_NN_group2.model.entity.IngredientExportRequestDetail;
 import aptech.proj_NN_group2.model.mapper.IngredientExportRequestDetailMapper;
@@ -457,5 +459,24 @@ public class IngredientExportRequestRepository extends BaseRepository<Ingredient
         } finally {
             closeQuietly(conn);
         }
+    }
+    public List<IngredientExportReceipt> getAllReceipts() {
+        List<IngredientExportReceipt> list = new ArrayList<>();
+        String sql = "SELECT * FROM ingredient_export_receipts ORDER BY created_at DESC";
+        
+        try (Connection conn = Database.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            
+            while (rs.next()) {
+                IngredientExportReceipt r = new IngredientExportReceipt();
+                r.setIngredient_export_receipt_id(rs.getInt("ingredient_export_receipt_id"));
+                r.setReceipt_status(rs.getString("receipt_status"));
+                r.setCreated_at(rs.getTimestamp("created_at"));
+                // Set thêm các field khác nếu cần
+                list.add(r);
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+        return list;
     }
 }

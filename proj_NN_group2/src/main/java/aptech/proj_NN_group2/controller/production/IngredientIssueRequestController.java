@@ -182,4 +182,16 @@ public class IngredientIssueRequestController implements Initializable {
     private void loadRequestTable() {
         tableRequests.setItems(FXCollections.observableArrayList(requestRepo.findAll()));
     }
+ // Sửa hàm initialize hoặc thêm hàm này
+    public void refreshData() {
+        // Nạp lại danh sách lệnh sản xuất 'draft'
+        cbOrder.setItems(FXCollections.observableArrayList(orderRepo.findByStatus("draft")));
+        
+        // Nạp lại danh sách phiếu yêu cầu (nếu cần)
+        loadRequestTable();
+        
+        // Reset các thông tin cũ
+        lblOrderInfo.setText("");
+        tablePreview.getItems().clear();
+    }
 }

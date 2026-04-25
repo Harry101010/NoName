@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="aptech.proj_NN_group2.controller.warehouse.WarehouseController" 
+      spacing="10" style="-fx-padding: 15;">
+
+    <Label text="QUẢN LÝ TỒN KHO NGUYÊN LIỆU" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+    
+    <SplitPane orientation="VERTICAL" dividerPositions="0.4" VBox.vgrow="ALWAYS">
+        <VBox>
+            <Label text="» Danh mục nguyên liệu (Master)" style="-fx-font-weight: bold; -fx-padding: 5;"/>
+            <TableView fx:id="tblDetailLots" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="colName" text="Tên nguyên liệu" prefWidth="250"/>
+                    <TableColumn fx:id="colUnit" text="Đơn vị" prefWidth="80"/>
+                    <TableColumn fx:id="colTotal" text="Tổng tồn" prefWidth="100"/>
+                    <TableColumn fx:id="colExpiry" text="Hạn gần nhất" prefWidth="120"/>
+                    <TableColumn fx:id="colStorage" text="Bảo quản" prefWidth="150"/>
+                    <TableColumn fx:id="colSummaryStatus" text="Trạng thái" prefWidth="100"/>
+                </columns>
+            </TableView>
+        </VBox>
+
+        <VBox>
+            <Label text="» Chi tiết lô hàng (Detail - FIFO)" style="-fx-font-weight: bold; -fx-padding: 5; -fx-text-fill: #2c3e50;"/>
+            <TableView fx:id="tblLots" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="colLotId" text="ID" prefWidth="50"/>
+                    <TableColumn fx:id="colLotName" text="Tên NL" prefWidth="150"/>
+                    <TableColumn fx:id="colSupplier" text="Nhà cung cấp" prefWidth="150"/>
+                    <TableColumn fx:id="colImport" text="Ngày nhập" prefWidth="120"/>
+                    <TableColumn fx:id="colLotExpiry" text="Hạn dùng" prefWidth="120"/>
+                    <TableColumn fx:id="colRemain" text="Số lượng còn" prefWidth="100"/>
+                    <TableColumn fx:id="colStatus" text="Trạng thái" prefWidth="100"/>
+                    <TableColumn fx:id="colLotStorage" text="Bảo quản" prefWidth="120"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </SplitPane>
+
+    <HBox spacing="10" style="-fx-padding: 10; -fx-border-color: #ccc; -fx-border-radius: 5;">
+        <TextField fx:id="txtMaterialName" promptText="Tên nguyên liệu" prefWidth="150"/>
+        <ComboBox fx:id="cbUnit" promptText="Đơn vị" prefWidth="100"/>
+        <TextField fx:id="txtQuantity" promptText="Số lượng" prefWidth="100"/>
+        <DatePicker fx:id="dpExpiryDate" promptText="Hạn sử dụng" prefWidth="120"/>
+        <TextField fx:id="txtSupplierName" promptText="Nhà cung cấp" prefWidth="150"/>
+        <Button text="Nhập kho" onAction="#handleAdd" style="-fx-background-color: #27ae60; -fx-text-fill: white;"/>
+        <Button text="Cập nhật" onAction="#handleUpdate" style="-fx-background-color: #f39c12; -fx-text-fill: white;"/>
+        <Button text="Xóa" onAction="#handleDelete" style="-fx-background-color: #e74c3c; -fx-text-fill: white;"/>
+    </HBox>
+</VBox>

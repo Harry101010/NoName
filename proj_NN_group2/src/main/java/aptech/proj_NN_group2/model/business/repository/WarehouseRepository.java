@@ -7,10 +7,10 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import aptech.proj_NN_group2.model.entity.IngredientLot;
 import aptech.proj_NN_group2.model.mapper.IngredientLotMapper;
 import aptech.proj_NN_group2.util.Database;
 import aptech.proj_NN_group2.model.entity.InventorySummary;
+import aptech.proj_NN_group2.model.entity.ingredient.IngredientLot;
 
 public class WarehouseRepository {
 
@@ -72,42 +72,32 @@ public class WarehouseRepository {
     // =========================
     // NHẬP KHO
     // =========================
-    public void importStock(int ingredientId, double quantity, String expiryDate, String supplierName) {
-
-        try (Connection conn = getConnection()) {
-
-            // lấy hoặc tạo supplier
-            int supplierId = getOrCreateSupplier(supplierName);
-
-            String sql = """
-                    INSERT INTO ingredient_lots
-                    (
-                        ingredient_id,
-                        import_date,
-                        expiry_date,
-                        received_quantity,
-                        remaining_quantity,
-                        supplier_id
-                    )
-                    VALUES (?, ?, ?, ?, ?, ?)
+ /// Sửa thành throws Exception
+    public void importStock(IngredientLot lot) throws Exception {
+        String sql = """
+                INSERT INTO ingredient_lots (ingredient_id, import_date, expiry_date, received_quantity, remaining_quantity, supplier_id)
+                VALUES (?, ?, ?, ?, ?, ?)
                 """;
+        
+        try (Connection conn = getConnection()) {
+            int ingredientId = findIngredientIdByName(lot.getIngredientName());
+            if (ingredientId == -1) {
+                throw new Exception("Không tìm thấy nguyên liệu: " + lot.getIngredientName());
+            }
+            
+            int supplierId = getOrCreateSupplier(lot.getSupplierName());
 
             PreparedStatement ps = conn.prepareStatement(sql);
-
-            ps.setInt(1, ingredientId);
-
-            // tự động lấy ngày hiện tại
-            ps.setDate(2, java.sql.Date.valueOf(java.time.LocalDate.now()));
-
-            ps.setString(3, expiryDate);
-            ps.setDouble(4, quantity);
-            ps.setDouble(5, quantity);
+            ps.setInt(1, ingredientId); 
+            ps.setDate(2, java.sql.Date.valueOf(lot.getImportDate()));
+            ps.setDate(3, java.sql.Date.valueOf(lot.getExpiryDate()));
+            ps.setDouble(4, lot.getRemainingQuantity());
+            ps.setDouble(5, lot.getRemainingQuantity());
             ps.setInt(6, supplierId);
 
             ps.executeUpdate();
-
         } catch (Exception e) {
-            e.printStackTrace();
+            throw e; // Quăng lỗi này lên Controller
         }
     }
 
@@ -194,32 +184,50 @@ public class WarehouseRepository {
 
         return -1;
     }
+    
+    public boolean exists(String name) {
+        // SQL: Đếm số lượng dòng có tên trùng với tham số truyền vào
+        String sql = "SELECT COUNT(*) FROM ingredients WHERE ingredient_name = ?";
+        
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setString(1, name);
+            ResultSet rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                // Nếu count > 0 nghĩa là đã tồn tại
+                return rs.getInt(1) > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false; // Nếu lỗi xảy ra, mặc định trả về false
+    }
 
-    public int createIngredient(String ingredientName, int unitId) {
-
+    public int createIngredient(String ingredientName, int unitId, String storageCondition) {
+        // Thêm cột price_per_unit vào đây và truyền giá trị cứng là 0
         String sql = """
-                INSERT INTO ingredients (ingredient_name, unit_id, price_per_unit)
-                VALUES (?, ?, 0)
-            """;
+                INSERT INTO ingredients (ingredient_name, unit_id, price_per_unit, storage_condition)
+                VALUES (?, ?, 0, ?)
+                """;
 
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setString(1, ingredientName);
             ps.setInt(2, unitId);
+            ps.setString(3, storageCondition); // Giá 0 đã được fix cứng trong SQL ở trên
 
             ps.executeUpdate();
 
             ResultSet rs = ps.getGeneratedKeys();
-
             if (rs.next()) {
-                return rs.getInt(1);
+                return rs.getInt(1); // Trả về ID mới được tạo
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return -1;
     }
 
@@ -501,5 +509,83 @@ public class WarehouseRepository {
         }
 
         return -1;
+    }
+ // Thêm vào WarehouseRepository.java
+    public List<IngredientLot> getLotsByIngredientName(String ingredientName) {
+        List<IngredientLot> list = new ArrayList<>();
+        String sql = """
+                SELECT l.lot_id, i.ingredient_name, u.unit_name, s.supplier_name, 
+                       l.import_date, l.expiry_date, l.remaining_quantity, i.storage_condition
+                FROM ingredient_lots l
+                JOIN ingredients i ON l.ingredient_id = i.ingredient_id
+                JOIN units u ON i.unit_id = u.unit_id
+                LEFT JOIN suppliers s ON l.supplier_id = s.supplier_id
+                WHERE i.ingredient_name = ? 
+                  AND l.is_deleted = 0 
+                  AND l.remaining_quantity > 0
+                ORDER BY l.expiry_date ASC
+                """;
+
+        try (Connection conn = Database.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setString(1, ingredientName);
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                IngredientLot lot = new IngredientLot();
+                lot.setLotId(rs.getInt("lot_id"));
+                lot.setIngredientName(rs.getString("ingredient_name"));
+                lot.setUnitName(rs.getString("unit_name"));
+                lot.setSupplierName(rs.getString("supplier_name"));
+                lot.setStorageCondition(rs.getString("storage_condition"));
+                if (rs.getDate("import_date") != null) lot.setImportDate(rs.getDate("import_date").toLocalDate());
+                if (rs.getDate("expiry_date") != null) lot.setExpiryDate(rs.getDate("expiry_date").toLocalDate());
+                lot.setRemainingQuantity(rs.getDouble("remaining_quantity"));
+                list.add(lot);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+    public boolean updateLot(IngredientLot lot) {
+        // Lấy hoặc tạo mới nhà cung cấp nếu tên nhà cung cấp thay đổi
+        int supplierId = getOrCreateSupplier(lot.getSupplierName());
+
+        String sql = """
+                UPDATE ingredient_lots 
+                SET remaining_quantity = ?, 
+                    expiry_date = ?, 
+                    supplier_id = ? 
+                WHERE lot_id = ?
+            """;
+
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setDouble(1, lot.getRemainingQuantity());
+            // LocalDate to java.sql.Date
+            ps.setDate(2, java.sql.Date.valueOf(lot.getExpiryDate())); 
+            ps.setInt(3, supplierId);
+            ps.setInt(4, lot.getLotId());
+
+            return ps.executeUpdate() > 0; // Trả về true nếu cập nhật thành công
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false; // Trả về false nếu có lỗi
+        }
+    }
+    public void updateExportRequestStatus(int requestId, String status) {
+        String sql = "UPDATE ingredient_export_receipts SET receipt_status = ? WHERE ingredient_export_receipt_id = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, status);
+            ps.setInt(2, requestId);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
