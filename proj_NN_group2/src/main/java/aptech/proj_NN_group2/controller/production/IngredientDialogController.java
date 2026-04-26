@@ -63,7 +63,6 @@ public class IngredientDialogController {
                 newRecipe.setQuantity_per_kg(quantity);
                 boolean success = recipeRepo.create(newRecipe);
                 System.out.println("Kết quả lưu DB: " + success); // Xem console xem có in ra true không
-                recipeRepo.create(newRecipe);
             } else {
                 // LOGIC SỬA
                 currentRow.setQuantity_per_kg(quantity);
