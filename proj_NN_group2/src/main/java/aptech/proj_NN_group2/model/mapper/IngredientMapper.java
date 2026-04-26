@@ -3,7 +3,7 @@ package aptech.proj_NN_group2.model.mapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import aptech.proj_NN_group2.model.entity.Ingredient;
+import aptech.proj_NN_group2.model.entity.ingredient.Ingredient;
 import aptech.proj_NN_group2.model.interfaces.IMapper;
 
 public class IngredientMapper implements IMapper<Ingredient> {

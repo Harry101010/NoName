@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane fx:id="mainContainer" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="aptech.proj_NN_group2.controller.admin.AdminDashboardController">
+    
+    <left>
+        <VBox spacing="10" prefWidth="250" style="-fx-background-color: #2c3e50; -fx-padding: 20;">
+            <Label text="ADMIN PANEL" style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;"/>
+            <Separator style="-fx-background-color: #34495e;"/>
+            
+            <Button text="👤 Quản lý người dùng" maxWidth="Infinity" onAction="#toUserManagement" 
+                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER_LEFT; -fx-cursor: hand;"/>
+            
+            <Button text="📦 Quản lý kho" maxWidth="Infinity" onAction="#toWarehouse" 
+                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER_LEFT; -fx-cursor: hand;"/>
+            
+            <Button text="🏭 Quản lý sản xuất" maxWidth="Infinity" onAction="#toProduction" 
+                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER_LEFT; -fx-cursor: hand;"/>
+            
+            <Button text="📊 Kinh doanh" maxWidth="Infinity" onAction="#toSales" 
+                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER_LEFT; -fx-cursor: hand;"/>
+            
+            <Region VBox.vgrow="ALWAYS"/>
+            <Button text="Đăng xuất" maxWidth="Infinity" onAction="#handleLogout" 
+                    style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;"/>
+        </VBox>
+    </left>
+    
+    <center>
+        <StackPane fx:id="contentArea" style="-fx-background-color: #ecf0f1;">
+            <Label text="Chọn chức năng để bắt đầu" style="-fx-text-fill: #95a5a6; -fx-font-size: 16px;"/>
+        </StackPane>
+    </center>
+</BorderPane>

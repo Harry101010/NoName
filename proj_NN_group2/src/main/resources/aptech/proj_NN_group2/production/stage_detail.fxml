@@ -1,117 +1,122 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox spacing="12" xmlns="http://javafx.com/javafx/17"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="aptech.proj_NN_group2.controller.production.StageDetailController"
-      style="-fx-background-color: #f4f6f8;">
-    <padding><Insets top="16" right="20" bottom="16" left="20"/></padding>
+<VBox spacing="12" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="aptech.proj_NN_group2.controller.production.StageDetailController">
+    <padding><Insets bottom="16" left="20" right="20" top="16" /></padding>
 
     <!-- Header -->
     <HBox alignment="CENTER_LEFT" spacing="12">
-        <Button text="← Quay lại" onAction="#goBack"
-                style="-fx-background-color: #6c757d; -fx-text-fill: white; -fx-background-radius: 6;"/>
         <Label text="Chi Tiết Công Đoạn Sản Xuất">
-            <font><Font name="System Bold" size="18"/></font>
+            <font><Font name="System Bold" size="18" /></font>
         </Label>
     </HBox>
 
     <!-- Chọn lệnh sản xuất -->
-    <TitledPane text="Chọn lệnh sản xuất" collapsible="false" style="-fx-background-color: white;">
+    <TitledPane collapsible="false" text="Chọn lệnh sản xuất">
         <VBox spacing="8">
-            <padding><Insets top="8" right="12" bottom="8" left="12"/></padding>
-            <HBox spacing="10" alignment="CENTER_LEFT">
-                <Label text="Lệnh sản xuất:" minWidth="130"/>
-                <ComboBox fx:id="cbOrder" prefWidth="360" promptText="-- Chọn lệnh sản xuất --"/>
-                <Button text="Tải công đoạn" onAction="#handleLoadStages"
-                        style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-background-radius: 6;"/>
+            <padding><Insets bottom="8" left="12" right="12" top="8" /></padding>
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label minWidth="130" text="Lệnh sản xuất:" />
+                <ComboBox fx:id="cbOrder" prefWidth="360" promptText="-- Chọn lệnh sản xuất --" />
+                <Button onAction="#handleLoadStages" style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-background-radius: 6;" text="Tải công đoạn" />
             </HBox>
-            <HBox spacing="8" alignment="CENTER_LEFT">
-                <Label text="Thông tin:" minWidth="130"/>
-                <Label fx:id="lblOrderInfo" style="-fx-text-fill: #555;"/>
+            <HBox alignment="CENTER_LEFT" spacing="8">
+                <Label minWidth="130" text="Thông tin:" />
+                <Label fx:id="lblOrderInfo" style="-fx-text-fill: #555;" />
             </HBox>
         </VBox>
     </TitledPane>
 
     <!-- Bảng 8 công đoạn — click để ghi nhận -->
-    <TitledPane text="Danh sách công đoạn — click vào công đoạn để ghi nhận chi tiết"
-                collapsible="false" style="-fx-background-color: white;">
+    <TitledPane collapsible="false" text="Danh sách công đoạn — click vào công đoạn để ghi nhận chi tiết">
         <TableView fx:id="tableStages" prefHeight="200">
-            <padding><Insets top="4" right="8" bottom="4" left="8"/></padding>
+            <padding><Insets bottom="4" left="8" right="8" top="4" /></padding>
             <columns>
-                <TableColumn fx:id="colNo"       text="#"               prefWidth="35"/>
-                <TableColumn fx:id="colName"     text="Công đoạn"       prefWidth="230"/>
-                <TableColumn fx:id="colStatus"   text="Trạng thái"      prefWidth="100"/>
-                <TableColumn fx:id="colStart"    text="Bắt đầu"         prefWidth="140"/>
-                <TableColumn fx:id="colEnd"      text="Kết thúc"        prefWidth="140"/>
-                <TableColumn fx:id="colDuration" text="TG thực (phút)"  prefWidth="110"/>
-                <TableColumn fx:id="colVolume"   text="Dung tích (L)"   prefWidth="100"/>
-                <TableColumn fx:id="colNote"     text="Ghi chú"         prefWidth="200"/>
+                <TableColumn fx:id="colNo" prefWidth="35" text="#" />
+                <TableColumn fx:id="colName" prefWidth="230" text="Công đoạn" />
+                <TableColumn fx:id="colStatus" prefWidth="100" text="Trạng thái" />
+                <TableColumn fx:id="colStart" prefWidth="140" text="Bắt đầu" />
+                <TableColumn fx:id="colEnd" prefWidth="140" text="Kết thúc" />
+                <TableColumn fx:id="colDuration" prefWidth="110" text="TG thực (phút)" />
+                <TableColumn fx:id="colVolume" prefWidth="100" text="Dung tích (L)" />
+                <TableColumn fx:id="colNote" prefWidth="200" text="Ghi chú" />
             </columns>
-            <placeholder><Label text="Chọn lệnh sản xuất và bấm 'Tải công đoạn'"/></placeholder>
+            <placeholder><Label text="Chọn lệnh sản xuất và bấm 'Tải công đoạn'" /></placeholder>
         </TableView>
     </TitledPane>
 
     <!-- Panel ghi nhận chi tiết (hiện khi click vào công đoạn) -->
     <VBox fx:id="panelDetail" spacing="10" style="-fx-background-color: white; -fx-padding: 12; -fx-background-radius: 6;">
 
-        <Label fx:id="lblStageTitle" style="-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #1565C0;"/>
+        <Label fx:id="lblStageTitle" style="-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #1565C0;" />
 
         <!-- Form chung tất cả công đoạn -->
         <GridPane hgap="12" vgap="8">
             <columnConstraints>
-                <ColumnConstraints minWidth="160"/>
-                <ColumnConstraints hgrow="ALWAYS"/>
-                <ColumnConstraints minWidth="160"/>
-                <ColumnConstraints hgrow="ALWAYS"/>
+                <ColumnConstraints minWidth="160" />
+                <ColumnConstraints hgrow="ALWAYS" />
+                <ColumnConstraints minWidth="160" />
+                <ColumnConstraints hgrow="ALWAYS" />
             </columnConstraints>
 
-            <Label text="Thời gian thực (phút):" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-            <TextField fx:id="tfDuration" promptText="VD: 30" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+            <Label text="Thời gian thực (phút):" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+            <TextField fx:id="tfDuration" promptText="VD: 30" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-            <Label text="Dung tích thực (lít):" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
-            <TextField fx:id="tfVolume" promptText="VD: 50.5" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
+            <Label text="Dung tích thực (lít):" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+            <TextField fx:id="tfVolume" promptText="VD: 50.5" GridPane.columnIndex="3" GridPane.rowIndex="0" />
 
-            <Label text="Số khuôn (nếu có):" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-            <TextField fx:id="tfMold" promptText="VD: 100" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+            <Label text="Số khuôn (nếu có):" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+            <TextField fx:id="tfMold" promptText="VD: 100" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-            <Label text="Ghi chú:" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
-            <TextField fx:id="tfNote" promptText="Ghi chú thêm" GridPane.rowIndex="1" GridPane.columnIndex="3"/>
+            <Label text="Ghi chú:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <TextField fx:id="tfNote" promptText="Ghi chú thêm" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+         <rowConstraints>
+            <RowConstraints />
+            <RowConstraints />
+         </rowConstraints>
         </GridPane>
 
         <!-- Panel đặc thù công đoạn 1: Material Preparation & Mixing -->
-        <VBox fx:id="panelMixing" spacing="8"
-              style="-fx-background-color: #fff8e1; -fx-padding: 10; -fx-background-radius: 6; -fx-border-color: #FFB300; -fx-border-radius: 6;">
-            <Label text="🧪 Material Preparation &amp; Mixing — Thông tin đặc thù"
-                   style="-fx-font-weight: bold; -fx-text-fill: #E65100;"/>
+        <VBox fx:id="panelMixing" spacing="8" style="-fx-background-color: #fff8e1; -fx-padding: 10; -fx-background-radius: 6; -fx-border-color: #FFB300; -fx-border-radius: 6;">
+            <Label style="-fx-font-weight: bold; -fx-text-fill: #E65100;" text="🧪 Material Preparation &amp; Mixing — Thông tin đặc thù" />
             <GridPane hgap="12" vgap="8">
                 <columnConstraints>
-                    <ColumnConstraints minWidth="180"/>
-                    <ColumnConstraints hgrow="ALWAYS"/>
+                    <ColumnConstraints minWidth="180" />
+                    <ColumnConstraints hgrow="ALWAYS" />
                 </columnConstraints>
-                <Label text="Nhiệt độ trộn (°C):" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-                <TextField fx:id="tfMixingTemp" promptText="VD: 65.5"
-                           GridPane.rowIndex="0" GridPane.columnIndex="1"/>
-                <Label text="Ghi chú tỉ lệ trộn thực tế:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-                <TextArea fx:id="taMixingRatio" prefHeight="60" wrapText="true"
-                          promptText="VD: Sữa 55% - Đường 15% - Kem 25% - Vanilla 5%"
-                          GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                <Label text="Nhiệt độ trộn (°C):" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                <TextField fx:id="tfMixingTemp" promptText="VD: 65.5" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                <Label text="Ghi chú tỉ lệ trộn thực tế:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                <TextArea fx:id="taMixingRatio" prefHeight="60" promptText="VD: Sữa 55% - Đường 15% - Kem 25% - Vanilla 5%" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <rowConstraints>
+               <RowConstraints />
+               <RowConstraints />
+            </rowConstraints>
             </GridPane>
         </VBox>
 
         <!-- Nút hành động -->
         <HBox spacing="10">
-            <Button text="💾 Lưu &amp; Hoàn thành công đoạn" onAction="#handleSave"
-                    style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-padding: 8 16;"/>
-            <Button text="Làm mới" onAction="#handleReset"
-                    style="-fx-background-color: #ffc107; -fx-text-fill: white; -fx-background-radius: 6; -fx-padding: 8 16;"/>
+            <Button onAction="#handleSave" style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-padding: 8 16;" text="💾 Lưu &amp; Hoàn thành công đoạn" />
+            <Button onAction="#handleReset" style="-fx-background-color: #ffc107; -fx-text-fill: white; -fx-background-radius: 6; -fx-padding: 8 16;" text="Làm mới" />
         </HBox>
 
-        <Label fx:id="lblMessage" style="-fx-font-weight: bold; -fx-font-size: 13px;"/>
+        <Label fx:id="lblMessage" style="-fx-font-weight: bold; -fx-font-size: 13px;" />
     </VBox>
 
 </VBox>

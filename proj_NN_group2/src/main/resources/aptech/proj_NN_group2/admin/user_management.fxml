@@ -1,20 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.control.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" 
-            fx:controller="aptech.proj_NN_group2.controller.admin.AdminController" 
-            style="-fx-padding: 0;"> <top>
+<BorderPane style="-fx-padding: 0;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="aptech.proj_NN_group2.controller.admin.AdminController"> <top>
         <VBox>
             <MenuBar>
                 <menus>
                     <Menu text="Tài khoản">
                         <items>
-                            <MenuItem text="Thông tin cá nhân" onAction="#handleOpenProfile" />
+                            <MenuItem onAction="#handleOpenProfile" text="Thông tin cá nhân" />
                             <SeparatorMenuItem />
-                            <MenuItem text="Đăng xuất" onAction="#handleLogout" />
+                            <MenuItem onAction="#handleLogout" text="Đăng xuất" />
                         </items>
                     </Menu>
                     <Menu text="Trợ giúp">
@@ -27,20 +38,16 @@
             </MenuBar>
 
             <VBox spacing="10" style="-fx-padding: 20 20 10 20;">
-                <HBox alignment="CENTER_RIGHT" spacing="10" style="-fx-background-color: #ecf0f1; -fx-padding: 10; -fx-background-radius: 5;">
-                    <Label fx:id="lblWelcome" text="Xin chào, Admin" style="-fx-font-weight: bold;" />
+                <HBox alignment="CENTER_RIGHT" spacing="10" style="-fx-padding: 10; -fx-background-radius: 5;">
+                    <Label fx:id="lblWelcome" style="-fx-font-weight: bold;" text="Xin chào, Admin" />
                     
-                    <Button text="Hồ sơ" onAction="#handleOpenProfile" 
-                            style="-fx-background-color: #34495e; -fx-text-fill: white; -fx-cursor: hand;" />
+                    <Button onAction="#handleOpenProfile" style="-fx-background-color: #34495e; -fx-text-fill: white; -fx-cursor: hand;" text="Hồ sơ" />
                     
-                    <Button text="Đăng xuất" onAction="#handleLogout" 
-                            style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-cursor: hand;" />
+                    <Button onAction="#handleLogout" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-cursor: hand;" text="Đăng xuất" />
                 </HBox>
                 
-                <Label text="DANH SÁCH TÀI KHOẢN NHÂN VIÊN" 
-                       style="-fx-font-size: 20; -fx-font-weight: bold;" 
-                       alignment="CENTER" maxWidth="Infinity">
-                    <padding><Insets top="10" bottom="5"/></padding>
+                <Label alignment="CENTER" maxWidth="Infinity" style="-fx-font-size: 20; -fx-font-weight: bold;" text="DANH SÁCH TÀI KHOẢN NHÂN VIÊN">
+                    <padding><Insets bottom="5" top="10" /></padding>
                 </Label>
             </VBox>
         </VBox>
@@ -55,7 +62,7 @@
                 <TableColumn fx:id="colStatus" prefWidth="100" text="Trạng thái" />
             </columns>
             <BorderPane.margin>
-                <Insets left="20" bottom="20"/>
+                <Insets bottom="20" left="20" />
             </BorderPane.margin>
         </TableView>
     </center>
@@ -67,19 +74,15 @@
             <PasswordField fx:id="txtNewPass" promptText="Password" />
             <ComboBox fx:id="cbRole" prefWidth="150" promptText="Chọn quyền..." />
             
-            <Button text="Thêm mới" onAction="#addUser" prefWidth="150" 
-                    style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-cursor: hand;" />
+            <Button onAction="#addUser" prefWidth="150" style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-cursor: hand;" text="Thêm mới" />
             
             <Separator />
             
-            <Button text="Khóa/Mở khóa" onAction="#toggleStatus" prefWidth="150" 
-                    style="-fx-background-color: #e67e22; -fx-text-fill: white; -fx-cursor: hand;" />
+            <Button onAction="#toggleStatus" prefWidth="150" style="-fx-background-color: #e67e22; -fx-text-fill: white; -fx-cursor: hand;" text="Khóa/Mở khóa" />
             
-            <Button fx:id="btnUpdate" onAction="#handleUpdateUser" text="Cập nhật" prefWidth="150" 
-                    style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-cursor: hand;" />
+            <Button fx:id="btnUpdate" onAction="#handleUpdateUser" prefWidth="150" style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-cursor: hand;" text="Cập nhật" />
             
-            <Button fx:id="btnDelete" onAction="#handleDeleteUser" text="Xóa tài khoản" prefWidth="150" 
-                    style="-fx-background-color: #f44336; -fx-text-fill: white; -fx-cursor: hand;" />
+            <Button fx:id="btnDelete" onAction="#handleDeleteUser" prefWidth="150" style="-fx-background-color: #f44336; -fx-text-fill: white; -fx-cursor: hand;" text="Xóa tài khoản" />
         </VBox>
     </right>
 </BorderPane>

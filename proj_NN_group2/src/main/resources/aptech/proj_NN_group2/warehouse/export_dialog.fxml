@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<VBox spacing="15" style="-fx-padding: 20;" 
+      xmlns="http://javafx.com/javafx/23" 
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="aptech.proj_NN_group2.controller.warehouse.ExportDialogController">
+      
+    <Label fx:id="lblTitle" text="Xuất kho: [Tên nguyên liệu]" style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
+    <Label text="Số lượng tồn hiện tại:"/>
+    <Label fx:id="lblAvailable" text="0.0" style="-fx-text-fill: #27ae60; -fx-font-weight: bold;"/>
+    
+    <Label text="Nhập số lượng cần xuất:"/>
+    <TextField fx:id="txtExportQty" promptText="Ví dụ: 10.5"/>
+    
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button text="Hủy" onAction="#handleCancel"/>
+        <Button text="Xác nhận xuất" onAction="#handleConfirm" style="-fx-background-color: #2980b9; -fx-text-fill: white;"/>
+    </HBox>
+</VBox>

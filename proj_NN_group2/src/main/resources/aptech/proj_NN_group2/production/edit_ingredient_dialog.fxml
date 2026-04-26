@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="15" style="-fx-padding: 20;" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="aptech.proj_NN_group2.controller.production.IngredientDialogController">
+    
+    <Label text="Tên nguyên liệu:" style="-fx-font-weight: bold;"/>
+    <TextField fx:id="txtName" editable="false" style="-fx-background-color: #e0e0e0;"/>
+    
+    <Label text="Đơn vị:" style="-fx-font-weight: bold;"/>
+    <TextField fx:id="txtUnit" editable="false" style="-fx-background-color: #e0e0e0;"/>
+    
+    <Label text="Định mức (Kg/L):" style="-fx-font-weight: bold;"/>
+    <TextField fx:id="txtQuantity" promptText="Nhập định mức mới..."/>
+    
+    <Separator/>
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button text="Lưu thay đổi" onAction="#handleSave" style="-fx-background-color: #27ae60; -fx-text-fill: white;"/>
+        <Button text="Hủy" onAction="#handleClose"/>
+    </HBox>
+</VBox>

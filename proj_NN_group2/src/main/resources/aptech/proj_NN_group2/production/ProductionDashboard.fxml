@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="aptech.proj_NN_group2.controller.production.ProductionDashboardController">
+    
+   <TabPane tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" 
+         AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+    <tabs>
+        <Tab text="Lệnh sản xuất" onSelectionChanged="#onCreateBatchTabSelected">
+            <content><fx:include fx:id="createBatch" source="create_batch.fxml" /></content>
+        </Tab>
+        <Tab text="Công đoạn">
+            <content><fx:include source="production_process.fxml" /></content>
+        </Tab>
+        <Tab text="Tạo phiếu xuất kho" onSelectionChanged="#onIssueRequestTabSelected">
+            <content><fx:include fx:id="issueRequest" source="ingredient_issue_request.fxml" /></content>
+        </Tab>
+        <Tab text="Nhận nguyên liệu">
+            <content><fx:include source="confirm_received_ingredient.fxml" /></content>
+        </Tab>
+        <Tab text="Chi tiết công đoạn">
+            <content><fx:include source="stage_detail.fxml" /></content>
+        </Tab>
+           <Tab text="Sản phẩm và Định mức">
+                <content><fx:include source="recipe_management_cleaned.fxml" /></content>
+           </Tab>
+    </tabs>
+</TabPane>
+</AnchorPane>

@@ -1,77 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox spacing="12" xmlns="http://javafx.com/javafx/17"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="aptech.proj_NN_group2.controller.production.ConfirmReceivedIngredientController"
-      style="-fx-background-color: #f4f6f8;">
-    <padding><Insets top="16" right="20" bottom="16" left="20"/></padding>
+<VBox spacing="12" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="aptech.proj_NN_group2.controller.production.ConfirmReceivedIngredientController">
+    <padding><Insets bottom="16" left="20" right="20" top="16" /></padding>
 
     <!-- Header -->
     <HBox alignment="CENTER_LEFT" spacing="12">
-        <Button text="← Quay lại" onAction="#goBack"
-                style="-fx-background-color: #6c757d; -fx-text-fill: white; -fx-background-radius: 6;"/>
         <Label text="Xác Nhận Nhận Nguyên Liệu">
-            <font><Font name="System Bold" size="18"/></font>
+            <font><Font name="System Bold" size="18" /></font>
         </Label>
     </HBox>
 
     <!-- Bảng phiếu xuất kho chờ xác nhận -->
-    <TitledPane text="Phiếu xuất kho đã duyệt — chờ Trưởng SX xác nhận" collapsible="false"
-                style="-fx-background-color: white;">
+    <TitledPane collapsible="false" style="-fx-background-color: white;" text="Phiếu xuất kho đã duyệt — chờ Trưởng SX xác nhận">
         <VBox spacing="8">
-            <padding><Insets top="8" right="12" bottom="8" left="12"/></padding>
+            <padding><Insets bottom="8" left="12" right="12" top="8" /></padding>
             <HBox spacing="8">
-                <Button text="🔄 Làm mới" onAction="#handleRefresh"
-                        style="-fx-background-color: #6c757d; -fx-text-fill: white; -fx-background-radius: 6;"/>
+                <Button onAction="#handleRefresh" style="-fx-background-color: #6c757d; -fx-text-fill: white; -fx-background-radius: 6;" text="🔄 Làm mới" />
             </HBox>
             <TableView fx:id="tableReceipts" prefHeight="200">
                 <columns>
-                    <TableColumn fx:id="colReceiptId"     text="ID Phiếu XK"  prefWidth="90"/>
-                    <TableColumn fx:id="colIceCream"      text="Loại kem"      prefWidth="160"/>
-                    <TableColumn fx:id="colKg"            text="Số kg"         prefWidth="80"/>
-                    <TableColumn fx:id="colReceiptStatus" text="Trạng thái"    prefWidth="110"/>
-                    <TableColumn fx:id="colCreatedAt"     text="Ngày tạo"      prefWidth="160"/>
-                    <TableColumn fx:id="colNote"          text="Ghi chú"       prefWidth="180"/>
+                    <TableColumn fx:id="colReceiptId" prefWidth="90" text="ID Phiếu XK" />
+                    <TableColumn fx:id="colIceCream" prefWidth="160" text="Loại kem" />
+                    <TableColumn fx:id="colKg" prefWidth="80" text="Số kg" />
+                    <TableColumn fx:id="colReceiptStatus" prefWidth="110" text="Trạng thái" />
+                    <TableColumn fx:id="colCreatedAt" prefWidth="160" text="Ngày tạo" />
+                    <TableColumn fx:id="colNote" prefWidth="180" text="Ghi chú" />
                 </columns>
-                <placeholder><Label text="Không có phiếu xuất kho nào đang chờ xác nhận"/></placeholder>
+                <placeholder><Label text="Không có phiếu xuất kho nào đang chờ xác nhận" /></placeholder>
             </TableView>
         </VBox>
     </TitledPane>
 
     <!-- Thông tin phiếu đang chọn -->
-    <HBox spacing="8" alignment="CENTER_LEFT"
-          style="-fx-background-color: #e8f4fd; -fx-padding: 8 12; -fx-background-radius: 6;">
-        <Label text="Đang chọn:" style="-fx-font-weight: bold;"/>
-        <Label fx:id="lblSelectedInfo" style="-fx-text-fill: #0056b3;"/>
+    <HBox alignment="CENTER_LEFT" spacing="8" style="-fx-padding: 8 12; -fx-background-radius: 6;">
+        <Label style="-fx-font-weight: bold;" text="Đang chọn:" />
+        <Label fx:id="lblSelectedInfo" />
     </HBox>
 
     <!-- Bảng chi tiết nguyên liệu -->
-    <TitledPane text="Chi tiết nguyên liệu trong phiếu" collapsible="false"
-                style="-fx-background-color: white;">
+    <TitledPane collapsible="false" style="-fx-background-color: white;" text="Chi tiết nguyên liệu trong phiếu">
         <VBox spacing="6">
-            <padding><Insets top="8" right="12" bottom="8" left="12"/></padding>
+            <padding><Insets bottom="8" left="12" right="12" top="8" /></padding>
             <TableView fx:id="tableDetails" prefHeight="160">
                 <columns>
-                    <TableColumn fx:id="colIngredient" text="Nguyên liệu"       prefWidth="220"/>
-                    <TableColumn fx:id="colUnit"       text="Đơn vị"            prefWidth="100"/>
-                    <TableColumn fx:id="colQty"        text="Số lượng cần nhận" prefWidth="160"/>
+                    <TableColumn fx:id="colIngredient" prefWidth="220" text="Nguyên liệu" />
+                    <TableColumn fx:id="colUnit" prefWidth="100" text="Đơn vị" />
+                    <TableColumn fx:id="colQty" prefWidth="160" text="Số lượng cần nhận" />
                 </columns>
-                <placeholder><Label text="Chọn phiếu xuất kho để xem chi tiết nguyên liệu"/></placeholder>
+                <placeholder><Label text="Chọn phiếu xuất kho để xem chi tiết nguyên liệu" /></placeholder>
             </TableView>
         </VBox>
     </TitledPane>
 
     <!-- Nút xác nhận -->
-    <HBox spacing="12" alignment="CENTER_LEFT">
-        <Button text="✔ Xác nhận đã nhận đủ nguyên liệu" onAction="#handleConfirm"
-                prefHeight="42"
-                style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 6;"/>
+    <HBox alignment="CENTER_LEFT" spacing="12">
+        <Button onAction="#handleConfirm" prefHeight="42" style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 6;" text="✔ Xác nhận đã nhận đủ nguyên liệu" />
     </HBox>
 
-    <Label fx:id="lblMessage" style="-fx-font-weight: bold; -fx-font-size: 13px;"/>
+    <Label fx:id="lblMessage" style="-fx-font-weight: bold; -fx-font-size: 13px;" />
 </VBox>
