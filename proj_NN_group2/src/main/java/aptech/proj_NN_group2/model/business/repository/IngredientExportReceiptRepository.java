@@ -38,6 +38,17 @@ public class IngredientExportReceiptRepository extends BaseRepository<Ingredient
         return find(sql, ps -> ps.setString(1, RECEIPT_STATUS_APPROVED));
     }
 
+    /** Tìm phiếu xuất kho đã duyệt theo production_order_id — dùng cho ProductionDashboard */
+    public IngredientExportReceipt findApprovedByOrderId(int productionOrderId) {
+        String sql = BASE_SELECT
+                + " WHERE ier.production_order_id = ? AND ier2.receipt_status = ?"
+                + " ORDER BY ier2.created_at DESC";
+        return findOne(sql, ps -> {
+            ps.setInt(1, productionOrderId);
+            ps.setString(2, RECEIPT_STATUS_APPROVED);
+        });
+    }
+
     public List<IngredientExportReceipt> findAll() {
         return find(BASE_SELECT + " ORDER BY ier2.created_at DESC", null);
     }

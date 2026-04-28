@@ -19,14 +19,14 @@ public class ProductionStageRepository extends BaseRepository<ProductionStage> {
     private static final String STATUS_COMPLETED = "completed";
 
     public static final String[] STAGE_NAMES = {
-        "Xử lý nguyên liệu và trộn hỗn hợp",
-        "Đồng hóa",
-        "Thanh trùng",
-        "Ủ kem",
-        "Đánh kem",
-        "Chiết rót vào khuôn",
-        "Làm cứng",
-        "Bảo quản và đóng gói"
+        "Material Preparation & Mixing",
+        "Homogenization",
+        "Pasteurization",
+        "Aging",
+        "Freezing & Whipping",
+        "Mold Filling",
+        "Hardening",
+        "Packaging & Storage"
     };
 
     private final ProductionStageMapper mapper = new ProductionStageMapper();

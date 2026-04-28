@@ -1,31 +1,180 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" 
-            fx:controller="aptech.proj_NN_group2.controller.production.ProductionDashboardController">
-    
-   <TabPane tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" 
-         AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-    <tabs>
-        <Tab text="Lệnh sản xuất" onSelectionChanged="#onCreateBatchTabSelected">
-            <content><fx:include fx:id="createBatch" source="create_batch.fxml" /></content>
-        </Tab>
-        <Tab text="Công đoạn">
-            <content><fx:include source="production_process.fxml" /></content>
-        </Tab>
-        <Tab text="Tạo phiếu xuất kho" onSelectionChanged="#onIssueRequestTabSelected">
-            <content><fx:include fx:id="issueRequest" source="ingredient_issue_request.fxml" /></content>
-        </Tab>
-        <Tab text="Nhận nguyên liệu">
-            <content><fx:include source="confirm_received_ingredient.fxml" /></content>
-        </Tab>
-        <Tab text="Chi tiết công đoạn">
-            <content><fx:include source="stage_detail.fxml" /></content>
-        </Tab>
-           <Tab text="Sản phẩm và Định mức">
-                <content><fx:include source="recipe_management_cleaned.fxml" /></content>
-           </Tab>
-    </tabs>
-</TabPane>
-</AnchorPane>
+<BorderPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="aptech.proj_NN_group2.controller.production.ProductionDashboardController"
+            style="-fx-background-color: -fx-background;">
+    <padding><Insets top="0" right="0" bottom="0" left="0"/></padding>
+
+    <!-- TOP: Header -->
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="12"
+              style="-fx-background-color: white; -fx-border-color: #e5e7eb; -fx-border-width: 0 0 1 0; -fx-padding: 12 20;">
+            <Button text="← Back" onAction="#goBack" styleClass="secondary-button"/>
+            <Label text="Production Management" styleClass="page-title" HBox.hgrow="ALWAYS"/>
+            <Button text="+ New Order" onAction="#handleShowCreateOrder" styleClass="primary-button"/>
+            <Button text="Logout" onAction="#handleLogout" styleClass="danger-button"/>
+        </HBox>
+    </top>
+
+    <!-- CENTER: 2 columns -->
+    <center>
+        <HBox spacing="0">
+
+            <!-- LEFT: Production order list -->
+            <VBox spacing="8" prefWidth="420"
+                  style="-fx-background-color: white; -fx-border-color: #e5e7eb; -fx-border-width: 0 1 0 0; -fx-padding: 16;">
+                <Label text="Production Orders" styleClass="section-title"/>
+                <TableView fx:id="tableOrders" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colOrderId"     text="ID"       prefWidth="45"/>
+                        <TableColumn fx:id="colIceCream"    text="Product"  prefWidth="120"/>
+                        <TableColumn fx:id="colKg"          text="Kg"       prefWidth="65"/>
+                        <TableColumn fx:id="colOrderStatus" text="Status"   prefWidth="120"/>
+                        <TableColumn fx:id="colCreatedAt"   text="Created"  prefWidth="130"/>
+                    </columns>
+                    <placeholder><Label text="No production orders found"/></placeholder>
+                </TableView>
+            </VBox>
+
+            <!-- RIGHT: Detail + actions -->
+            <VBox HBox.hgrow="ALWAYS" spacing="12" style="-fx-padding: 16;">
+
+                <!-- Panel: Create new order -->
+                <VBox fx:id="panelCreateOrder" spacing="10"
+                      style="-fx-background-color: white; -fx-padding: 16; -fx-background-radius: 8; -fx-border-color: #e5e7eb; -fx-border-radius: 8;">
+                    <Label text="Create New Production Order" styleClass="section-title"/>
+                    <GridPane hgap="12" vgap="8">
+                        <columnConstraints>
+                            <ColumnConstraints minWidth="130"/>
+                            <ColumnConstraints hgrow="ALWAYS"/>
+                        </columnConstraints>
+                        <Label text="Ice Cream:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                        <ComboBox fx:id="cbIceCream" maxWidth="Infinity" promptText="-- Select product --"
+                                  GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                        <Label text="Output (kg):" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                        <TextField fx:id="tfOutputKg" promptText="e.g. 20.5"
+                                   GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                        <Label text="Note:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                        <TextArea fx:id="taOrderNote" prefRowCount="2" wrapText="true"
+                                  promptText="Optional note"
+                                  GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                    </GridPane>
+                    <HBox spacing="8">
+                        <Button text="Create Order" onAction="#handleCreateOrder" styleClass="primary-button"/>
+                        <Button text="Cancel" onAction="#handleCancelCreate" styleClass="secondary-button"/>
+                    </HBox>
+                    <Label fx:id="lblActionMessage" style="-fx-font-weight: bold;"/>
+                </VBox>
+
+                <!-- Panel: Order detail -->
+                <VBox fx:id="panelDetail" spacing="12" VBox.vgrow="ALWAYS">
+
+                    <!-- Title + status + action -->
+                    <VBox spacing="4"
+                          style="-fx-background-color: white; -fx-padding: 14; -fx-background-radius: 8; -fx-border-color: #e5e7eb; -fx-border-radius: 8;">
+                        <Label fx:id="lblOrderTitle" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                        <Label fx:id="lblCurrentStep" style="-fx-text-fill: #2563eb; -fx-font-size: 13px;"/>
+                        <HBox spacing="8" style="-fx-padding: 8 0 0 0;">
+                            <Button fx:id="btnAction" onAction="#handleAction"
+                                    prefHeight="38" style="-fx-font-weight: bold; -fx-background-radius: 8;"/>
+                        </HBox>
+                        <Label fx:id="lblActionMessage" style="-fx-font-weight: bold; -fx-font-size: 13px;"/>
+                    </VBox>
+
+                    <!-- Panel: Ingredients (step 1 & 2) -->
+                    <VBox fx:id="panelIngredients" spacing="6"
+                          style="-fx-background-color: white; -fx-padding: 12; -fx-background-radius: 8; -fx-border-color: #e5e7eb; -fx-border-radius: 8;">
+                        <Label text="Required Ingredients" style="-fx-font-weight: bold;"/>
+                        <TableView fx:id="tableIngredients" prefHeight="160">
+                            <columns>
+                                <TableColumn fx:id="colIngName" text="Ingredient" prefWidth="200"/>
+                                <TableColumn fx:id="colIngUnit" text="Unit"       prefWidth="80"/>
+                                <TableColumn fx:id="colIngQty"  text="Quantity"   prefWidth="120"/>
+                            </columns>
+                            <placeholder><Label text="No data available"/></placeholder>
+                        </TableView>
+                    </VBox>
+
+                    <!-- Panel: 8 production stages (step 3) -->
+                    <VBox fx:id="panelStages" spacing="8" VBox.vgrow="ALWAYS"
+                          style="-fx-background-color: white; -fx-padding: 12; -fx-background-radius: 8; -fx-border-color: #e5e7eb; -fx-border-radius: 8;">
+                        <Label text="Production Stages — Click on an open stage to record details"
+                               style="-fx-font-weight: bold;"/>
+                        <TableView fx:id="tableStages" prefHeight="200">
+                            <columns>
+                                <TableColumn fx:id="colStageNo"       text="#"            prefWidth="35"/>
+                                <TableColumn fx:id="colStageName"     text="Stage"        prefWidth="220"/>
+                                <TableColumn fx:id="colStageStatus"   text="Status"       prefWidth="90"/>
+                                <TableColumn fx:id="colStageStart"    text="Start Time"   prefWidth="130"/>
+                                <TableColumn fx:id="colStageEnd"      text="End Time"     prefWidth="130"/>
+                                <TableColumn fx:id="colStageDuration" text="Duration (min)" prefWidth="100"/>
+                                <TableColumn fx:id="colStageVolume"   text="Volume (L)"   prefWidth="90"/>
+                                <TableColumn fx:id="colStageMold"     text="Mold Count"   prefWidth="90"/>
+                            </columns>
+                            <placeholder><Label text="No stages found"/></placeholder>
+                        </TableView>
+
+                        <!-- Stage input form -->
+                        <VBox fx:id="panelStageInput" spacing="8"
+                              style="-fx-background-color: #f0f9ff; -fx-padding: 12; -fx-background-radius: 8; -fx-border-color: #bae6fd; -fx-border-radius: 8;">
+                            <Label fx:id="lblStageTitle" style="-fx-font-weight: bold; -fx-text-fill: #0369a1;"/>
+                            <GridPane hgap="12" vgap="6">
+                                <columnConstraints>
+                                    <ColumnConstraints minWidth="150"/>
+                                    <ColumnConstraints hgrow="ALWAYS"/>
+                                    <ColumnConstraints minWidth="150"/>
+                                    <ColumnConstraints hgrow="ALWAYS"/>
+                                </columnConstraints>
+                                <Label text="Actual Duration (min):" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                                <TextField fx:id="tfDuration" promptText="e.g. 30"
+                                           GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                                <Label text="Actual Volume (L):" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+                                <TextField fx:id="tfVolume" promptText="e.g. 50.5"
+                                           GridPane.rowIndex="0" GridPane.columnIndex="3"/>
+                                <Label text="Mold Count (if any):" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                                <TextField fx:id="tfMold" promptText="e.g. 100"
+                                           GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                                <Label text="Note:" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+                                <TextField fx:id="tfStageNote" promptText="Optional note"
+                                           GridPane.rowIndex="1" GridPane.columnIndex="3"/>
+                            </GridPane>
+
+                            <!-- Mixing stage panel (Stage 1 only) -->
+                            <VBox fx:id="panelMixing" spacing="6"
+                                  style="-fx-background-color: #fff7ed; -fx-padding: 8; -fx-background-radius: 6; -fx-border-color: #fed7aa; -fx-border-radius: 6;">
+                                <Label text="🧪 Material Preparation &amp; Mixing Details (Stage 1)"
+                                       style="-fx-font-weight: bold; -fx-text-fill: #c2410c;"/>
+                                <GridPane hgap="12" vgap="6">
+                                    <columnConstraints>
+                                        <ColumnConstraints minWidth="180"/>
+                                        <ColumnConstraints hgrow="ALWAYS"/>
+                                    </columnConstraints>
+                                    <Label text="Mixing Temperature (°C):" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                                    <TextField fx:id="tfMixingTemp" promptText="e.g. 65.5"
+                                               GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                                    <Label text="Mixing Ratio Note:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                                    <TextArea fx:id="taMixingRatio" prefRowCount="2" wrapText="true"
+                                              promptText="e.g. Milk 55% - Sugar 17% - Cream 20% - Matcha 8%"
+                                              GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                                </GridPane>
+                            </VBox>
+
+                            <Button text="💾 Save &amp; Complete Stage" onAction="#handleSaveStage"
+                                    styleClass="success-button"/>
+                        </VBox>
+                    </VBox>
+
+                </VBox>
+
+            </VBox>
+
+        </HBox>
+    </center>
+
+</BorderPane>

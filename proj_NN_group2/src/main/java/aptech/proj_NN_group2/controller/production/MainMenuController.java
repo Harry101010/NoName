@@ -1,15 +1,32 @@
 package aptech.proj_NN_group2.controller.production;
 
+import aptech.proj_NN_group2.util.CurrentUser;
 import aptech.proj_NN_group2.util.NavigationUtil;
 import aptech.proj_NN_group2.util.StringValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 
 public class MainMenuController {
+
+    @FXML private Label lblUserInfo;
+
+    @FXML
+    public void initialize() {
+        if (lblUserInfo != null && CurrentUser.isLoggedIn()) {
+            lblUserInfo.setText(CurrentUser.getUser().getUsername()
+                    + "  |  " + CurrentUser.getRoleName());
+        }
+    }
 
     @FXML
     private void goToCreateBatch(ActionEvent event) {
         NavigationUtil.goTo(event, StringValue.VIEW_CREATE_BATCH, "Tạo mẻ sản xuất");
+    }
+
+    @FXML
+    private void goToProductionDashboard(ActionEvent event) {
+        NavigationUtil.goTo(event, StringValue.VIEW_PRODUCTION_DASHBOARD, "Quản lý sản xuất");
     }
 
     @FXML
