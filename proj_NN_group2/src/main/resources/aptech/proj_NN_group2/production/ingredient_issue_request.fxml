@@ -11,70 +11,67 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
 
 <VBox spacing="12" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="aptech.proj_NN_group2.controller.production.IngredientIssueRequestController">
     <padding><Insets bottom="16" left="20" right="20" top="16" /></padding>
 
-    <!-- Header -->
-    <HBox alignment="CENTER_LEFT" spacing="12">
-        
-        <Label text="Tạo Phiếu Yêu Cầu Xuất Kho Nguyên Liệu">
-            <font><Font name="System Bold" size="18" /></font>
-        </Label>
-    </HBox>
+    <Label text="Tạo Phiếu Yêu Cầu Xuất Kho Nguyên Liệu">
+        <font><Font name="System Bold" size="18" /></font>
+    </Label>
 
-    <!-- Form tạo phiếu -->
-    <TitledPane collapsible="false" text="Thông tin phiếu yêu cầu">
-        <VBox spacing="10">
-            <padding><Insets bottom="10" left="12" right="12" top="10" /></padding>
+    <GridPane hgap="12" vgap="12" VBox.vgrow="ALWAYS">
+        <columnConstraints>
+            <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+            <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+        </columnConstraints>
 
-            <HBox alignment="CENTER_LEFT" spacing="12">
-                <Label minWidth="140" text="Lệnh sản xuất:" />
-                <ComboBox fx:id="cbOrder" prefWidth="380" promptText="-- Chọn lệnh sản xuất (draft) --" />
-            </HBox>
+        <TitledPane collapsible="false" maxWidth="Infinity" text="Thông tin phiếu yêu cầu" GridPane.columnIndex="0" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+            <VBox spacing="10">
+                <padding><Insets bottom="10" left="12" right="12" top="10" /></padding>
+                <HBox alignment="CENTER_LEFT" spacing="12">
+                    <Label minWidth="100" text="Lệnh sản xuất:" />
+                    <ComboBox fx:id="cbOrder" maxWidth="Infinity" promptText="-- Chọn lệnh sản xuất (draft) --" HBox.hgrow="ALWAYS" />
+                </HBox>
+                <HBox alignment="CENTER_LEFT" spacing="12">
+                    <Label minWidth="100" text="Thông tin lệnh:" />
+                    <Label fx:id="lblOrderInfo" style="-fx-text-fill: #555;" wrapText="true" />
+                </HBox>
+                <VBox spacing="5">
+                    <Label text="Ghi chú:" />
+                    <TextArea fx:id="taNote" prefHeight="80" promptText="Ghi chú thêm (nếu có)..." wrapText="true" />
+                </VBox>
+                <HBox spacing="10">
+                    <Button onAction="#handleCreate" style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-background-radius: 6; -fx-font-weight: bold;" text="Tạo phiếu yêu cầu" />
+                    <Button onAction="#handleReset" style="-fx-background-color: #ffc107; -fx-text-fill: white; -fx-background-radius: 6;" text="Làm mới" />
+                </HBox>
+                <Label fx:id="lblMessage" style="-fx-font-weight: bold;" />
+            </VBox>
+        </TitledPane>
 
-            <HBox alignment="CENTER_LEFT" spacing="12">
-                <Label minWidth="140" text="Thông tin lệnh:" />
-                <Label fx:id="lblOrderInfo" style="-fx-text-fill: #555;" />
-            </HBox>
+        <TitledPane collapsible="false" maxWidth="Infinity" text="Preview nguyên liệu cần xuất" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+            <VBox spacing="6">
+                <padding><Insets bottom="8" left="12" right="12" top="8" /></padding>
+                <TableView fx:id="tablePreview" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colIngredient" prefWidth="150" text="Nguyên liệu" />
+                        <TableColumn fx:id="colUnit" prefWidth="80" text="Đơn vị" />
+                        <TableColumn fx:id="colQty" prefWidth="120" text="Số lượng" />
+                    </columns>
+                    <placeholder><Label text="Chọn lệnh sản xuất để xem nguyên liệu" /></placeholder>
+                </TableView>
+            </VBox>
+        </TitledPane>
+    </GridPane>
 
-            <HBox alignment="TOP_LEFT" spacing="12">
-                <Label minWidth="140" text="Ghi chú:" />
-                <TextArea fx:id="taNote" prefHeight="60" prefWidth="380" promptText="Ghi chú thêm (nếu có)..." wrapText="true" />
-            </HBox>
-
-            <HBox spacing="10">
-                <Button onAction="#handleCreate" style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-background-radius: 6; -fx-font-weight: bold;" text="Tạo phiếu yêu cầu" />
-                <Button onAction="#handleReset" style="-fx-background-color: #ffc107; -fx-text-fill: white; -fx-background-radius: 6;" text="Làm mới" />
-            </HBox>
-
-            <Label fx:id="lblMessage" style="-fx-font-weight: bold;" />
-        </VBox>
-    </TitledPane>
-
-    <!-- Bảng preview nguyên liệu -->
-    <TitledPane collapsible="false" text="Preview nguyên liệu cần xuất / Chi tiết phiếu đã chọn">
-        <VBox spacing="6">
-            <padding><Insets bottom="8" left="12" right="12" top="8" /></padding>
-            <TableView fx:id="tablePreview" prefHeight="160">
-                <columns>
-                    <TableColumn fx:id="colIngredient" prefWidth="220" text="Nguyên liệu" />
-                    <TableColumn fx:id="colUnit" prefWidth="100" text="Đơn vị" />
-                    <TableColumn fx:id="colQty" prefWidth="160" text="Số lượng cần xuất" />
-                </columns>
-                <placeholder><Label text="Chọn lệnh sản xuất để xem nguyên liệu cần xuất" /></placeholder>
-            </TableView>
-        </VBox>
-    </TitledPane>
-
-    <!-- Danh sách phiếu đã tạo -->
     <TitledPane collapsible="false" text="Danh sách phiếu yêu cầu xuất kho" VBox.vgrow="ALWAYS">
         <VBox spacing="6">
             <padding><Insets bottom="8" left="12" right="12" top="8" /></padding>
             <HBox spacing="8">
                 <Button onAction="#handleViewDetails" style="-fx-background-color: #17a2b8; -fx-text-fill: white; -fx-background-radius: 6;" text="Xem chi tiết nguyên liệu" />
             </HBox>
-            <TableView fx:id="tableRequests" prefHeight="220" VBox.vgrow="ALWAYS">
+            <TableView fx:id="tableRequests" VBox.vgrow="ALWAYS">
                 <columns>
                     <TableColumn fx:id="colReqId" prefWidth="50" text="ID" />
                     <TableColumn fx:id="colReqIceCream" prefWidth="160" text="Loại kem" />

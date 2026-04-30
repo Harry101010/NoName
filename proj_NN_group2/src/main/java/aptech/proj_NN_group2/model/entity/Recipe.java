@@ -1,11 +1,15 @@
 package aptech.proj_NN_group2.model.entity;
 
+import java.math.BigDecimal;
+
 public class Recipe {
     private int recipe_id;
     private int ice_cream_id;
     private int ingredient_id;
     private String ingredient_name;
     private double quantity_per_kg; 
+    private BigDecimal quantity;
+    private String unit;
 
     public Recipe() {}
 
@@ -17,6 +21,13 @@ public class Recipe {
     }
 
     // --- Getters và Setters ---
+    
+    public BigDecimal getQuantity() { return quantity; }
+    public void setQuantity(BigDecimal quantity) { this.quantity = quantity; }
+
+    public String getUnit() { return unit; }
+    public void setUnit(String unit) { this.unit = unit; }
+    
     public int getRecipe_id() { return recipe_id; }
     public void setRecipe_id(int recipe_id) { this.recipe_id = recipe_id; }
 

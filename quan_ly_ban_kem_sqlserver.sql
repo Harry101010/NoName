@@ -2,6 +2,8 @@
    ICE CREAM MANAGEMENT DATABASE
    SQL Server Management Studio
    ========================================================= */
+USE master; -- Chuyển sang master để SQL Server "thả" database kia ra
+GO
 
 IF EXISTS (SELECT name FROM sys.databases WHERE name = N'IceCreamManagement')
 BEGIN
@@ -55,9 +57,10 @@ IF NOT EXISTS (SELECT 1 FROM roles)
 BEGIN
     INSERT INTO roles (role_name)
     VALUES (N'Admin'),
-    (N'Trưởng sản xuất'),
-    (N'Quản lý kho'),
-    (N'Nhân viên kinh doanh');
+    (N'Production Supervisor'),
+    (N'Storekeeper'),
+	(N'Staff'),
+    (N'Saleman');
 END
 
 SET ANSI_NULLS ON
@@ -80,6 +83,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
+
 SET IDENTITY_INSERT [dbo].[users] ON 
 
 INSERT [dbo].[users] ([user_id], [username], [password_hash], [role_id], [is_active], [created_at], [email], [reset_token], [reset_token_expired_at]) VALUES (1, N'admin_user', N'$2a$12$ubse3VV12.Cidq36X5tTNeWii7N7yi70tpKPFNOWd5vHbZtvcSV7i', 1, 1, CAST(N'2026-04-08T23:38:02.0000000' AS DateTime2), NULL, NULL, NULL)
@@ -96,6 +100,7 @@ SET IDENTITY_INSERT [dbo].[users] OFF
 GO
 SET ANSI_PADDING ON
 GO
+
 /****** Object:  Index [UQ__users__F3DBC572EE622957]    Script Date: 11/04/2026 8:44:40 PM ******/
 ALTER TABLE [dbo].[users] ADD UNIQUE NONCLUSTERED 
 (
@@ -125,6 +130,12 @@ BEGIN
 END
 GO
 
+-- Nạp Units nếu chưa có
+IF NOT EXISTS (SELECT 1 FROM units)
+BEGIN
+    INSERT INTO units (unit_name) VALUES ('kg'), ('g'), ('liter'), ('pcs');
+END
+
 /* =========================
    4) INGREDIENTS / RAW MATERIALS
    - origin, storage_condition, price_per_unit belong here
@@ -148,11 +159,41 @@ BEGIN
 END
 GO
 
+-- Nạp Ingredients nếu chưa có (Tương tự cho các bảng khác)
+IF NOT EXISTS (SELECT 1 FROM ingredients)
+BEGIN
+    INSERT INTO ingredients (ingredient_name, origin, storage_condition, unit_id, price_per_unit)
+SELECT v.name, v.origin, v.storage, u.unit_id, v.price
+FROM (VALUES 
+    ('Fresh Milk', 'Dalat', 'Chilled', 'liter', 25000), 
+    ('Sugar', 'Bien Hoa', 'Dry', 'kg', 20000),
+    ('Matcha Powder', 'Japan', 'Dark', 'g', 500000), 
+    ('Cocoa Powder', 'Belgium', 'Dry', 'kg', 300000),
+    ('Strawberry', 'Dalat', 'Chilled', 'kg', 150000), 
+    ('Heavy Cream', 'Anchor', 'Chilled', 'liter', 160000),
+    ('Vanilla Extract', 'France', 'Dry', 'g', 50000), 
+    ('Sea Salt', 'VN', 'Dry', 'kg', 10000),
+    ('Shredded Coconut', 'Ben Tre', 'Frozen', 'kg', 60000), 
+    ('Unsalted Butter', 'France', 'Chilled', 'kg', 200000),
+    ('Almond', 'USA', 'Dry', 'kg', 400000), 
+    ('Chocolate Chips', 'VN', 'Chilled', 'kg', 120000),
+    ('Milk Powder', 'New Zealand', 'Dry', 'kg', 140000), 
+    ('Glucose Syrup', 'Korea', 'Dry', 'kg', 45000),
+    ('Eggs', 'VN', 'Chilled', 'pcs', 3500), 
+    ('Strawberry Jam', 'Dalat', 'Chilled', 'kg', 85000),
+    ('Peppermint', 'India', 'Cool', 'g', 30000), 
+    ('Walnut', 'USA', 'Dry', 'kg', 480000),
+    ('Caramel', 'Internal', 'Chilled', 'liter', 90000), 
+    ('CMC Stabilizer', 'Germany', 'Dry', 'kg', 190000)
+) AS v(name, origin, storage, unit_name, price)
+JOIN units u ON u.unit_name = v.unit_name;
+END
 /* =========================
    5) INGREDIENT LOTS / BATCHES
    - expiry_date belongs here, not in ingredients
    - FIFO can be handled by import_date, expiry_date, lot_id
    ========================= */
+
 IF OBJECT_ID(N'dbo.ingredient_lots', N'U') IS NULL
 BEGIN
     CREATE TABLE dbo.ingredient_lots (
@@ -174,9 +215,41 @@ BEGIN
 END
 GO
 
+PRINT '--- Đang nạp số lượng tồn kho ban đầu vào bảng ingredient_lots ---';
+
+INSERT INTO ingredient_lots (ingredient_id, expiry_date, received_quantity, remaining_quantity)
+SELECT i.ingredient_id, '2026-12-31', v.initial_qty, v.initial_qty
+FROM ingredients i
+JOIN (VALUES 
+    ('Fresh Milk', 50.0),      -- 50 lít
+    ('Sugar', 100.0),          -- 100 kg
+    ('Matcha Powder', 10.0),   -- 10 g
+    ('Cocoa Powder', 20.0),    -- 20 kg
+    ('Strawberry', 30.0),      -- 30 kg
+    ('Heavy Cream', 20.0),     -- 20 lít
+    ('Vanilla Extract', 5.0),  -- 5 g
+    ('Sea Salt', 5.0),         -- 5 kg
+    ('Shredded Coconut', 10.0),-- 10 kg
+    ('Unsalted Butter', 20.0), -- 20 kg
+    ('Almond', 15.0),          -- 15 kg
+    ('Chocolate Chips', 25.0), -- 25 kg
+    ('Milk Powder', 50.0),     -- 50 kg
+    ('Glucose Syrup', 10.0),   -- 10 kg
+    ('Eggs', 100.0),           -- 100 quả
+    ('Strawberry Jam', 15.0),  -- 15 kg
+    ('Peppermint', 2.0),       -- 2 g
+    ('Walnut', 10.0),          -- 10 kg
+    ('Caramel', 5.0),          -- 5 lít
+    ('CMC Stabilizer', 2.0)    -- 2 kg
+) AS v(ing_name, initial_qty) ON i.ingredient_name = v.ing_name;
+
+PRINT '--- Đã nạp xong số lượng cho các nguyên liệu ---';
+GO
+
 /* =========================
    6) ICE CREAM PRODUCTS
    ========================= */
+
 IF OBJECT_ID(N'dbo.ice_creams', N'U') IS NULL
 BEGIN
     CREATE TABLE dbo.ice_creams (
@@ -186,6 +259,12 @@ BEGIN
     );
 END
 GO
+
+-- Products (5 types)
+INSERT INTO ice_creams (ice_cream_name) VALUES 
+('Vanilla Ice Cream'), ('Matcha Ice Cream'), ('Chocolate Ice Cream'), 
+('Strawberry Ice Cream'), ('Walnut Ice Cream');
+
 
 /* =========================
    7) RECIPE / MATERIAL NORM
@@ -212,10 +291,42 @@ BEGIN
 END
 GO
 
+INSERT INTO recipes (ice_cream_id, ingredient_id, quantity_per_kg)
+SELECT ice.ice_cream_id, ing.ingredient_id, v.qty
+FROM (VALUES 
+    -- Vanilla Ice Cream (ID 1)
+    ('Vanilla Ice Cream', 'Fresh Milk', 0.5), ('Vanilla Ice Cream', 'Sugar', 0.1), 
+    ('Vanilla Ice Cream', 'Heavy Cream', 0.2), ('Vanilla Ice Cream', 'Vanilla Extract', 0.05), 
+    ('Vanilla Ice Cream', 'Milk Powder', 0.15),
+    
+    -- Matcha Ice Cream (ID 2)
+    ('Matcha Ice Cream', 'Fresh Milk', 0.4), ('Matcha Ice Cream', 'Sugar', 0.1), 
+    ('Matcha Ice Cream', 'Matcha Powder', 0.1), ('Matcha Ice Cream', 'Heavy Cream', 0.2), 
+    ('Matcha Ice Cream', 'Milk Powder', 0.1), ('Matcha Ice Cream', 'Caramel', 0.1),
+    
+    -- Chocolate Ice Cream (ID 3)
+    ('Chocolate Ice Cream', 'Fresh Milk', 0.4), ('Chocolate Ice Cream', 'Sugar', 0.1), 
+    ('Chocolate Ice Cream', 'Cocoa Powder', 0.1), ('Chocolate Ice Cream', 'Heavy Cream', 0.2), 
+    ('Chocolate Ice Cream', 'Chocolate Chips', 0.1), ('Chocolate Ice Cream', 'Milk Powder', 0.1),
+    
+    -- Strawberry Ice Cream (ID 4)
+    ('Strawberry Ice Cream', 'Fresh Milk', 0.4), ('Strawberry Ice Cream', 'Sugar', 0.1), 
+    ('Strawberry Ice Cream', 'Strawberry', 0.2), ('Strawberry Ice Cream', 'Heavy Cream', 0.2), 
+    ('Strawberry Ice Cream', 'Strawberry Jam', 0.1),
+    
+    -- Walnut Ice Cream (ID 5)
+    ('Walnut Ice Cream', 'Fresh Milk', 0.4), ('Walnut Ice Cream', 'Sugar', 0.1), 
+    ('Walnut Ice Cream', 'Heavy Cream', 0.2), ('Walnut Ice Cream', 'Almond', 0.1), 
+    ('Walnut Ice Cream', 'Walnut', 0.1)
+) AS v(ice_name, ing_name, qty)
+JOIN ice_creams ice ON v.ice_name = ice.ice_cream_name
+JOIN ingredients ing ON v.ing_name = ing.ingredient_name;
+
 /* =========================
    8) PRODUCTION ORDERS
    - One order = one production batch for one ice cream
    ========================= */
+
 IF OBJECT_ID(N'dbo.production_orders', N'U') IS NULL
 BEGIN
     CREATE TABLE dbo.production_orders (
@@ -238,11 +349,32 @@ BEGIN
 END
 GO
 
+
+--  Nạp Order
+INSERT INTO production_orders (ice_cream_id, planned_output_kg, order_status, note)
+SELECT ice.ice_cream_id, v.output, v.status, v.note
+FROM (VALUES
+    ('Vanilla Ice Cream', 100, 'finished', 'Order 01'),
+    ('Matcha Ice Cream', 120, 'finished', 'Order 02'),
+    ('Chocolate Ice Cream', 80, 'in_progress', 'Order 03'),
+    ('Strawberry Ice Cream', 90, 'in_progress', 'Order 04'),
+    ('Walnut Ice Cream', 50, 'waiting_ingredient', 'Order 05'),
+    ('Vanilla Ice Cream', 150, 'draft', 'Order 06'),
+    ('Matcha Ice Cream', 200, 'draft', 'Order 07'),
+    ('Chocolate Ice Cream', 70, 'draft', 'Order 08'),
+    ('Strawberry Ice Cream', 110, 'draft', 'Order 09'),
+    ('Walnut Ice Cream', 60, 'draft', 'Order 10')
+) AS v(ice_name, output, status, note)
+JOIN ice_creams ice ON v.ice_name = ice.ice_cream_name;
+
 /* =========================
    9) PRODUCTION STAGES
    - 8 stages in order
    - store timing, actual volume, mold count, duration
    ========================= */
+
+/*
+
 IF OBJECT_ID(N'dbo.production_stages', N'U') IS NULL
 BEGIN
     CREATE TABLE dbo.production_stages (
@@ -280,6 +412,39 @@ BEGIN
     );
 END
 GO
+*/
+
+-- Bảng Stage (Định nghĩa công đoạn - Khớp với ProductionStage.java)
+
+CREATE TABLE dbo.production_stages (
+    stage_id INT PRIMARY KEY IDENTITY(1,1), 
+    stage_name NVARCHAR(100) NOT NULL,
+    sequence_order INT NOT NULL, 
+    standard_time_minutes DECIMAL(10,2) DEFAULT 0,
+    is_proportional BIT DEFAULT 0 
+);
+
+--  Nạp Production Stages
+INSERT INTO production_stages (stage_name, sequence_order, standard_time_minutes, is_proportional) 
+VALUES 
+('Mixing', 1, 30, 1), ('Homogenization', 2, 20, 1), ('Pasteurization', 3, 15, 1),
+('Aging', 4, 120, 0), ('Whipping', 5, 10, 1), ('Filling', 6, 20, 1),
+('Hardening', 7, 240, 0), ('Packaging', 8, 30, 1);
+
+
+-- Tạo bảng theo doi sản xuất
+
+CREATE TABLE dbo.production_tracking (
+    tracking_id INT PRIMARY KEY IDENTITY(1,1),
+    production_order_id INT NOT NULL,
+    stage_id INT NOT NULL,
+    status NVARCHAR(20) DEFAULT 'pending',
+    actual_start_time DATETIME NULL,
+    actual_end_time DATETIME NULL,
+    actual_quantity DECIMAL(18,3) DEFAULT 0,
+    CONSTRAINT FK_Tracking_Order FOREIGN KEY (production_order_id) REFERENCES dbo.production_orders(production_order_id),
+    CONSTRAINT FK_Tracking_Stage FOREIGN KEY (stage_id) REFERENCES dbo.production_stages(stage_id)
+);
 
 /* =========================
    10) MATERIAL EXPORT REQUESTS
@@ -503,7 +668,36 @@ BEGIN
         FOREIGN KEY (ice_cream_id) REFERENCES dbo.ice_creams(ice_cream_id)
     );
 END
+
+----------------------------------------------
+USE IceCreamManagement;
+GO
+
+-- 1. Thêm cột is_deleted vào bảng ingredient_lots để sửa lỗi WarehouseRepository
+IF NOT EXISTS (SELECT * FROM sys.columns 
+               WHERE object_id = OBJECT_ID('dbo.ingredient_lots') 
+               AND name = 'is_deleted')
+BEGIN
+    ALTER TABLE dbo.ingredient_lots ADD is_deleted BIT NOT NULL DEFAULT 0;
+    PRINT 'Đã thêm cột is_deleted vào bảng ingredient_lots.';
+END
+GO
+
+-- 2. Thêm cột must_change_password vào bảng users để sửa lỗi cảnh báo
+IF NOT EXISTS (SELECT * FROM sys.columns 
+               WHERE object_id = OBJECT_ID('dbo.users') 
+               AND name = 'must_change_password')
+BEGIN
+    ALTER TABLE dbo.users ADD must_change_password BIT NOT NULL DEFAULT 0;
+    PRINT 'Đã thêm cột must_change_password vào bảng users.';
+END
+GO
+
+--tới dây
+
+
 -- Bảng nhà cung cấp
+
 GO
 CREATE TABLE suppliers (
     supplier_id INT IDENTITY PRIMARY KEY,
@@ -554,3 +748,34 @@ CREATE TABLE [dbo].[product_issue_notes](
     [create_date]         DATETIME2(0) DEFAULT (GETDATE()),
     CONSTRAINT [FK_product_issue_notes_users] FOREIGN KEY([saleman_id]) REFERENCES [dbo].[users] ([user_id])
 );
+
+
+
+-- 1. Tạo bảng suppliers nếu chưa có
+IF OBJECT_ID(N'dbo.suppliers', N'U') IS NULL
+BEGIN
+    CREATE TABLE dbo.suppliers(
+        [supplier_id] INT IDENTITY(1,1) PRIMARY KEY,
+        [supplier_name] NVARCHAR(200) NOT NULL,
+        [phone] NVARCHAR(20),
+        [email] NVARCHAR(100),
+        [address] NVARCHAR(255),
+        [is_active] BIT DEFAULT 1
+    );
+END
+GO
+
+-- 2. Chỉ thêm cột supplier_id vào bảng ingredient_lots nếu nó chưa tồn tại
+IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('dbo.ingredient_lots') AND name = 'supplier_id')
+BEGIN
+    ALTER TABLE dbo.ingredient_lots ADD supplier_id INT;
+END
+GO
+
+-- 3. Chỉ thêm khóa ngoại nếu chưa tồn tại
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE name = 'FK_lot_supplier')
+BEGIN
+    ALTER TABLE dbo.ingredient_lots 
+    ADD CONSTRAINT FK_lot_supplier FOREIGN KEY (supplier_id) REFERENCES dbo.suppliers(supplier_id);
+END
+GO

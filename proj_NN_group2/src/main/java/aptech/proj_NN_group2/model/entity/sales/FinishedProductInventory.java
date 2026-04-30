@@ -1,4 +1,4 @@
-package aptech.proj_NN_group2.model.entity;
+package aptech.proj_NN_group2.model.entity.sales;
 import java.time.LocalDateTime;
 
 public class FinishedProductInventory {
@@ -9,6 +9,11 @@ public class FinishedProductInventory {
     private LocalDateTime mfgDate;
     private LocalDateTime expDate;
     private String location;
+    private int orderId; // Thêm cột này
+
+	 // Getter và Setter
+	 public int getOrderId() { return orderId; }
+	 public void setOrderId(int orderId) { this.orderId = orderId; }
 
     // Constructors, Getters và Setters (Hãy generate đầy đủ trong IDE)
     public FinishedProductInventory() {}

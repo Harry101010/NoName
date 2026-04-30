@@ -4,8 +4,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import aptech.proj_NN_group2.model.business.repository.SalemanRepository;
-import aptech.proj_NN_group2.model.entity.FinishedProductInventory;
 import aptech.proj_NN_group2.model.entity.IssueNote;
+import aptech.proj_NN_group2.model.entity.sales.FinishedProductInventory;
 import aptech.proj_NN_group2.util.DialogUtil;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -39,6 +39,8 @@ public class FinishedProductWarehouseController {
     @FXML private TableColumn<FinishedProductInventory, LocalDateTime> colInvMfg;
     @FXML private TableColumn<FinishedProductInventory, LocalDateTime> colInvExp;
     @FXML private TextField txtSearchInventory;
+    @FXML private TableColumn<FinishedProductInventory, Integer> colInvOrderId;
+    
 
     private final SalemanRepository repo = new SalemanRepository();
     private final ObservableList<IssueNote> pendingList = FXCollections.observableArrayList();

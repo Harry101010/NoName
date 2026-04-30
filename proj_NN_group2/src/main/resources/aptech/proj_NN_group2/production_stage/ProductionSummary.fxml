@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox spacing="15.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="aptech.proj_NN_group2.controller.production_stage.ProductionSummaryController">
+    
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+
+    <HBox spacing="20.0" alignment="CENTER_LEFT">
+        <Label text="Báo cáo tiến độ sản xuất (Production Summary)" textFill="#333333">
+            <font>
+                <Font name="System Bold" size="18.0" />
+            </font>
+        </Label>
+        <Button fx:id="btnRefresh" text="🔄 Refresh" onAction="#handleRefresh" style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-cursor: hand;" />
+    </HBox>
+
+    <TableView fx:id="tblSummary" prefHeight="400.0" prefWidth="800.0">
+	    <columns>
+	        <TableColumn fx:id="colOrderId" text="Order ID" prefWidth="80.0" />
+	        
+	        <TableColumn fx:id="colProductName" text="Product Name" prefWidth="200.0" />
+	        
+	        <TableColumn fx:id="colProgress" text="Progress (%)" prefWidth="150.0" />
+	        
+	        <TableColumn fx:id="colCurrentStage" text="Current Stage" prefWidth="150.0" />
+	        
+	        <TableColumn fx:id="colFailedStage" text="Failed Stage" prefWidth="150.0" />
+	    </columns>
+	</TableView>
+</VBox>

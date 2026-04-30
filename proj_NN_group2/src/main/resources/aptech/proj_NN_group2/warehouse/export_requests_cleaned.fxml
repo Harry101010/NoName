@@ -15,7 +15,7 @@
                 <TableView fx:id="tblRequests" style="-fx-background-radius: 8;" VBox.vgrow="ALWAYS">
                     <columns>
                         <TableColumn fx:id="colId" text="ID" prefWidth="60"/>
-                        <TableColumn fx:id="colOrder" text="Lệnh SX" prefWidth="150"/>
+                        <TableColumn fx:id="colOrder" text="Lệnh SX" prefWidth="100"/>
                         <TableColumn fx:id="colStatus" text="Trạng thái" prefWidth="120"/>
                         <TableColumn fx:id="colDate" text="Ngày yêu cầu" prefWidth="180"/>
                         <TableColumn fx:id="colNote" text="Ghi chú" prefWidth="220"/>

@@ -11,21 +11,33 @@
         <Tab text="Lệnh sản xuất" onSelectionChanged="#onCreateBatchTabSelected">
             <content><fx:include fx:id="createBatch" source="create_batch.fxml" /></content>
         </Tab>
-        <Tab text="Công đoạn">
-            <content><fx:include source="production_process.fxml" /></content>
-        </Tab>
+       
         <Tab text="Tạo phiếu xuất kho" onSelectionChanged="#onIssueRequestTabSelected">
             <content><fx:include fx:id="issueRequest" source="ingredient_issue_request.fxml" /></content>
         </Tab>
         <Tab text="Nhận nguyên liệu">
             <content><fx:include source="confirm_received_ingredient.fxml" /></content>
+        </Tab>       
+        
+        <Tab text="Theo dõi sản xuất" onSelectionChanged="#onTrackingTabSelected">
+		    <content>
+		        <fx:include fx:id="productionTracking" source="../production_stage/production_tracking.fxml" />
+		    </content>
+		</Tab>
+		<Tab text="Báo cáo tiến độ">
+            <fx:include source="../production_stage/ProductionSummary.fxml" />
         </Tab>
-        <Tab text="Chi tiết công đoạn">
+                
+        <Tab text="Sản phẩm và Định mức">
+                <content><fx:include source="recipe_management_cleaned.fxml" /></content>
+        </Tab>
+        
+         <Tab text="Công đoạn">
+            <content><fx:include source="production_process.fxml" /></content>
+        </Tab>
+         <Tab text="Chi tiết công đoạn">
             <content><fx:include source="stage_detail.fxml" /></content>
         </Tab>
-           <Tab text="Sản phẩm và Định mức">
-                <content><fx:include source="recipe_management_cleaned.fxml" /></content>
-           </Tab>
     </tabs>
 </TabPane>
 </AnchorPane>

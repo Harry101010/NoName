@@ -5,7 +5,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import aptech.proj_NN_group2.model.business.repository.FinishedStockRepository;
+import aptech.proj_NN_group2.model.business.repository.sales.FinishedStockRepository;
 
 import aptech.proj_NN_group2.model.business.repository.ProductionOrderRepository;
 import aptech.proj_NN_group2.model.business.repository.ProductionStageRepository;

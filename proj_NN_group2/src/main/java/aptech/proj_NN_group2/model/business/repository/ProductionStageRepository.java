@@ -4,11 +4,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import aptech.proj_NN_group2.model.business.BaseRepository;
 import aptech.proj_NN_group2.model.entity.ProductionStage;
 import aptech.proj_NN_group2.model.entity.ProductionStageDetail;
+import aptech.proj_NN_group2.model.entity.production_stage.ProductionStageTemplate;
 import aptech.proj_NN_group2.model.mapper.ProductionStageMapper;
 import aptech.proj_NN_group2.util.Database;
 
@@ -36,9 +38,10 @@ public class ProductionStageRepository extends BaseRepository<ProductionStage> {
         return mapper.RowMap(rs);
     }
 
+    // --- Các phương thức cũ ---
     public List<ProductionStage> findByOrderId(int orderId) {
         return find("SELECT * FROM production_stages WHERE production_order_id = ? ORDER BY stage_no",
-                ps -> ps.setInt(1, orderId));
+                    ps -> ps.setInt(1, orderId));
     }
 
     public void initStages(int orderId) {
@@ -47,7 +50,6 @@ public class ProductionStageRepository extends BaseRepository<ProductionStage> {
         try {
             conn = Database.getConnection();
             conn.setAutoCommit(false);
-
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
                 for (int i = 0; i < STAGE_NAMES.length; i++) {
                     ps.setInt(1, orderId);
@@ -58,19 +60,19 @@ public class ProductionStageRepository extends BaseRepository<ProductionStage> {
                 }
                 ps.executeBatch();
             }
-
             conn.commit();
         } catch (SQLException e) {
             rollbackQuietly(conn);
-            System.err.println("initStages Error: " + e.getMessage());
         } finally {
             closeQuietly(conn);
         }
     }
+
     public ProductionStage findById(int stageId) {
         return findOne("SELECT * FROM production_stages WHERE production_stage_id = ?",
-                ps -> ps.setInt(1, stageId));
+                       ps -> ps.setInt(1, stageId));
     }
+
     public boolean completeStage(ProductionStage stage) {
         String sql = "UPDATE production_stages SET stage_status=?, actual_duration_min=?, " +
                      "actual_volume=?, mold_count=?, end_time=SYSDATETIME(), recorded_by=?, note=? " +
@@ -90,21 +92,12 @@ public class ProductionStageRepository extends BaseRepository<ProductionStage> {
         String finalNote = detail.getNote();
         if (detail.isMixingStage()) {
             StringBuilder sb = new StringBuilder();
-            if (detail.getMixing_temperature_c() != null) {
-                sb.append("[Nhiệt độ trộn: ").append(detail.getMixing_temperature_c()).append("°C] ");
-            }
-            if (detail.getMixing_ratio_note() != null && !detail.getMixing_ratio_note().isBlank()) {
-                sb.append("[Tỉ lệ trộn: ").append(detail.getMixing_ratio_note()).append("] ");
-            }
-            if (detail.getNote() != null && !detail.getNote().isBlank()) {
-                sb.append(detail.getNote());
-            }
+            if (detail.getMixing_temperature_c() != null) sb.append("[Nhiệt độ trộn: ").append(detail.getMixing_temperature_c()).append("°C] ");
+            if (detail.getMixing_ratio_note() != null && !detail.getMixing_ratio_note().isBlank()) sb.append("[Tỉ lệ trộn: ").append(detail.getMixing_ratio_note()).append("] ");
+            if (detail.getNote() != null && !detail.getNote().isBlank()) sb.append(detail.getNote());
             finalNote = sb.toString().trim();
         }
-
-        String sql = "UPDATE production_stages SET stage_status=?, actual_duration_min=?, " +
-                     "actual_volume=?, mold_count=?, end_time=SYSDATETIME(), note=? " +
-                     "WHERE production_stage_id=?";
+        String sql = "UPDATE production_stages SET stage_status=?, actual_duration_min=?, actual_volume=?, mold_count=?, end_time=SYSDATETIME(), note=? WHERE production_stage_id=?";
         String noteFinal = finalNote;
         return executeUpdate(sql, ps -> {
             ps.setString(1, STATUS_COMPLETED);
@@ -115,10 +108,10 @@ public class ProductionStageRepository extends BaseRepository<ProductionStage> {
             ps.setInt(6, detail.getProduction_stage_id());
         });
     }
+
     public boolean unlockNextStage(int orderId, int nextStageNo) {
         return executeUpdate(
-            "UPDATE production_stages SET stage_status=?, start_time=SYSDATETIME() " +
-            "WHERE production_order_id=? AND stage_no=?",
+            "UPDATE production_stages SET stage_status=?, start_time=SYSDATETIME() WHERE production_order_id=? AND stage_no=?",
             ps -> {
                 ps.setString(1, STATUS_OPEN);
                 ps.setInt(2, orderId);
@@ -126,22 +119,49 @@ public class ProductionStageRepository extends BaseRepository<ProductionStage> {
             });
     }
 
-    private static void rollbackQuietly(Connection conn) {
-        if (conn != null) {
-            try {
-                conn.rollback();
-            } catch (SQLException ignored) {
-            }
-        }
+    // --- CÁC PHƯƠNG THỨC MỚI BẠN CẦN ---
+ 
+
+    // 2. Sửa hàm getStageNoById: Dùng sequence_order thay cho stage_no
+    public int getStageNoById(int stageId) {
+        String sql = "SELECT sequence_order FROM production_stages WHERE stage_id = ?";
+        try (Connection conn = Database.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, stageId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getInt("sequence_order");
+        } catch (SQLException e) { e.printStackTrace(); }
+        return 0;
     }
 
-    private static void closeQuietly(Connection conn) {
-        if (conn != null) {
-            try {
-                conn.setAutoCommit(true);
-                conn.close();
-            } catch (SQLException ignored) {
+ // Sửa phần khai báo hàm này trong ProductionStageRepository.java
+    public List<ProductionStageTemplate> getAllStages() {
+        List<ProductionStageTemplate> stages = new ArrayList<>();
+        String sql = "SELECT * FROM production_stages ORDER BY sequence_order ASC";
+
+        try (Connection conn = Database.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                // Sửa thành ProductionStageTemplate ở đây
+                ProductionStageTemplate stage = new ProductionStageTemplate(
+                    rs.getInt("stage_id"),
+                    rs.getString("stage_name"),
+                    rs.getInt("sequence_order"),
+                    rs.getBigDecimal("standard_time_minutes"),
+                    rs.getBoolean("is_proportional")
+                );
+                stages.add(stage);
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+        return stages;
     }
+ 
+
+    // --- Helper methods ---
+    private static void rollbackQuietly(Connection conn) { if (conn != null) try { conn.rollback(); } catch (SQLException ignored) {} }
+    private static void closeQuietly(Connection conn) { if (conn != null) try { conn.setAutoCommit(true); conn.close(); } catch (SQLException ignored) {} }
 }

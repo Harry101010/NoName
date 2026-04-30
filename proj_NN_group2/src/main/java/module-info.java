@@ -16,6 +16,10 @@ module aptech.proj_NN_group2 {
     opens aptech.proj_NN_group2.controller.production to javafx.fxml;
     opens aptech.proj_NN_group2.controller.sales to javafx.fxml;
     opens aptech.proj_NN_group2.controller.warehouse to javafx.fxml;
+    opens aptech.proj_NN_group2.controller.production_stage to javafx.fxml;
+    opens aptech.proj_NN_group2.production_stage to javafx.fxml;
+    opens aptech.proj_NN_group2.model.entity.production_stage to javafx.base;
+    opens aptech.proj_NN_group2.model.entity.sales to javafx.base;
 
     // QUAN TRỌNG: Cấp quyền cho javafx.base truy cập các Entity
     // Cần thêm dòng này để fix lỗi IllegalAccessException bạn đang gặp

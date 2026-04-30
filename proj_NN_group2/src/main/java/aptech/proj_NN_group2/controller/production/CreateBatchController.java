@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import aptech.proj_NN_group2.model.business.repository.production_stage.ProductionTrackingRepository;
 import aptech.proj_NN_group2.model.business.repository.IceCreamRepository;
 import aptech.proj_NN_group2.model.business.repository.ProductionOrderRepository;
 import aptech.proj_NN_group2.model.entity.IceCream;
@@ -43,6 +44,7 @@ public class CreateBatchController implements Initializable {
     // Chỉ giữ lại một repository duy nhất
     private final IceCreamRepository iceCreamRepository = new IceCreamRepository();
     private final ProductionOrderRepository orderRepo = new ProductionOrderRepository();
+    private final ProductionTrackingRepository trackingRepo = new ProductionTrackingRepository();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -119,6 +121,11 @@ public class CreateBatchController implements Initializable {
 
         int newId = orderRepo.create(order);
         if (newId > 0) {
+        	// --- THÊM ĐOẠN NÀY ĐỂ KHỞI TẠO TRACKING TỰ ĐỘNG ---
+            aptech.proj_NN_group2.model.business.repository.production_stage.ProductionTrackingRepository trackingRepo = 
+                new aptech.proj_NN_group2.model.business.repository.production_stage.ProductionTrackingRepository();
+            trackingRepo.initializeTrackingForOrder(newId);
+            // --------------------------------------------------
             lblMessage.setStyle("-fx-text-fill: green;");
             lblMessage.setText("Tạo mẻ sản xuất thành công! ID: " + newId);
             handleReset();
@@ -145,4 +152,5 @@ public class CreateBatchController implements Initializable {
     private void loadTable() {
         tableOrders.setItems(FXCollections.observableArrayList(orderRepo.findAll()));
     }
+    
 }

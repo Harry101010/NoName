@@ -19,12 +19,28 @@ public class AdminDashboardController {
     // Phương thức load FXML và đẩy vào StackPane
     private void switchView(String fxmlPath) {
         try {
+        	
+        	String path = "/aptech/proj_NN_group2/production/ProductionDashboard.fxml";
+        	java.net.URL url = getClass().getResource(path);
+        	System.out.println("Debug Path: " + path);
+        	System.out.println("Resource found? " + (url != null));
+
+        	if (url == null) {
+        	    System.out.println("LỖI: Java không tìm thấy file FXML tại đường dẫn trên!");
+        	}
+        	
             FXMLLoader loader = SceneManager.createLoader(fxmlPath);
             Parent view = loader.load();
             contentArea.getChildren().setAll(view);
         } catch (IOException e) {
-            DialogUtil.error("Lỗi hệ thống", "Không thể tải giao diện: " + fxmlPath);
-            e.printStackTrace();
+        	// IN RA LỖI CHI TIẾT VÀO CONSOLE
+            System.err.println("LỖI CHI TIẾT TẠI ĐÂY:");
+            e.printStackTrace(); // Dòng này cực quan trọng
+            
+            // Nếu có nguyên nhân sâu xa
+            if (e.getCause() != null) {
+                e.getCause().printStackTrace();
+            }
         }
     }
 

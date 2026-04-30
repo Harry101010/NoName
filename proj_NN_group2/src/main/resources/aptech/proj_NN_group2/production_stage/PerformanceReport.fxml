@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="aptech.proj_NN_group2.controller.production_stage.PerformanceReportController">
+    <center>
+        <TableView fx:id="tblPerformance" prefWidth="600.0">
+            <columns>
+                <TableColumn fx:id="colStage" text="Operation" prefWidth="150"/>
+                <TableColumn fx:id="colQty" text="Quantity" prefWidth="100"/>
+                <TableColumn fx:id="colStart" text="Start" prefWidth="150"/>
+                <TableColumn fx:id="colEnd" text="End" prefWidth="150"/>
+                <TableColumn fx:id="colDuration" text="Timing" prefWidth="100"/>
+            </columns>
+        </TableView>
+    </center>
+</BorderPane>

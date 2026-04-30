@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="15.0" alignment="TOP_CENTER" 
+      xmlns="http://javafx.com/javafx/8" 
+      xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="aptech.proj_NN_group2.controller.sales.StockLookupController">
+    
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <Label text="Finished Product Inventory" 
+           style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+
+    <HBox spacing="10.0" alignment="CENTER_LEFT">
+        <Label text="Search Product:" style="-fx-font-weight: bold;"/>
+        <TextField fx:id="txtSearch" promptText="Enter product name or ID to filter..." prefWidth="300.0"/>
+        
+        <Button text="Refresh Data" onAction="#refreshInventory" 
+                style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-cursor: hand; -fx-font-weight: bold;"/>
+        
+        <Button text="Sync Missing Orders" onAction="#handleSync" 
+                style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-cursor: hand; -fx-font-weight: bold;"/>
+    </HBox>
+
+    <Label fx:id="lblMessage" text="" style="-fx-text-fill: #27ae60; -fx-font-weight: bold;"/>
+
+    <TableView fx:id="tblStock" VBox.vgrow="ALWAYS" style="-fx-font-size: 14px;">
+        <columns>
+            <TableColumn fx:id="colIndex" text="#" prefWidth="40.0" style="-fx-alignment: CENTER;"/>
+            
+            <TableColumn fx:id="colOrderId" text="Order ID" prefWidth="100.0" style="-fx-alignment: CENTER; -fx-font-weight: bold;"/>
+            
+            <TableColumn fx:id="colName" text="Product Name" prefWidth="250.0"/>
+            
+            <TableColumn fx:id="colQty" text="Quantity" prefWidth="100.0" style="-fx-alignment: CENTER-RIGHT;"/>
+            
+            <TableColumn fx:id="colMfgDate" text="Mfg Date" prefWidth="150.0" style="-fx-alignment: CENTER;"/>
+            
+            <TableColumn fx:id="colExpiry" text="Expiry Date" prefWidth="150.0" style="-fx-alignment: CENTER;"/>
+            
+            <TableColumn fx:id="colLocation" text="Storage Location" prefWidth="150.0" style="-fx-alignment: CENTER;"/>
+        </columns>
+        <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+        </columnResizePolicy>
+    </TableView>
+
+</VBox>

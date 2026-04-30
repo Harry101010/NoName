@@ -3,19 +3,24 @@ package aptech.proj_NN_group2.model.entity;
 import java.time.LocalDateTime;
 
 public class IssueNote {
+    // Các trường của người cũ
     private int noteId;
-    private String customerOrderCode; // Mã đơn khách
-    private String salemanName;        // Tên nhân viên
-    private String customerName;       // Tên khách hàng
-    private double totalQuantity;      // Tổng số lượng
-    private LocalDateTime createDate;   // Ngày lập phiếu
-    private LocalDateTime deliveryDate; // Ngày phải giao
+    private String customerOrderCode; 
+    private String salemanName;        
+    private String customerName;       
+    private double totalQuantity;      
+    private LocalDateTime createDate;   
+    private LocalDateTime deliveryDate; 
     private String status;
-    // Thêm vào class IssueNote.java
-    private String productName;
-    private Double quantity;
 
-    // --- Getter và Setter (Đây là phần giúp hết "đèn đỏ") ---
+    // Các trường của bạn (Thêm vào để phục vụ Tab 2, 3)
+    private String productName;
+    private double quantity;
+    private LocalDateTime requestDate; // Tương đương với createDate nhưng để đồng bộ code của bạn
+
+    public IssueNote() {}
+
+    // --- Getter và Setter đầy đủ ---
 
     public int getNoteId() { return noteId; }
     public void setNoteId(int noteId) { this.noteId = noteId; }
@@ -40,12 +45,15 @@ public class IssueNote {
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
-    
 
-
-    // Nhớ tạo Getter và Setter cho 2 trường này (quan trọng để TableView nhận diện)
     public String getProductName() { return productName; }
     public void setProductName(String productName) { this.productName = productName; }
-    public Double getQuantity() { return quantity; }
-    public void setQuantity(Double quantity) { this.quantity = quantity; }
+
+    public double getQuantity() { return quantity; }
+    public void setQuantity(double quantity) { this.quantity = quantity; }
+
+    public LocalDateTime getRequestDate() { 
+        return requestDate != null ? requestDate : createDate; 
+    }
+    public void setRequestDate(LocalDateTime requestDate) { this.requestDate = requestDate; }
 }

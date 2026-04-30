@@ -94,6 +94,12 @@ public class RecipeManagementController {
         var allProducts = iceCreamRepo.findAll();
         productList.setAll(allProducts);
     }
+ // Thêm hàm này vào class RecipeManagementController
+    public void refreshAll() {
+        // Gọi hàm loadProductData() để lấy lại dữ liệu từ DB
+        loadProductData();
+        System.out.println("Đã refresh định mức sản phẩm!");
+    }
 
     private void refreshIngredientTable(int iceCreamId) {
         var updatedList = recipeRepo.findRowsByIceCreamId(iceCreamId);

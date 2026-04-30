@@ -3,11 +3,13 @@ package aptech.proj_NN_group2.controller.production;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
-import aptech.proj_NN_group2.model.business.repository.FinishedStockRepository;
+import aptech.proj_NN_group2.model.business.repository.sales.FinishedStockRepository;
 import aptech.proj_NN_group2.model.business.repository.ProductionOrderRepository;
 import aptech.proj_NN_group2.model.business.repository.ProductionStageRepository;
+import aptech.proj_NN_group2.model.business.repository.production_stage.ProductionTrackingRepository;
 import aptech.proj_NN_group2.model.entity.ProductionOrder;
 import aptech.proj_NN_group2.model.entity.ProductionStage;
 import aptech.proj_NN_group2.util.NavigationUtil;
@@ -16,7 +18,13 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 public class ProductionProcessController implements Initializable {
@@ -42,6 +50,7 @@ public class ProductionProcessController implements Initializable {
     private final ProductionOrderRepository orderRepo = new ProductionOrderRepository();
     private final ProductionStageRepository stageRepo = new ProductionStageRepository();
     private final FinishedStockRepository finishedStockRepo = new FinishedStockRepository();
+    private final ProductionTrackingRepository trackingRepo = new ProductionTrackingRepository();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -100,6 +109,7 @@ public class ProductionProcessController implements Initializable {
             lblMessage.setText("Chưa chọn lệnh sản xuất.");
             return;
         }
+        int orderId = order.getProduction_order_id();
 
         ProductionStage openStage = tableStages.getItems().stream()
                 .filter(s -> "open".equals(s.getStage_status()))
@@ -155,18 +165,39 @@ public class ProductionProcessController implements Initializable {
             return;
         }
 
-        boolean finalStage = openStage.getStage_no() >= ProductionStageRepository.STAGE_NAMES.length;
-        boolean imported = true;
-        if (finalStage) {
-            double finishedQty = openStage.getActual_volume() != null
-                    ? openStage.getActual_volume().doubleValue()
-                    : order.getPlanned_output_kg().doubleValue();
-            if (finishedQty > 0) {
-                imported = finishedStockRepo.importFinishedStock(order.getProduction_order_id(), finishedQty);
-            }
-        } else {
-            stageRepo.unlockNextStage(order.getProduction_order_id(), openStage.getStage_no() + 1);
-        }
+       
+         // Khởi tạo mặc định là false
+
+     // Trong ProductionProcessController.java
+     // Thay đoạn if (finalStage) { ... } hiện tại bằng đoạn code dưới đây:
+
+     
+     int maxStage = trackingRepo.getMaxStageNo(orderId);
+     boolean finalStage = openStage.getStage_no() >= maxStage;
+     boolean imported = false;
+
+     System.out.println("DEBUG: [KIỂM TRA] Đơn hàng: " + order.getProduction_order_id());
+     System.out.println("DEBUG: [KIỂM TRA] Stage hiện tại: " + openStage.getStage_no() + " | Stage cuối: " + maxStage);
+     System.out.println("DEBUG: [KIỂM TRA] finalStage = " + finalStage);
+
+  // Tìm đến đoạn if (finalStage) trong hàm handleComplete và thay bằng:
+     if (finalStage) {
+         double finishedQty = volume != null ? volume.doubleValue() : (order.getPlanned_output_kg() != null ? order.getPlanned_output_kg().doubleValue() : 0.0);
+
+         // HIỆN DIALOG Ở ĐÂY
+         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+         confirm.setTitle("Xác nhận nhập kho");
+         confirm.setHeaderText("Đây là công đoạn cuối!");
+         confirm.setContentText("Bạn có muốn hoàn thành đơn hàng và nhập " + finishedQty + "kg vào kho không?");
+
+         Optional<ButtonType> result = confirm.showAndWait();
+         if (result.isPresent() && result.get() == ButtonType.OK) {
+             imported = finishedStockRepo.importFinishedStock(orderId, finishedQty);
+             if (imported) {
+                 lblMessage.setText("Đã nhập kho thành phẩm thành công.");
+             }
+         }
+     }
 
         lblMessage.setStyle(imported ? "-fx-text-fill: green;" : "-fx-text-fill: orange;");
         lblMessage.setText(finalStage
@@ -190,4 +221,5 @@ public class ProductionProcessController implements Initializable {
     private void goBack(ActionEvent event) {
         NavigationUtil.goTo(event, StringValue.VIEW_MAIN_MENU, "Hệ thống Quản lý Sản xuất & Xuất kho");
     }
+ 
 }
