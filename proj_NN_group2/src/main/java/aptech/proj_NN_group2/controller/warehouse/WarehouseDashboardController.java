@@ -15,14 +15,14 @@ public class WarehouseDashboardController {
     @FXML private WarehouseController warehouseController;
     @FXML private ExportRequestController exportRequestController;
     @FXML private RecipeManagementController recipeManagementController;
+    @FXML private ExportHistoryController exportHistoryController;
 
     @FXML
     public void initialize() {
-        mainTabPane.getSelectionModel().selectedItemProperty().addListener((obs, oldTab, newTab) -> {
-            if (newTab != null) {
-                refreshActiveTab(newTab);
-            }
-        });
+        mainTabPane.getSelectionModel().selectedItemProperty().addListener((obs, oldTab, newTab) -> refreshActiveTab(newTab));
+
+        // Ensure the first visible tab has fresh data after the whole scene graph is ready.
+        Platform.runLater(() -> refreshActiveTab(mainTabPane.getSelectionModel().getSelectedItem()));
     }
 
     private void refreshActiveTab(Tab tab) {

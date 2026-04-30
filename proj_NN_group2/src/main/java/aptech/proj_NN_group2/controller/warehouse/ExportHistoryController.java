@@ -35,9 +35,12 @@ public class ExportHistoryController implements Initializable {
     }
 
     private void loadHistory() {
-    	List<IngredientExportReceipt> list = repo.getAllReceipts();
-        // Giả sử repo của bạn có hàm getAllReceipts()
-    	System.out.println("DEBUG: Số lượng phiếu trong danh sách là: " + list.size());
+        List<IngredientExportReceipt> list = repo.getAllReceipts();
+        System.out.println("DEBUG: Số lượng phiếu trong danh sách là: " + list.size());
         tblHistory.setItems(FXCollections.observableArrayList(repo.getAllReceipts()));
+    }
+
+    public void refreshHistory() {
+        loadHistory();
     }
 }

@@ -23,7 +23,7 @@
     </padding>
 
     <VBox spacing="10" style="-fx-padding: 20; -fx-border-color: #bdc3c7; -fx-border-radius: 5; -fx-background-radius: 5;" VBox.vgrow="NEVER">
-        <Label style="-fx-font-size: 18; -fx-font-weight: bold;" text="1. TẠO PHIẾU YÊU CẦU XUẤT THÀNH PHẨM" />
+        <Label style="-fx-font-size: 18; -fx-font-weight: bold;" text="1. TẠO ĐƠN HÀNG SẢN XUẤT" />
         
         <HBox spacing="20">
             <VBox prefWidth="380" spacing="10" style="-fx-padding: 15; -fx-border-color: #e0e0e0; -fx-border-radius: 5; -fx-background-radius: 5;">

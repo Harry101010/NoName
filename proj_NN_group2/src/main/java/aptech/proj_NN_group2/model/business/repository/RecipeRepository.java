@@ -18,13 +18,13 @@ import aptech.proj_NN_group2.model.mapper.RecipeMapper;
 import aptech.proj_NN_group2.util.Database;
 
 
-public class RecipeRepository extends BaseRepository<Recipe> 
-    implements IFind<Recipe>, ICreate<Recipe>, IUpdate<Recipe>, IDelete<Recipe> {
-	
+public class RecipeRepository extends BaseRepository<Recipe>
+        implements IFind<Recipe>, ICreate<Recipe>, IUpdate<Recipe>, IDelete<Recipe> {
+
     private final RecipeMapper mapper = new RecipeMapper();
     private final RecipeRowRepository recipeRowRepository = new RecipeRowRepository();
-    
-    // --- CÁC HÀM TÌM KIẾM ---
+
+    // --- LOOKUP ---
     @Override
     public Recipe findById(int id) {
         return findOne("SELECT * FROM recipes WHERE recipe_id = ?", ps -> ps.setInt(1, id));
@@ -35,11 +35,21 @@ public class RecipeRepository extends BaseRepository<Recipe>
         return find("SELECT * FROM recipes ORDER BY ice_cream_id, ingredient_id", null);
     }
 
+    /**
+     * Returns the joined recipe rows used by the UI tables.
+     */
+    public List<RecipeRow> findAllRows() {
+        return recipeRowRepository.findAll();
+    }
+
+    /**
+     * Returns the joined recipe rows for one ice cream product.
+     */
     public List<RecipeRow> findRowsByIceCreamId(int iceCreamId) {
         return recipeRowRepository.findRowsByIceCreamId(iceCreamId);
     }
 
-    // --- CÁC HÀM THÊM/SỬA/XÓA ---
+    // --- CREATE / UPDATE / DELETE ---
     @Override
     public boolean create(Recipe r) {
         String sql = "INSERT INTO recipes (ice_cream_id, ingredient_id, quantity_per_kg) VALUES (?, ?, ?)";
@@ -59,7 +69,9 @@ public class RecipeRepository extends BaseRepository<Recipe>
         });
     }
 
-    // Hàm update cho UI (cập nhật theo IceCream và Ingredient)
+    /**
+     * UI helper: update by ice cream + ingredient pair.
+     */
     public void update(RecipeRow row) {
         String sql = "UPDATE recipes SET quantity_per_kg = ? WHERE ice_cream_id = ? AND ingredient_id = ?";
         executeUpdate(sql, ps -> {
@@ -78,15 +90,20 @@ public class RecipeRepository extends BaseRepository<Recipe>
         return executeUpdate("DELETE FROM recipes WHERE ice_cream_id = ?", ps -> ps.setInt(1, iceCreamId));
     }
 
-    // --- MAPPING ---
-    @Override
-    protected Recipe map(ResultSet rs) throws SQLException {
-        return mapper.RowMap(rs);
+    /**
+     * Deletes all recipe rows that reference the given ingredient.
+     * Needed by RecipeManagementController2 when removing an ingredient.
+     */
+    public boolean deleteByIngredientId(int ingredientId) {
+        return executeUpdate("DELETE FROM recipes WHERE ingredient_id = ?", ps -> ps.setInt(1, ingredientId));
     }
+
+    /**
+     * Deletes one joined row by its recipe id.
+     */
     public void deleteRow(RecipeRow row) {
-        // SQL này xóa nguyên liệu cụ thể của sản phẩm cụ thể
         String sql = "DELETE FROM recipes WHERE ice_cream_id = ? AND ingredient_id = ?";
-        
+
         executeUpdate(sql, ps -> {
             ps.setInt(1, row.getIce_cream_id());
             ps.setInt(2, row.getIngredient_id());

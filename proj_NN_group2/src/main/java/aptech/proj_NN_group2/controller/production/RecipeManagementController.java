@@ -257,6 +257,26 @@ public class RecipeManagementController {
             new Alert(Alert.AlertType.ERROR, "Không thể mở cửa sổ: " + e.getMessage()).show();
         }
     }
+    
+    @FXML
+    public void refreshAll(ActionEvent event) {
+        // Reload the product list from database
+        loadProductData();
+
+        // Keep the currently selected product's recipe details visible if possible
+        IceCream selected = tblProducts.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            lblRecipeTitle.setText("Nguyên liệu: " + selected.getIce_cream_name());
+            refreshIngredientTable(selected.getIce_cream_id());
+        } else {
+            if (tblRecipeDetails != null) {
+                tblRecipeDetails.getItems().clear();
+            }
+            if (lblRecipeTitle != null) {
+                lblRecipeTitle.setText("Định mức nguyên liệu");
+            }
+        }
+    }
  // --- CÁC HÀM XỬ LÝ SẢN PHẨM (BÊN TRÁI) ---
 
 //    @FXML 

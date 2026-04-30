@@ -28,5 +28,4 @@ public final class StringValue {
     public static final String VIEW_ADMIN_DASHBOARD = "/aptech/proj_NN_group2/admin/AdminDashboard.fxml";
     private StringValue() {
     }
-    public static final String VIEW_PRODUCTION_DASHBOARD = "/aptech/proj_NN_group2/production/ProductionDashboard.fxml";
-}
+    public static final String VIEW_PRODUCTION_DASHBOARD = "/aptech/proj_NN_group2/production/ProductionDashboard.fxml";}
