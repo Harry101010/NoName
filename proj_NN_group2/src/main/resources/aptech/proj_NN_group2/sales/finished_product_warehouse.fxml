@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="20" style="-fx-padding: 25;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="aptech.proj_NN_group2.controller.sales.FinishedProductWarehouseController">
+    
+    <VBox spacing="10" style="-fx-padding: 15; -fx-border-radius: 5; -fx-background-radius: 5;">
+        <Label style="-fx-font-size: 18; -fx-font-weight: bold;" text="YÊU CẦU XUẤT KHO CHỜ PHÊ DUYỆT" />
+        <TableView fx:id="tableApproval" prefHeight="250">
+            <columns>
+                <TableColumn fx:id="colId" prefWidth="40" text="ID" />
+                <TableColumn fx:id="colOrderCode" prefWidth="100" text="Mã Đơn" />
+                <TableColumn fx:id="colSaleman" prefWidth="100" text="Kinh Doanh" />
+                <TableColumn fx:id="colCustomer" prefWidth="100" text="Khách Hàng" />
+                <TableColumn fx:id="colProductName" prefWidth="120" text="Sản phẩm" />
+                <TableColumn fx:id="colQty" prefWidth="70" text="Số lượng" />
+                <TableColumn fx:id="colStatus" prefWidth="90" text="Trạng Thái" />
+                <TableColumn fx:id="colAction" prefWidth="160" text="Thao tác" />
+            </columns>
+        </TableView>
+        <Button onAction="#loadPendingNotes" style="-fx-background-color: #34495e; -fx-text-fill: white;" text="Tải lại danh sách" />
+    </VBox>
+
+    <VBox prefHeight="250" spacing="10" style="-fx-padding: 15; -fx-border-radius: 5; -fx-background-radius: 5;" VBox.vgrow="ALWAYS">
+        <HBox alignment="CENTER_LEFT" spacing="15">
+            <Label style="-fx-font-size: 18; -fx-font-weight: bold;" text="TRA CỨU TỒN KHO THÀNH PHẨM" />
+            <Region HBox.hgrow="ALWAYS" />
+            <TextField fx:id="txtSearchInventory" prefWidth="300" promptText="Tìm theo tên SP hoặc mã PO..." style="-fx-padding: 8;" />
+        </HBox>
+        
+        <TableView fx:id="tableInventory" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="colInvPO" prefWidth="100" text="Mã PO SX" />
+                <TableColumn fx:id="colInvName" prefWidth="180" text="Tên Sản Phẩm" />
+                <TableColumn fx:id="colInvQty" prefWidth="80" text="Tồn kho" />
+                <TableColumn fx:id="colInvMfg" prefWidth="110" text="Ngày SX" />
+                <TableColumn fx:id="colInvExp" prefWidth="110" text="Hạn SD" />
+                <TableColumn fx:id="colInvLocation" prefWidth="100" text="Vị trí kệ" />
+            </columns>
+        </TableView>
+    </VBox>
+</VBox>

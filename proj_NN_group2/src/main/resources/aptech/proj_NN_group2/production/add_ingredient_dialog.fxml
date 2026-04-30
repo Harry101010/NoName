@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="10" style="-fx-padding: 15;" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="aptech.proj_NN_group2.controller.production.AddIngredientDialogController">
+    <TextField fx:id="txtSearch" promptText="Tìm nguyên liệu..."/>
+    <TableView fx:id="tblIngredients" prefHeight="300" prefWidth="400">
+        <columns>
+            <TableColumn fx:id="colCode" text="Mã" prefWidth="80"/>
+            <TableColumn fx:id="colName" text="Tên nguyên liệu" prefWidth="200"/>
+            <TableColumn fx:id="colUnit" text="Đơn vị" prefWidth="80"/>
+        </columns>
+    </TableView>
+    <TextField fx:id="txtQuantity" promptText="Nhập định mức (kg/l)"/>
+    <Button text="Xác nhận thêm" onAction="#handleConfirm" maxWidth="Infinity" style="-fx-background-color: #2e7d32; -fx-text-fill: white;"/>
+</VBox>

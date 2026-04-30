@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+
+
+<BorderPane xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="aptech.proj_NN_group2.controller.sales.SalemanWarehouseDashboardController">
+   <center>
+      <AnchorPane prefHeight="700.0" prefWidth="1100.0">
+         <children>
+            <TabPane fx:id="mainTabPane" side="TOP" xmlns:fx="http://javafx.com/fxml/1">
+		    <Tab text="1. Finished Product Inventory" closable="false">
+		        <fx:include source="StockLookup.fxml"/>
+		    </Tab>
+		
+		    <Tab text="2. Create Delivery Request" closable="false">
+		        <fx:include source="CreateRequest.fxml"/>
+		    </Tab>
+		
+		    <Tab text="3. Warehouse Approval" closable="false">
+		        <fx:include source="WarehouseApproval.fxml"/>
+		    </Tab>
+		
+		    <Tab text="4. Dispatch History" closable="false">
+		        <fx:include source="DispatchHistory.fxml"/>
+		    </Tab>
+		</TabPane>
+         </children>
+      </AnchorPane>
+   </center>
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="Tài Khoản">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#goToProfile" text="Thông tin tài khoản" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleLogout" text="Đăng xuất" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+</BorderPane>

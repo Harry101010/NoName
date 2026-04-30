@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="aptech.proj_NN_group2.controller.production.RecipeManagementController"
+            style="-fx-padding: 10;">
+    <top>
+        <Label text="QUẢN LÝ CÔNG THỨC SẢN PHẨM" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-padding: 10;"/>
+    </top>
+    <center>
+        <SplitPane dividerPositions="0.4" style="-fx-padding: 10 0 0 0;">
+            <VBox spacing="10" style="-fx-padding: 5;">
+                <Label text="Danh sách sản phẩm" style="-fx-font-weight: bold;"/>
+                <TextField fx:id="txtProductFilter" promptText="Tìm tên sản phẩm..."/>
+                <TableView fx:id="tblProducts" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colProductId" text="ID" prefWidth="50"/>
+                        <TableColumn fx:id="colProductName" text="Tên sản phẩm" prefWidth="250"/>
+                    	<TableColumn fx:id="colProductActive" text="Active" prefWidth="60" />
+                     </columns>
+                </TableView>
+                <HBox spacing="5">
+                    <Button text="Thêm SP" onAction="#handleProductAdd" style="-fx-background-color: #27ae60; -fx-text-fill: white;"/>
+                    <Button text="Sửa SP" onAction="#handleProductEdit" style="-fx-background-color: #f39c12; -fx-text-fill: white;"/>
+                    <Button text="Xóa SP" onAction="#handleProductDelete" style="-fx-background-color: #e74c3c; -fx-text-fill: white;"/>
+                </HBox>
+            </VBox>
+
+            <VBox spacing="10" style="-fx-padding: 5;">
+                <Label fx:id="lblRecipeTitle" text="Định mức nguyên liệu" style="-fx-font-weight: bold;"/>
+                <TableView fx:id="tblRecipeDetails" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colSTT" text="STT" prefWidth="40"/>
+                        <TableColumn fx:id="colIngName" text="Nguyên liệu" prefWidth="150"/>
+                        <TableColumn fx:id="colQuantity" text="Định mức" prefWidth="100"/>
+                        <TableColumn fx:id="colUnit" text="Đơn vị" prefWidth="80"/>
+                    </columns>
+                </TableView>
+                <HBox spacing="5">
+                    <Button text="Thêm NL" onAction="#handleIngredientAdd" style="-fx-background-color: #27ae60; -fx-text-fill: white;"/>
+                    <Button text="Sửa NL" onAction="#handleIngredientEdit" style="-fx-background-color: #f39c12; -fx-text-fill: white;"/>
+                    <Button text="Xóa NL" onAction="#handleIngredientDelete" style="-fx-background-color: #e74c3c; -fx-text-fill: white;"/>
+                </HBox>
+            </VBox>
+        </SplitPane>
+    </center>
+</BorderPane>

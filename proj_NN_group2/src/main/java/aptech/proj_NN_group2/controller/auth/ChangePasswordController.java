@@ -141,15 +141,15 @@ public class ChangePasswordController {
                     title = "Hệ thống quản lý - Admin " + user.getUsername();
                     break;
                 case 2:
-                    fxmlPath = "/aptech/proj_NN_group2/main_menu.fxml";
+                    fxmlPath = "/aptech/proj_NN_group2/production/main_menu.fxml";
                     title = "Giao diện sản xuất " + user.getUsername();
                     break;
                 case 3:
-                    fxmlPath = "/aptech/proj_NN_group2/warehouse_dashboard.fxml";
+                    fxmlPath = "/aptech/proj_NN_group2/warehhouse/warehouse_dashboard.fxml";
                     title = "Giao diện kho " + user.getUsername();
                     break;
                 case 4:
-                    fxmlPath = "/aptech/proj_NN_group2/saleman/saleman_warehouse_dashboard.fxml";
+                    fxmlPath = "/aptech/proj_NN_group2/sales/saleman_warehouse_dashboard.fxml";
                     title = "Giao diện kinh doanh " + user.getUsername();
                     break;
                 default:

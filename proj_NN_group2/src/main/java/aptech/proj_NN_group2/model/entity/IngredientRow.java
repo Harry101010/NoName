@@ -1,5 +1,7 @@
 package aptech.proj_NN_group2.model.entity;
 
+import aptech.proj_NN_group2.model.entity.ingredient.Ingredient;
+
 public class IngredientRow {
     private int ingredient_id;
     private String ingredient_name;
@@ -9,6 +11,24 @@ public class IngredientRow {
     private String unit_name;
     private double price_per_unit;
     private boolean is_active;
+
+    // 1. Constructor rỗng (cần thiết cho một số thao tác JavaFX)
+    public IngredientRow() {
+    }
+
+    // 2. Constructor nhận vào đối tượng Ingredient để map dữ liệu (Đây là cái bạn cần!)
+    public IngredientRow(Ingredient ing) {
+        this.ingredient_id = ing.getIngredient_id();
+        this.ingredient_name = ing.getIngredient_name();
+        this.origin = ing.getOrigin();
+        this.storage_condition = ing.getStorage_condition();
+        this.unit_id = ing.getUnit_id();
+        this.unit_name = ing.getUnit_name();
+        this.price_per_unit = ing.getPrice_per_unit();
+        this.is_active = ing.getIs_active();
+    }
+
+    // --- Các Getter và Setter ---
 
     public int getIngredient_id() {
         return ingredient_id;

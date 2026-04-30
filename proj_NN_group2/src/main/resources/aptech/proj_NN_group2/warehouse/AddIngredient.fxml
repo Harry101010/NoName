@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="10" alignment="CENTER" xmlns="http://javafx.com/javafx/21" 
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="aptech.proj_NN_group2.controller.warehouse.NewIngredientController"
+      style="-fx-padding: 20; -fx-background-color: #f4f4f4;">
+    
+    <Label text="Thêm Nguyên Liệu Mới" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+    
+    <TextField fx:id="txtNewName" promptText="Tên nguyên liệu..."/>
+    
+    <ComboBox fx:id="cbUnit" promptText="Chọn đơn vị..." maxWidth="Infinity"/>
+    
+    <TextField fx:id="txtStorage" promptText="Cách bảo quản (ví dụ: Lạnh)..."/>
+    
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Lưu" onAction="#handleSave" style="-fx-background-color: #28a745; -fx-text-fill: white;"/>
+        <Button text="Hủy" onAction="#handleCancel" style="-fx-background-color: #dc3545; -fx-text-fill: white;"/>
+    </HBox>
+</VBox>

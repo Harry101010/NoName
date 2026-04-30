@@ -1,36 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
 
-<VBox spacing="20" prefWidth="450" style="-fx-padding: 30; -fx-background-color: #ffffff;" 
-      xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" 
-      fx:controller="aptech.proj_NN_group2.controller.admin.AdminProfileController">
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefWidth="450" spacing="20" style="-fx-padding: 30;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="aptech.proj_NN_group2.controller.admin.AdminProfileController">
     
-    <Label text="HỒ SƠ CÁ NHÂN QUẢN TRỊ" style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+    <Label style="-fx-font-size: 20; -fx-font-weight: bold;" text="HỒ SƠ CÁ NHÂN QUẢN TRỊ" />
     <Separator />
     
     <VBox spacing="10">
-        <Label text="Tên đăng nhập:" style="-fx-font-weight: bold;" />
+        <Label style="-fx-font-weight: bold;" text="Tên đăng nhập:" />
         <TextField fx:id="txtUsername" prefHeight="35" />
         
-        <Label text="Quyền hạn hiện tại:" style="-fx-font-weight: bold;" />
-        <TextField fx:id="txtRole" editable="false" prefHeight="35" style="-fx-background-color: #f1f2f6;" />
+        <Label style="-fx-font-weight: bold;" text="Quyền hạn hiện tại:" />
+        <TextField fx:id="txtRole" editable="false" prefHeight="35" />
         
         <Separator>
-            <padding><Insets top="10" bottom="10"/></padding>
+            <padding><Insets bottom="10" top="10" /></padding>
         </Separator>
         
-        <Label text="Đổi mật khẩu mới:" style="-fx-font-weight: bold;" />
+        <Label style="-fx-font-weight: bold;" text="Đổi mật khẩu mới:" />
         <PasswordField fx:id="txtNewPassword" prefHeight="35" promptText="Nhập mật khẩu mới" />
         
-        <Label text="Xác nhận mật khẩu:" style="-fx-font-weight: bold;" />
+        <Label style="-fx-font-weight: bold;" text="Xác nhận mật khẩu:" />
         <PasswordField fx:id="txtConfirmPassword" prefHeight="35" promptText="Nhập lại mật khẩu mới" />
     </VBox>
     
-    <HBox spacing="15" alignment="CENTER_RIGHT">
-        <Button text="Đóng" onAction="#handleClose" prefWidth="100" prefHeight="35" style="-fx-background-color: #bdc3c7;" />
-        <Button text="Lưu thông tin" onAction="#handleSave" prefWidth="140" prefHeight="35" 
-                style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold;" />
+    <HBox alignment="CENTER_RIGHT" spacing="15">
+        <Button onAction="#handleClose" prefHeight="35" prefWidth="100" style="-fx-background-color: #bdc3c7;" text="Đóng" />
+        <Button onAction="#handleSave" prefHeight="35" prefWidth="140" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold;" text="Lưu thông tin" />
     </HBox>
 </VBox>
